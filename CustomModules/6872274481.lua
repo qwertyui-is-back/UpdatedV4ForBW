@@ -8931,36 +8931,24 @@ run(function()
 		Name = "Disabler",
 		Function = function(callback)
 			if callback then
-				if mode == "Scythe" then
-					task.spawn(function()
-						repeat
-							task.wait()
-							local item = getItemNear("scythe")
-							if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
-								bedwars.Client:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
-								if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
-									store.scythe = tick() + 1
-								end
+				task.spawn(function()
+					repeat
+						task.wait()
+						local item = getItemNear("scythe")
+						if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
+							bedwars.Client:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
+							if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
+								store.scythe = tick() + 1
 							end
-						until (not Disabler.Enabled)
-					end)
-				elseif mode == "Zephyr" then
-					disablerZephyr = true
-				end
-				if mode ~= "Zephyr" then
-					disablerZephyr = false
-				end
+						end
+					until (not Disabler.Enabled)
+				end)
+				disablerZephyr = true
+			else
+				disablerZephyr = false
 			end
 		end,
-		HoverText = "Float disabler with scythe"
-	})
-	DisablerMode = Disabler.CreateDropdown({
-		Name = "Mode",
-		List = {"Scythe", "Zephyr"},
-		Function = function(callback) 
-			if DisablerMode.Value == "Zephyr" then ZephyrSpeed.Object.Visible = callback end
-			mode = callback
-		end
+		HoverText = "Attempts to help bypass the AntiCheat"
 	})
 	ZephyrSpeed = Disabler.CreateSlider({
 		Name = "Speed Multiplier",
