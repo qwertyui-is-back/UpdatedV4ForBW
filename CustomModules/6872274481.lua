@@ -387,6 +387,7 @@ local function attackValue(vec)
 end
 
 disablerZephyr = false
+disablerBoost = 1
 local function getSpeed()
 	local speed = 1
 	if lplr.Character then
@@ -398,7 +399,7 @@ local function getSpeed()
 			speed = speed * 3
 		end
 		if store.scythe > tick() then
-			speed = speed * 1.89
+			speed = speed * (1.6 * disablerBoost)
 		end
 		if lplr.Character:GetAttribute("GrimReaperChannel") then
 			speed = speed * 1.9
@@ -410,7 +411,7 @@ local function getSpeed()
 		end
 		if store.zephyrOrb ~= 0 then
 			if disablerZephyr then
-				speed = speed * 2
+				speed = speed * (2 * disablerBoost)
 			end
 		end
 	end
@@ -8966,7 +8967,7 @@ run(function()
 		Min = 0,
 		Max = 2,
 		Function = function(callback)
-			ZephyrSpeed.Value = callback
+			disablerBoost = callback
 		end,
 		Default = 1
 	})
