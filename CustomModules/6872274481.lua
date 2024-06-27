@@ -8960,7 +8960,7 @@ run(function()
 			DisablerMode.Value = callback
 		end
 	})
-	ZephyrSpeed = Speed.CreateSlider({
+	ZephyrSpeed = Disabler.CreateSlider({
 		Name = "Speed Multiplier",
 		Min = 0,
 		Max = 2,
