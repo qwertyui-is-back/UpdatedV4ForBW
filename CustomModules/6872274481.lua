@@ -387,28 +387,28 @@ local function attackValue(vec)
 end
 
 local function getSpeed()
-	local speed = 0
+	local speed = 1
 	if lplr.Character then
 		local SpeedDamageBoost = lplr.Character:GetAttribute("SpeedBoost")
 		if SpeedDamageBoost and SpeedDamageBoost > 1 then
-			speed = speed + (8 * (SpeedDamageBoost - 1))
+			speed = speed + (1.25 * (SpeedDamageBoost - 1))
 		end
 		if store.grapple > tick() then
-			speed = speed + 90
+			speed = speed * 3
 		end
 		if store.scythe > tick() then
-			speed = speed + 5
+			speed = speed * 1.89
 		end
 		if lplr.Character:GetAttribute("GrimReaperChannel") then
-			speed = speed + 20
+			speed = speed * 1.9
 		end
 		local armor = store.localInventory.inventory.armor[3]
 		if type(armor) ~= "table" then armor = {itemType = ""} end
 		if armor.itemType == "speed_boots" then
-			speed = speed + 12
+			speed = speed * 2
 		end
 		if store.zephyrOrb ~= 0 then
-			speed = speed + 12
+			speed = speed * 2
 		end
 	end
 	return speed
@@ -4359,7 +4359,7 @@ run(function()
 							end
 						end
 
-						local speedValue = SpeedValue.Value + getSpeed()
+						local speedValue = SpeedValue.Value * getSpeed()
 						local speedVelocity = entityLibrary.character.Humanoid.MoveDirection * (SpeedMode.Value == "Normal" and SpeedValue.Value or 20)
 						entityLibrary.character.HumanoidRootPart.Velocity = antivoidvelo or Vector3.new(speedVelocity.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, speedVelocity.Z)
 						if SpeedMode.Value ~= "Normal" then
@@ -4551,6 +4551,7 @@ run(function()
 					block.Anchored = true
 					block.CanCollide = false
 					block.Parent = gameCamera
+					block.Transparency = 1
 					controlmodule.moveFunction = function(Self, vec, facecam, ...)
 						if entityLibrary.isAlive then
 							local plr = AllNearPosition(TargetStrafeRange.Value + 5, 10)[1]
@@ -6208,6 +6209,101 @@ run(function()
 			end
 		end,
 		HoverText = "Removes the ugly bobbing when you move and makes sword farther"
+	})
+	nobobdepth = nobob.CreateSlider({
+		Name = "Depth",
+		Min = 0,
+		Max = 24,
+		Default = 8,
+		Function = function(val)
+			if nobob.Enabled then
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_DEPTH_OFFSET", -(val / 10))
+			end
+		end
+	})
+	nobobhorizontal = nobob.CreateSlider({
+		Name = "Horizontal",
+		Min = 0,
+		Max = 24,
+		Default = 8,
+		Function = function(val)
+			if nobob.Enabled then
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_HORIZONTAL_OFFSET", (val / 10))
+			end
+		end
+	})
+	nobobvertical= nobob.CreateSlider({
+		Name = "Vertical",
+		Min = 0,
+		Max = 24,
+		Default = -2,
+		Function = function(val)
+			if nobob.Enabled then
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_VERTICAL_OFFSET", (val / 10))
+			end
+		end
+	})
+	rotationx = nobob.CreateSlider({
+		Name = "RotX",
+		Min = 0,
+		Max = 360,
+		Function = function(val)
+			if nobob.Enabled then
+				gameCamera.Viewmodel.RightHand.RightWrist.C1 = oldc1 * CFrame.Angles(math.rad(rotationx.Value), math.rad(rotationy.Value), math.rad(rotationz.Value))
+			end
+		end
+	})
+	rotationy = nobob.CreateSlider({
+		Name = "RotY",
+		Min = 0,
+		Max = 360,
+		Function = function(val)
+			if nobob.Enabled then
+				gameCamera.Viewmodel.RightHand.RightWrist.C1 = oldc1 * CFrame.Angles(math.rad(rotationx.Value), math.rad(rotationy.Value), math.rad(rotationz.Value))
+			end
+		end
+	})
+	rotationz = nobob.CreateSlider({
+		Name = "RotZ",
+		Min = 0,
+		Max = 360,
+		Function = function(val)
+			if nobob.Enabled then
+				gameCamera.Viewmodel.RightHand.RightWrist.C1 = oldc1 * CFrame.Angles(math.rad(rotationx.Value), math.rad(rotationy.Value), math.rad(rotationz.Value))
+			end
+		end
+	})
+end)
+
+run(function()
+	local nobobdepth = {Value = 8}
+	local nobobhorizontal = {Value = 8}
+	local nobobvertical = {Value = -2}
+	local rotationx = {Value = 0}
+	local rotationy = {Value = 0}
+	local rotationz = {Value = 0}
+	local oldc1
+	local oldfunc
+	local nobob = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "Bob",
+		Function = function(callback)
+			local viewmodel = gameCamera:FindFirstChild("Viewmodel")
+			if viewmodel then
+				if callback then
+					lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_DEPTH_OFFSET", -(nobobdepth.Value / 10))
+					lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_HORIZONTAL_OFFSET", (nobobhorizontal.Value / 10))
+					lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_VERTICAL_OFFSET", (nobobvertical.Value / 10))
+					oldc1 = viewmodel.RightHand.RightWrist.C1
+					viewmodel.RightHand.RightWrist.C1 = oldc1 * CFrame.Angles(math.rad(rotationx.Value), math.rad(rotationy.Value), math.rad(rotationz.Value))
+				else
+					lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_DEPTH_OFFSET", 0)
+					lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_HORIZONTAL_OFFSET", 0)
+					lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_VERTICAL_OFFSET", 0)
+					viewmodel.RightHand.RightWrist.C1 = oldc1
+				end
+			end
+		end,
+		HoverText = "Further sword"
 	})
 	nobobdepth = nobob.CreateSlider({
 		Name = "Depth",
