@@ -386,6 +386,7 @@ local function attackValue(vec)
 	return {value = vec}
 end
 
+disablerZephyr = false
 local function getSpeed()
 	local speed = 1
 	if lplr.Character then
@@ -408,7 +409,9 @@ local function getSpeed()
 			speed = speed * 2
 		end
 		if store.zephyrOrb ~= 0 then
-			speed = speed * 1.8999
+			if disablerZephyr then
+				speed = speed * 2
+			end
 		end
 	end
 	return speed
@@ -8920,25 +8923,51 @@ end)
 
 run(function()
 	local Disabler = {Enabled = false}
+	local ZephyrSpeed = {Value = 1}
+	local DisablerMode = {Value = "Scythe"}
 	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "FirewallBypass",
+		Name = "Disabler",
 		Function = function(callback)
 			if callback then
-				task.spawn(function()
-					repeat
-						task.wait()
-						local item = getItemNear("scythe")
-						if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
-							bedwars.Client:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
-							if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
-								store.scythe = tick() + 1
+				if DisablerMode.Value == "Scythe" then
+					task.spawn(function()
+						repeat
+							task.wait()
+							local item = getItemNear("scythe")
+							if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
+								bedwars.Client:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
+								if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
+									store.scythe = tick() + 1
+								end
 							end
-						end
-					until (not Disabler.Enabled)
-				end)
+						until (not Disabler.Enabled)
+					end)
+				elseif DisablerMode.Value == "Zephyr" then
+					disablerZephyr = true
+				end
+				if DisablerMode.Value ~= "Zephyr" then
+					disablerZephyr = false
+				end
 			end
 		end,
 		HoverText = "Float disabler with scythe"
+	})
+	DisablerMode = Disabler.CreateDropdown({
+		Name = "Mode",
+		List = {"Scythe", "Zephyr"},
+		Function = function(callback) 
+			if DisablerMode.Value == "Zephyr" then ZephyrSpeed.Object.Visible = callback end
+			DisablerMode.Value = callback
+		end
+	})
+	ZephyrSpeed = Speed.CreateSlider({
+		Name = "Speed Multiplier",
+		Min = 0,
+		Max = 2,
+		Function = function(callback)
+			ZephyrSpeed.Value = callback
+		end,
+		Default = 1
 	})
 end)
 
