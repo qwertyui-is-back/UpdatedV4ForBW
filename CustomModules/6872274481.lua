@@ -411,7 +411,7 @@ local function getSpeed()
 		end
 		if store.zephyrOrb ~= 0 then
 			if disablerZephyr then
-				speed = speed * (2 * disablerBoost)
+				speed = speed * (1.899 * disablerBoost)
 			end
 		end
 	end
