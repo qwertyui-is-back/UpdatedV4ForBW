@@ -8925,11 +8925,12 @@ run(function()
 	local Disabler = {Enabled = false}
 	local ZephyrSpeed = {Value = 1}
 	local DisablerMode = {Value = "Scythe"}
+	local mode = "Scythe"
 	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "Disabler",
 		Function = function(callback)
 			if callback then
-				if DisablerMode.Value == "Scythe" then
+				if mode == "Scythe" then
 					task.spawn(function()
 						repeat
 							task.wait()
@@ -8942,10 +8943,10 @@ run(function()
 							end
 						until (not Disabler.Enabled)
 					end)
-				elseif DisablerMode.Value == "Zephyr" then
+				elseif mode == "Zephyr" then
 					disablerZephyr = true
 				end
-				if DisablerMode.Value ~= "Zephyr" then
+				if mode ~= "Zephyr" then
 					disablerZephyr = false
 				end
 			end
@@ -8957,7 +8958,7 @@ run(function()
 		List = {"Scythe", "Zephyr"},
 		Function = function(callback) 
 			if DisablerMode.Value == "Zephyr" then ZephyrSpeed.Object.Visible = callback end
-			DisablerMode.Value = callback
+			mode = callback
 		end
 	})
 	ZephyrSpeed = Disabler.CreateSlider({
