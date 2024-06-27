@@ -408,7 +408,7 @@ local function getSpeed()
 			speed = speed * 2
 		end
 		if store.zephyrOrb ~= 0 then
-			speed = speed * 2
+			speed = speed * 1.8999
 		end
 	end
 	return speed
