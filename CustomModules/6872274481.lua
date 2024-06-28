@@ -9058,10 +9058,11 @@ run(function()
 					for i,v in pairs(game.Players:GetChildren()) do
 						if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
 							for o,b in pairs(v.Character:GetChildren()) do
-								if b:IsA("Part") and b.Name ~= "amogus" then
+								if b:IsA("MeshPart") and b.Name ~= "amogus" then
 									b.Transparency = 1
-								elseif b:IsA("Accessory") then
+								elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
 									b.Handle.Transparency = 1
+
 								end
 							end
 							if v.Character:FindFirstChild("amogus") == nil then
@@ -9076,7 +9077,7 @@ run(function()
 								mesh.Scale = Vector3.new(0.11,0.11,0.11)
 								local weld = Instance.new("Weld",part)
 								weld.Part0 = part
-								weld.Part1 = part.Parent.HumanoidRootPart
+								weld.Part1 = part.Parent.UpperTorso
 							end
 						end
 					end
