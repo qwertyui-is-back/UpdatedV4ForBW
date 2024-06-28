@@ -8948,8 +8948,10 @@ run(function()
 							Blinking = false
 						end
 					end
-					if clonepos and not Blinking then
+					if clonepos and Blinking == false then
 						clonepos.CFrame = entityLibrary.character.HumanoidRootPart.CFrame
+					elseif clonepos and Blinking == true then
+						clonepos.CFrame = clonepos.CFrame
 					end
 				end)
 			else 
