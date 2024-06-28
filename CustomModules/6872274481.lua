@@ -8923,6 +8923,72 @@ run(function()
 end)
 
 run(function()
+	local PingSpoof = {Enabled = false}
+	local PingSpoofDelay = {Value = 50}
+	local PingSpoofPart = {Enabled = true}
+	local clonepos
+	local Blinking = false
+
+	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "PingSpoof",
+		Function = function(callback)
+			if callback then 
+				clonepos = Instance.new("Part",workspace)
+				clonepos.CanCollide = false
+				clonepos.Anchored = true
+				clonepos.Size = Vector3.new(3.9,5,3.9)
+				clonepos.Transparency = PingSpoofPart.Enabled and 0.25 or 1
+				RunLoops:BindToHeartbeat("PingSpoof",function()
+					if entityLibrary.isAlive then
+						if (tick() % 1 > (PingSpoofDelay.Value / 100)) then
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
+							Blinking = true
+						else
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
+							Blinking = false
+						end
+					end
+					if clonepos and not Blinking then
+						clonepos.CFrame = entityLibrary.character.HumanoidRootPart.CFrame
+					end
+				end)
+			else 
+				RunLoops:UnbindFromHeartbeat("PingSpoof")
+				if clonepos then
+					clonepos:Destroy()
+					clonepos = nil
+				end
+			end
+		end,
+		HoverText = "Helps PingSpoof the anticheat",
+		ExtraText = function() 
+			return PingSpoofMode.Value	
+		end
+	})
+	PingSpoofMode = PingSpoof.CreateDropdown({
+		Name = "Mode",
+		List = {"Lower", "Blink"},
+		Function = function(val) warningNotification("PingSpoof", `Using {val} to bypass`, 2.5) end
+	})
+	PingSpoofDelay = PingSpoof.CreateSlider({
+		Name = "Delay",
+		Min = 0,
+		Max = 300,
+		Default = 50,
+		Double = 100,
+		Function = function() end
+	})
+	PingSpoofPart = PingSpoof.CreateToggle({
+		Name = "Show Part",
+		Function = function(callback)
+			if clonepos then
+				clonepos.Transparency = callback and 0.25 or 1
+			end
+		end
+	})
+end)
+
+run(function()
 	local Disabler = {Enabled = false}
 	local ZephyrSpeed = {Value = 1}
 	local DisablerMode = {Value = "Scythe"}
