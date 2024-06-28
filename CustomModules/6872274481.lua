@@ -4935,7 +4935,7 @@ run(function()
 	})
 end)
 
-run(function()
+runFunction(function()
 	local FieldOfViewValue = {Value = 70}
 	local oldfov
 	local oldfov2
@@ -9087,6 +9087,75 @@ run(function()
 		end,
 		HoverText = "Turns everyone into Among Us"
 	})
+end)
+
+run(function() -- snoopy gave me permission to use this like a year ago
+	local hasTeleported = false
+	local TweenService = game:GetService("TweenService")
+
+	function findNearestBed()
+		local nearestBed = nil
+		local minDistance = math.huge
+
+		for _,v in pairs(game.Workspace:GetDescendants()) do
+			if v.Name:lower() == "bed" and v:FindFirstChild("Covers") and v:FindFirstChild("Covers").BrickColor ~= lplr.Team.TeamColor then
+				local distance = (v.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+				if distance < minDistance then
+					nearestBed = v
+					minDistance = distance
+				end
+			end
+		end
+		return nearestBed
+	end
+
+	function tweenToNearestBed()
+		local nearestBed = findNearestBed()
+		if nearestBed and not hasTeleported then
+			hasTeleported = true
+
+			local tweenInfo = TweenInfo.new(0, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0)
+
+			local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.64), {CFrame = nearestBed.CFrame + Vector3.new(0, 2, 0)})
+			tween:Play()
+		end
+	end
+
+	BedTP = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "BedTP",
+		Function = function(callback)
+			if callback then
+				lplr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+				lplr.CharacterAdded:Connect(function()
+					wait(0.3) 
+					tweenToNearestBed()
+				end)
+				hasTeleported = false
+				BedTP.ToggleButton(false)
+			end
+		end,
+		HoverText = "Teleports you to the nearest bed."
+	})
+end)
+
+run(function()
+	InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "InfiniteJump",
+		Function = function(callback)
+			if callback then
+
+			end
+		end
+	})
+	game:GetService("UserInputService").JumpRequest:Connect(function()
+		if not InfiniteJump.Enabled then return end
+		local localPlayer = game:GetService("Players").LocalPlayer
+		local character = localPlayer.Character
+		if character and character:FindFirstChildOfClass("Humanoid") then
+			local humanoid = character:FindFirstChildOfClass("Humanoid")
+			humanoid:ChangeState("Jumping")
+		end
+	end)         
 end)
 
 run(function()
