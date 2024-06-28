@@ -8960,10 +8960,7 @@ run(function()
 				end
 			end
 		end,
-		HoverText = "Helps PingSpoof the anticheat",
-		ExtraText = function() 
-			return PingSpoofMode.Value	
-		end
+		HoverText = "Helps PingSpoof the anticheat"
 	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
 		Name = "Delay",
