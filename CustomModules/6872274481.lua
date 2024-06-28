@@ -9049,6 +9049,47 @@ run(function()
 end)
 
 run(function()
+	local AmongUs = {Enabled = false}
+	AmongUs = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "AmongUs",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("amogus",function()
+					for i,v in pairs(plrs:GetChildren()) do
+						if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.Torso ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
+							for o,b in pairs(v.Character:GetChildren()) do
+								if b:IsA("Part") and b.Name ~= "amogus" then
+									b.Transparency = 1
+								elseif b:IsA("Accessory") then
+									b.Handle.Transparency = 1
+								end
+							end
+							if v.Character:FindFirstChild("amogus") == nil then
+								local asset = "http://www.roblox.com/asset/?id=6235963214"
+								local text = "http://www.roblox.com/asset/?id=6235963270"
+								local part = Instance.new("Part",v.Character)
+								part.Name = "amogus"
+								local mesh = Instance.new("SpecialMesh",part)
+								mesh.MeshId = asset
+								mesh.TextureId = text
+								mesh.Offset = Vector3.new(0,-0.3,0)
+								mesh.Scale = Vector3.new(0.11,0.11,0.11)
+								local weld = Instance.new("Weld",part)
+								weld.Part0 = part
+								weld.Part1 = part.Parent.HumanoidRootPart
+							end
+						end
+					end
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("amogus")
+			end
+		end,
+		HoverText = "Turns everyone into Among Us"
+	})
+end)
+
+run(function()
 	store.TPString = shared.vapeoverlay or nil
 	local origtpstring = store.TPString
 	local Overlay = GuiLibrary.CreateCustomWindow({
