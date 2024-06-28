@@ -9056,7 +9056,7 @@ run(function()
 			if callback then
 				RunLoops:BindToHeartbeat("amogus",function()
 					for i,v in pairs(game.Players:GetChildren()) do
-						if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.Torso ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
+						if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
 							for o,b in pairs(v.Character:GetChildren()) do
 								if b:IsA("Part") and b.Name ~= "amogus" then
 									b.Transparency = 1
