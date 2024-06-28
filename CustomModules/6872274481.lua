@@ -8923,6 +8923,7 @@ run(function()
 end)
 
 run(function()
+	local tws = game:GetService("TweenService")
 	local PingSpoof = {Enabled = false}
 	local PingSpoofDelay = {Value = 50}
 	local PingSpoofPart = {Enabled = true}
@@ -8954,7 +8955,13 @@ run(function()
 						end
 					end
 					if clonepos and Blinking == false then
-						clonepos.CFrame = lplr.Character.HumanoidRootPart.CFrame
+						local twsp = PingSpoofDely.value / 100
+						local tweenInfo = TweenInfo.new(twsp)
+
+						local goal = {}
+						goal.Position = lplr.Character.HumanoidRootPart.Positon
+						local tween = TweenService:Create(clonepos.Position, tweenInfo, goal)
+						tween:Play()
 					end
 				end)
 			else 
