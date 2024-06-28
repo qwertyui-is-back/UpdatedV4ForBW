@@ -8943,7 +8943,7 @@ run(function()
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
-						if bticks >+ (PingSpoofDelay.Value / 100) then
+						if bticks >= (PingSpoofDelay.Value / 100) then
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
 							bticks = 0
 							Blinking = true
