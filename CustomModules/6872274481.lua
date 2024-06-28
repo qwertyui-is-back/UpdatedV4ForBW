@@ -8955,12 +8955,12 @@ run(function()
 						end
 					end
 					if clonepos and Blinking == false then
-						local twsp = PingSpoofDelay.Value / 100
+						local twsp = (PingSpoofDelay.Value / 100)
 						local tweenInfo = TweenInfo.new(twsp)
 
 						local goal = {}
 						goal.Position = lplr.Character.HumanoidRootPart.Position
-						local tween = tws:Create(clonepos.Position, tweenInfo, goal)
+						local tween = tws:Create(clonepos, tweenInfo, goal)
 						tween:Play()
 					end
 				end)
