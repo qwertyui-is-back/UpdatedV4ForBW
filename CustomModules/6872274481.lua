@@ -8946,10 +8946,10 @@ run(function()
 						if bticks >= (PingSpoofDelay.Value / 100) then
 							sethiddenproperty(lplr.Character.HumanoidRootPart, "NetworkIsSleeping", true)
 							bticks = 0
-							Blinking = true
+							Blinking = false
 						else
 							sethiddenproperty(lplr.Character.HumanoidRootPart, "NetworkIsSleeping", false)
-							Blinking = false
+							Blinking = true
 						end
 					end
 					if clonepos and Blinking == false then
