@@ -8965,11 +8965,6 @@ run(function()
 			return PingSpoofMode.Value	
 		end
 	})
-	PingSpoofMode = PingSpoof.CreateDropdown({
-		Name = "Mode",
-		List = {"Lower", "Blink"},
-		Function = function(val) warningNotification("PingSpoof", `Using {val} to bypass`, 2.5) end
-	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
 		Name = "Delay",
 		Min = 0,
