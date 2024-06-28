@@ -8965,7 +8965,7 @@ run(function()
 							Blinking = true
 						end
 					end
-					if clonepos and bticks == (PingSpoofDelay.Value / 500) then
+					if clonepos and bticks == (PingSpoofDelay.Value / 2500) then
 						local twsp = (PingSpoofDelay.Value / 10000)
 						local tweenInfo = TweenInfo.new(twsp)
 
@@ -9055,7 +9055,7 @@ run(function()
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("amogus",function()
-					for i,v in pairs(plrs:GetChildren()) do
+					for i,v in pairs(game.Players:GetChildren()) do
 						if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.Torso ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
 							for o,b in pairs(v.Character:GetChildren()) do
 								if b:IsA("Part") and b.Name ~= "amogus" then
