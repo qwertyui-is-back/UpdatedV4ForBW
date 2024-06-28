@@ -8938,7 +8938,7 @@ run(function()
 				clonepos = Instance.new("Part",workspace)
 				clonepos.CanCollide = false
 				clonepos.Anchored = true
-				clonepos.Size = Vector3.new(2,2,2)
+				clonepos.Size = Vector3.new(1,2,1)
 				clonepos.Transparency = PingSpoofPart.Enabled and 0.25 or 1
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					bticks = bticks + 1
@@ -8953,9 +8953,9 @@ run(function()
 						end
 					end
 					if clonepos and Blinking == false then
+						local origpos = entityLibrary.character.Torso
+						clonepos.Position = Vector3.new(clonepos.Position.X, origpos.Position.Y, clonepos.Position.Z)
 						clonepos.CFrame = entityLibrary.character.HumanoidRootPart.CFrame
-					elseif clonepos and Blinking == true then
-						clonepos.CFrame = clonepos.CFrame
 					end
 				end)
 			else 
