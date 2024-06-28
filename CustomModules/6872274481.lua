@@ -8944,11 +8944,11 @@ run(function()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
 						if bticks >= (PingSpoofDelay.Value / 100) then
-							sethiddenproperty(lplr.Character.HumanoidRootPart, "NetworkIsSleeping", true)
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
 							bticks = 0
 							Blinking = false
 						else
-							sethiddenproperty(lplr.Character.HumanoidRootPart, "NetworkIsSleeping", false)
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
 							Blinking = true
 						end
 					end
