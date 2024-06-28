@@ -8965,7 +8965,10 @@ run(function()
 				end
 			end
 		end,
-		HoverText = "Helps PingSpoof the anticheat"
+		HoverText = "Helps PingSpoof the anticheat",
+		ExtraText = function()
+			return PingSpoofDelay.Value
+		end
 	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
 		Name = "Delay",
@@ -9011,7 +9014,10 @@ run(function()
 				disablerZephyr = false
 			end
 		end,
-		HoverText = "Attempts to help bypass the AntiCheat"
+		HoverText = "Attempts to help bypass the AntiCheat",
+		ExtraText = function()
+			return "Heatseeker"
+		end
 	})
 	ZephyrSpeed = Disabler.CreateSlider({
 		Name = "Speed Multiplier",
