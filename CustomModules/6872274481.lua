@@ -9067,7 +9067,7 @@ run(function()
 						if lplr.Character:FindFirstChild("amogus") == nil then
 							local asset = "http://www.roblox.com/asset/?id=6235963214"
 							local text = "http://www.roblox.com/asset/?id=6235963270"
-							local part = Instance.new("Part",v.Character)
+							local part = Instance.new("Part",lplr.Character)
 							part.Name = "amogus"
 							local mesh = Instance.new("SpecialMesh",part)
 							mesh.MeshId = asset
