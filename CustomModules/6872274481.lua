@@ -8952,6 +8952,7 @@ run(function()
 				clonepos.Anchored = true
 				clonepos.Size = Vector3.new(3.9,5,3.9)
 				clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
+				clonepos.Name = "SkibidiPing"
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					bticks = bticks + 1
 					AddedPing = PingSpoofDelay.Value * 1.35
@@ -9050,18 +9051,19 @@ end)
 
 run(function()
 	local AmongUs = {Enabled = false}
-	AmongUs = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	AmongUs = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = "AmongUs",
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("amogus",function()
 					if lplr.Character.Humanoid ~= nil and (lplr.Character ~= nil and lplr.Character.HumanoidRootPart ~= nil and lplr.Character.Humanoid ~= nil and lplr.Character.Humanoid.Health ~= 0) then
 						for o,b in pairs(lplr.Character:GetChildren()) do
-							if b:IsA("MeshPart") and b.Name ~= "amogus" then
+							if b.Name == "SkibidiPing" then
+								return
+							elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
 								b.Transparency = 1
 							elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
 								b.Handle.Transparency = 1
-
 							end
 						end
 						if lplr.Character:FindFirstChild("amogus") == nil then
@@ -9085,11 +9087,12 @@ run(function()
 				RunLoops:UnbindFromHeartbeat("amogus")
 			end
 		end,
-		HoverText = "Turns everyone into Among Us"
+		HoverText = "Turns you into Among Us"
 	})
 end)
 
 run(function() -- snoopy gave me permission to use this like a year ago
+	local BedTP = {Enabled = false}
 	local hasTeleported = false
 	local TweenService = game:GetService("TweenService")
 
