@@ -3936,6 +3936,7 @@ run(function()
 				LongJumpOrigin = nil
 				damagetimer = 0
 				damagetimertick = 0
+				workspace.Gravity = 196.2
 			end
 		end,
 		HoverText = "Lets you jump farther (Not landing on same level & Spamming can lead to lagbacks)"
