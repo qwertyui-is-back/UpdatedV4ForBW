@@ -8944,18 +8944,16 @@ run(function()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
 						if bticks >= (PingSpoofDelay.Value / 100) then
-							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
+							sethiddenproperty(lplr.Character.HumanoidRootPart, "NetworkIsSleeping", true)
 							bticks = 0
 							Blinking = true
 						else
-							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
+							sethiddenproperty(lplr.Character.HumanoidRootPart, "NetworkIsSleeping", false)
 							Blinking = false
 						end
 					end
 					if clonepos and Blinking == false then
-						local origpos = entityLibrary.character.Torso
-						clonepos.Position = Vector3.new(clonepos.Position.X, origpos.Position.Y, clonepos.Position.Z)
-						clonepos.CFrame = entityLibrary.character.HumanoidRootPart.CFrame
+						clonepos.CFrame = lplr.Character.HumanoidRootPart.CFrame
 					end
 				end)
 			else 
