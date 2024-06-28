@@ -8959,7 +8959,7 @@ run(function()
 						local tweenInfo = TweenInfo.new(twsp)
 
 						local goal = {}
-						goal.Position = lplr.Character.HumanoidRootPart.Positon
+						goal.Position = lplr.Character.HumanoidRootPart.Position
 						local tween = tws:Create(clonepos.Position, tweenInfo, goal)
 						tween:Play()
 					end
