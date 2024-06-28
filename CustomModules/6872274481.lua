@@ -8938,7 +8938,7 @@ run(function()
 				clonepos = Instance.new("Part",workspace)
 				clonepos.CanCollide = false
 				clonepos.Anchored = true
-				clonepos.Size = Vector3.new(3.9,5,3.9)
+				clonepos.Size = Vector3.new(2,2,2)
 				clonepos.Transparency = PingSpoofPart.Enabled and 0.25 or 1
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					bticks = bticks + 1
