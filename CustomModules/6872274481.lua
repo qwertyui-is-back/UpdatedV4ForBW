@@ -3822,7 +3822,7 @@ run(function()
 	LongJumpacprogressbartext.Position = UDim2.new(0, 0, -1, 0)
 	LongJumpacprogressbartext.Parent = LongJumpacprogressbarframe
 	LongJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = "LongJump",
+		Name = "ItemLongJump",
 		Function = function(callback)
 			if callback then
 				table.insert(LongJump.Connections, vapeEvents.EntityDamageEvent.Event:Connect(function(damageTable)
