@@ -4935,7 +4935,7 @@ run(function()
 	})
 end)
 
-runFunction(function()
+run(function()
 	local FieldOfViewValue = {Value = 70}
 	local oldfov
 	local oldfov2
