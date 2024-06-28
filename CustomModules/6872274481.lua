@@ -8955,7 +8955,7 @@ run(function()
 						end
 					end
 					if clonepos and Blinking == false then
-						local twsp = (PingSpoofDelay.Value / 100)
+						local twsp = (PingSpoofDelay.Value / 1000)
 						local tweenInfo = TweenInfo.new(twsp)
 
 						local goal = {}
@@ -8974,7 +8974,7 @@ run(function()
 		end,
 		HoverText = "Helps PingSpoof the anticheat",
 		ExtraText = function()
-			return PingSpoofDelay.Value
+			return PingSpoofDelay.Value / 100
 		end
 	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
