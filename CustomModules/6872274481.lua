@@ -8938,8 +8938,8 @@ run(function()
 				clonepos = Instance.new("Part",workspace)
 				clonepos.CanCollide = false
 				clonepos.Anchored = true
-				clonepos.Size = Vector3.new(1,2,1)
-				clonepos.Transparency = PingSpoofPart.Enabled and 0.25 or 1
+				clonepos.Size = Vector3.new(3.9,5,3.9)
+				clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
@@ -8978,7 +8978,7 @@ run(function()
 		Name = "Show Part",
 		Function = function(callback)
 			if clonepos then
-				clonepos.Transparency = callback and 0.25 or 1
+				clonepos.Transparency = callback and 0.65 or 1
 			end
 		end
 	})
