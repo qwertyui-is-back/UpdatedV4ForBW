@@ -8955,7 +8955,7 @@ run(function()
 						end
 					end
 					if clonepos and Blinking == false then
-						local twsp = PingSpoofDely.value / 100
+						local twsp = PingSpoofDely.Value / 100
 						local tweenInfo = TweenInfo.new(twsp)
 
 						local goal = {}
