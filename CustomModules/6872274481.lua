@@ -8965,7 +8965,7 @@ run(function()
 							Blinking = true
 						end
 					end
-					if clonepos and bticks == (PingSpoofDelay.Value / 200) then
+					if clonepos and bticks == (PingSpoofDelay.Value / 500) then
 						local twsp = (PingSpoofDelay.Value / 10000)
 						local tweenInfo = TweenInfo.new(twsp)
 
