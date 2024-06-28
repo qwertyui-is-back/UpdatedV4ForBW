@@ -8960,7 +8960,7 @@ run(function()
 
 						local goal = {}
 						goal.Position = lplr.Character.HumanoidRootPart.Positon
-						local tween = TweenService:Create(clonepos.Position, tweenInfo, goal)
+						local tween = tws:Create(clonepos.Position, tweenInfo, goal)
 						tween:Play()
 					end
 				end)
