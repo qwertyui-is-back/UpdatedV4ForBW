@@ -3666,6 +3666,12 @@ run(function()
 	end
 
 	local damagemethods = {
+		none = function(nothing, pos)
+			damagetimer = LongJumpSpeed.Value * getSpeed()
+			overridegrav = true
+			workspace.Gravity = 20
+			entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end,
 		fireball = function(fireball, pos)
 			if not LongJump.Enabled then return end
 			pos = pos - (entityLibrary.character.HumanoidRootPart.CFrame.lookVector * 0.2)
@@ -3859,6 +3865,10 @@ run(function()
 								v(item, LongJumpOrigin)
 							end
 							break
+						else
+							if i == "none" then
+								v(item, pos)
+							end
 						end
 					end
 					local changecheck
@@ -3935,7 +3945,7 @@ run(function()
 		Min = 1,
 		Max = 52,
 		Function = function() end,
-		Default = 52
+		Default = 23
 	})
 end)
 
