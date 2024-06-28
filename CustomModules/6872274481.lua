@@ -8922,6 +8922,9 @@ run(function()
 	})
 end)
 
+local PerformanceStats = game:GetService("CoreGui"):WaitForChild("RobloxGui"):WaitForChild("PerformanceStats")
+local PingLabel
+local AddedPing = 0
 run(function()
 	local PingSpoof = {Enabled = false}
 	local PingSpoofDelay = {Value = 50}
@@ -8942,11 +8945,18 @@ run(function()
 				clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					bticks = bticks + 1
+					AddedPing = PingSpoofDelay.Value * 1.35
 					if entityLibrary.isAlive then
 						if bticks >= (PingSpoofDelay.Value / 100) then
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
 							bticks = 0
 							Blinking = false
+							for I, Child in next, PerformanceStats:GetChildren() do
+    								if Child.StatsMiniTextPanelClass.TitleLabel.Text == "Ping" then
+        								PingLabel = Child.StatsMiniTextPanelClass.ValueLabel
+        								break
+    								end
+							end
 						else
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
 							Blinking = true
@@ -8983,6 +8993,10 @@ run(function()
 		end
 	})
 end)
+PingLabel:GetPropertyChangedSignal("Text"):Connect(function()
+	PingLabel.Text = toString(PingLabel.Text + AddedPing)
+end);
+PingLabel.Text = toString(PingLabel.Text + AddedPing)
 
 run(function()
 	local Disabler = {Enabled = false}
