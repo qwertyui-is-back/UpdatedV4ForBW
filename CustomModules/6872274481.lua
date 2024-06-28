@@ -3828,12 +3828,12 @@ run(function()
 	LongJumpacprogressbartext.Position = UDim2.new(0, 0, -1, 0)
 	LongJumpacprogressbartext.Parent = LongJumpacprogressbarframe
 	LongJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = "ItemLongJump",
+		Name = "LongJump",
 		Function = function(callback)
 			if callback then
 				table.insert(LongJump.Connections, vapeEvents.EntityDamageEvent.Event:Connect(function(damageTable)
 					if damageTable.entityInstance == lplr.Character and (not damageTable.knockbackMultiplier or not damageTable.knockbackMultiplier.disabled) then
-						local knockbackBoost = damageTable.knockbackMultiplier and damageTable.knockbackMultiplier.horizontal and damageTable.knockbackMultiplier.horizontal * LongJumpSpeed.Value or LongJumpSpeed.Value
+						local knockbackBoost = damageTable.knockbackMultiplier and damageTable.knockbackMultiplier.horizontal and damageTable.knockbackMultiplier.horizontal * (LongJumpSpeed.Value * getSpeed()) or (LongJumpSpeed.Value * getSpeed())
 						if damagetimertick < tick() or knockbackBoost >= damagetimer then
 							damagetimer = knockbackBoost
 							damagetimertick = tick() + 2.5
@@ -8966,7 +8966,7 @@ run(function()
 						end
 					end
 					if clonepos and Blinking == false then
-						local twsp = (PingSpoofDelay.Value / 1000)
+						local twsp = (PingSpoofDelay.Value / 10000)
 						local tweenInfo = TweenInfo.new(twsp)
 
 						local goal = {}
