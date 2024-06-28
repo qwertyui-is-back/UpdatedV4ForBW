@@ -8927,21 +8927,25 @@ run(function()
 	local PingSpoofDelay = {Value = 50}
 	local PingSpoofPart = {Enabled = true}
 	local clonepos
+	local bticks = 0
 	local Blinking = false
 
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof",
 		Function = function(callback)
 			if callback then 
+				bticks = 0
 				clonepos = Instance.new("Part",workspace)
 				clonepos.CanCollide = false
 				clonepos.Anchored = true
 				clonepos.Size = Vector3.new(3.9,5,3.9)
 				clonepos.Transparency = PingSpoofPart.Enabled and 0.25 or 1
 				RunLoops:BindToHeartbeat("PingSpoof",function()
+					bticks = bticks + 1
 					if entityLibrary.isAlive then
-						if (tick() % 1 > (PingSpoofDelay.Value / 100)) then
+						if bticks >+ (PingSpoofDelay.Value / 100) then
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
+							bticks = 0
 							Blinking = true
 						else
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
