@@ -9055,30 +9055,29 @@ run(function()
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("amogus",function()
-					for i,v in pairs(game.Players:GetChildren()) do
-						if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
-							for o,b in pairs(v.Character:GetChildren()) do
-								if b:IsA("MeshPart") and b.Name ~= "amogus" then
-									b.Transparency = 1
-								elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
-									b.Handle.Transparency = 1
+					if lplr.Character.Humanoid ~= nil and (lplr.Character ~= nil and lplr.Character.HumanoidRootPart ~= nil and lplr.Character.Humanoid ~= nil and lplr.Character.Humanoid.Health ~= 0) then
+						for o,b in pairs(lplr.Character:GetChildren()) do
+							if b:IsA("MeshPart") and b.Name ~= "amogus" then
+								b.Transparency = 1
+							elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
+								b.Handle.Transparency = 1
 
-								end
 							end
-							if v.Character:FindFirstChild("amogus") == nil then
-								local asset = "http://www.roblox.com/asset/?id=6235963214"
-								local text = "http://www.roblox.com/asset/?id=6235963270"
-								local part = Instance.new("Part",v.Character)
-								part.Name = "amogus"
-								local mesh = Instance.new("SpecialMesh",part)
-								mesh.MeshId = asset
-								mesh.TextureId = text
-								mesh.Offset = Vector3.new(0,-0.3,0)
-								mesh.Scale = Vector3.new(0.11,0.11,0.11)
-								local weld = Instance.new("Weld",part)
-								weld.Part0 = part
-								weld.Part1 = part.Parent.UpperTorso
-							end
+						end
+						if lplr.Character:FindFirstChild("amogus") == nil then
+							local asset = "http://www.roblox.com/asset/?id=6235963214"
+							local text = "http://www.roblox.com/asset/?id=6235963270"
+							local part = Instance.new("Part",v.Character)
+							part.Name = "amogus"
+							local mesh = Instance.new("SpecialMesh",part)
+							mesh.MeshId = asset
+							mesh.TextureId = text
+							part.CanCollide = false
+							mesh.Offset = Vector3.new(0,-0.3,0)
+							mesh.Scale = Vector3.new(0.11,0.11,0.11)
+							local weld = Instance.new("Weld",part)
+							weld.Part0 = part
+							weld.Part1 = part.Parent.UpperTorso
 						end
 					end
 				end)
