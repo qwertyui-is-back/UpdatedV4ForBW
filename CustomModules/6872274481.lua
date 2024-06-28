@@ -8922,9 +8922,6 @@ run(function()
 	})
 end)
 
-local PerformanceStats = game:GetService("CoreGui"):WaitForChild("RobloxGui"):WaitForChild("PerformanceStats")
-local PingLabel
-local AddedPing = 0
 run(function()
 	local PingSpoof = {Enabled = false}
 	local PingSpoofDelay = {Value = 50}
@@ -8951,12 +8948,6 @@ run(function()
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
 							bticks = 0
 							Blinking = false
-							for I, Child in next, PerformanceStats:GetChildren() do
-    								if Child.StatsMiniTextPanelClass.TitleLabel.Text == "Ping" then
-        								PingLabel = Child.StatsMiniTextPanelClass.ValueLabel
-        								break
-    								end
-							end
 						else
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
 							Blinking = true
@@ -8993,10 +8984,6 @@ run(function()
 		end
 	})
 end)
-PingLabel:GetPropertyChangedSignal("Text"):Connect(function()
-	PingLabel.Text = toString(PingLabel.Text + AddedPing)
-end);
-PingLabel.Text = toString(PingLabel.Text + AddedPing)
 
 run(function()
 	local Disabler = {Enabled = false}
