@@ -9120,6 +9120,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.HumanoidRootPart.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
 				clonethingy.HumanoidRootPart.Touched:Connect(function(ok)
 					if ok.Name == "HumanoidRootPart" and ok.Parent.Name == lplr.Name then
+						task.wait(1.1)
 						RunLoops:UnbindFromHeartbeat("BoostSilentFly")
 						testing = true
 						warningNotification("CatV5","Finished",5)
