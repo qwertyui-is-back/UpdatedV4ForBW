@@ -5097,6 +5097,13 @@ run(function()
 		Function = function(callback)
 			debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 23, callback and 'raycast' or 'Raycast')
 			debug.setupvalue(bedwars.SwordController.swingSwordAtMouse, 4, callback and bedwars.QueryUtil or workspace)
+			task.spawn(function()
+				repeat
+					task.wait()
+					if (not GameFixer["Enabled"]) then break end
+					UserSettings():GetService("UserGameSettings").RotationType = ((cam.CFrame.Position - cam.Focus.Position).Magnitude <= 0.5 and Enum.RotationType.CameraRelative or Enum.RotationType.MovementRelative)
+				until (not GameFixer["Enabled"])
+			end)
 		end,
 		HoverText = "Fixes game bugs"
 	})
@@ -5104,6 +5111,7 @@ end)
 
 run(function()
 	local transformed = false
+	local lightingconnection
 	local GameTheme = {Enabled = false}
 	local GameThemeMode = {Value = "GameTheme"}
 
@@ -5528,6 +5536,66 @@ run(function()
 				colorcorrection.Parent = lightingService
 				debug.setconstant(require(lplr.PlayerScripts.TS.controllers.global.hotbar.ui.healthbar["hotbar-healthbar"]).HotbarHealthbar.render, 16, 16745650)
 			end)
+		end,
+		Femboy = function()
+			task.spawn(function()
+				for i,v in pairs(lightingService:GetChildren()) do
+					if v:IsA("Atmosphere") or v:IsA("Sky") or v:IsA("PostEffect") then
+						v:Remove()
+					end
+				end
+				local sky = Instance.new("Sky")
+				sky.SkyboxBk = "rbxassetid://1546230803"
+				sky.SkyboxDn = "rbxassetid://1546231143"
+				sky.SkyboxFt = "rbxassetid://1546230803"
+				sky.SkyboxLf = "rbxassetid://1546230803"
+				sky.SkyboxRt = "rbxassetid://1546230803"
+				sky.SkyboxUp = "rbxassetid://1546230451"
+				sky.Parent = lightingService
+				pcall(function() workspace.Clouds:Destroy() end)
+				local damagetab = debug.getupvalue(bedwars.DamageIndicator, 2)
+				damagetab.strokeThickness = false
+				damagetab.textSize = 32
+				damagetab.blowUpDuration = 0
+				damagetab.baseColor = Color3.fromRGB(255, 132, 178)
+				damagetab.blowUpSize = 32
+				damagetab.blowUpCompleteDuration = 0
+				damagetab.anchoredDuration = 0
+				debug.setconstant(bedwars.DamageIndicator, 83, Enum.Font.LuckiestGuy)
+				debug.setconstant(bedwars.DamageIndicator, 102, "Enabled")
+				debug.setconstant(bedwars.DamageIndicator, 118, 0.3)
+				debug.setconstant(bedwars.DamageIndicator, 128, 0.5)
+				debug.setupvalue(bedwars.DamageIndicator, 10, {
+					Create = function(self, obj, ...)
+						task.spawn(function()
+							obj.Parent.Parent.Parent.Parent.Velocity = Vector3.new((math.random(-50, 50) / 100) * damagetab.velX, (math.random(50, 60) / 100) * damagetab.velY, (math.random(-50, 50) / 100) * damagetab.velZ)
+							local textcompare = obj.Parent.TextColor3
+							if textcompare ~= Color3.fromRGB(85, 255, 85) then
+								local newtween = tweenService:Create(obj.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Linear), {
+									TextColor3 = (textcompare == Color3.fromRGB(76, 175, 93) and Color3.new(0, 0, 0) or Color3.new(0, 0, 0))
+								})
+								task.wait(0.15)
+								newtween:Play()
+							end
+						end)
+						return tweenService:Create(obj, ...)
+					end
+				})
+				local colorcorrection = Instance.new("ColorCorrectionEffect")
+				colorcorrection.TintColor = Color3.fromRGB(255, 199, 220)
+				colorcorrection.Brightness = 0.05
+				colorcorrection.Parent = lightingService
+				debug.setconstant(require(lplr.PlayerScripts.TS.controllers.global.hotbar.ui.healthbar["hotbar-healthbar"]).HotbarHealthbar.render, 16, 16745650)
+				lightingconnection = glightingService.Changed:connect(function()
+					if not lightingchanged then
+						lightingService.Brightness = 2
+						lightingService.ClockTime = 14
+						lightingService.FogEnd = 100000
+						lightingService.GlobalShadows = false
+						lightingService.OutdoorAmbient = Color3.fromRGB(64, 16, 255)
+					end
+				end)
+			end)
 		end
 	}
 
@@ -5552,7 +5620,7 @@ run(function()
 	GameThemeMode = GameTheme.CreateDropdown({
 		Name = "Theme",
 		Function = function() end,
-		List = {"Old", "Winter", "Halloween", "Valentines"}
+		List = {"Old", "Winter", "Halloween", "Valentines", "Femboy"}
 	})
 end)
 
@@ -9007,11 +9075,82 @@ run(function()
 	})
 end)
 
+run(function() -- Yes, this is old. I know. It isn't skidded, but it should work still because Infinite Fly does.
+	local BoostSilentFly = {["Enabled"] = false}
+	local velocity = {["Value"] = 35}
+	local clonethingy
+	
+	local testing = false
+	local partthingy
+	BoostSilentFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "BoostSilentFly",
+		Function = function(callback)
+			if callback then
+				lplr.Character.Archivable = true
+				clonethingy = lplr.Character:Clone()
+				clonethingy.Parent = workspace
+				clonethingy.Name = "clonethingy"
+				workspace.Camera.CameraSubject = clonethingy.Humanoid
+				partthingy = Instance.new("Part",workspace)
+				partthingy.Size = Vector3.new(2048,1,2048)
+				partthingy.CFrame = clonethingy.HumanoidRootPart.CFrame * CFrame.new(0,-4,0)
+				partthingy.Anchored = true
+				partthingy.Transparency = 1
+				RunLoops:BindToHeartbeat("BoostSilentFly", function(delta)
+					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,entity.character.HumanoidRootPart.CFrame.Z)
+					clonethingy.HumanoidRootPart.Rotation = lplr.Character.UpperTorso.Rotation
+				end)
+				task.spawn(function()
+					repeat
+						task.wait(0.1)
+						if BoostSilentFly["Enabled"] == false then break end
+						lplr.Character.HumanoidRootPart.Velocity = lplr.Character.HumanoidRootPart.Velocity + Vector3.new(0,35,0)
+					until BoostSilentFly["Enabled"] == false
+				end)
+				repeat
+					task.wait(0.001)
+					if BoostSilentFly["Enabled"] == false then break end
+					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,entity.character.HumanoidRootPart.CFrame.Z)
+				until testing == true
+			else
+				warningNotification("CatV5","Please wait",5)
+				clonethingy.HumanoidRootPart.Touched:Connect(function(ok)
+					if ok.Name == "HumanoidRootPart" and ok.Parent.Name == lplr.Name then
+						RunLoops:UnbindFromHeartbeat("BoostSilentFly")
+						testing = true
+						warningNotification("CatV5","Finished",5)
+						workspace.Camera.CameraSubject = lplr.Character.Humanoid
+						clonethingy:Destroy()
+						partthingy:Destroy()
+						clonethingy.HumanoidRootPart.Touched:Disconnect()
+					end
+				end)
+			end
+		end,
+		HoverText = "entirely made by liltypicscripter and qwertyui."
+	})
+	
+end)
+
 run(function()
 	local Disabler = {Enabled = false}
 	local ZephyrSpeed = {Value = 1}
 	local DisablerMode = {Value = "Scythe"}
 	local mode = "Scythe"
+	local sd = false
+	local csd = false
+	local zd = false
+	local function DeleteClientSidedAnticheat()
+		if lplr.PlayerScripts.Modules:FindFirstChild("anticheat") then
+			lplr.PlayerScripts.Modules.anticheat:Destroy()
+		end
+		if lplr.PlayerScripts:FindFirstChild("GameAnalyticsClient") then
+			lplr.PlayerScripts.GameAnalyticsClient:Destroy()
+		end
+		if game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat") then
+			game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat"):Destroy()
+		end
+	end
 	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "Disabler",
 		Function = function(callback)
@@ -9019,16 +9158,25 @@ run(function()
 				task.spawn(function()
 					repeat
 						task.wait()
-						local item = getItemNear("scythe")
-						if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
-							bedwars.Client:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
-							if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
-								store.scythe = tick() + 1
+						if sd then
+							local item = getItemNear("scythe")
+							if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
+								bedwars.Client:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
+								if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
+									store.scythe = tick() + 1
+								end
 							end
 						end
 					until (not Disabler.Enabled)
 				end)
-				disablerZephyr = true
+				if zd then
+					disablerZephyr = true
+				else
+					disablerZephyr = false
+				end
+				if csd then
+					DeleteClientSidedAnticheat()
+				end
 			else
 				disablerZephyr = false
 			end
@@ -9036,6 +9184,27 @@ run(function()
 		HoverText = "Attempts to help bypass the AntiCheat",
 		ExtraText = function()
 			return "Heatseeker"
+		end
+	})
+	ClientS = Disabler.CreateToggle({
+		Name = "Client Sided",
+		Default = true,
+		Function = function(callback)
+			csd = callback
+		end
+	})
+	Scythe = Disabler.CreateToggle({
+		Name = "Scythe",
+		Default = true,
+		Function = function(callback)
+			sd = callback
+		end
+	})
+	Zephyr = Disabler.CreateToggle({
+		Name = "Zephyr",
+		Default = true,
+		Function = function(callback)
+			zd = callback
 		end
 	})
 	ZephyrSpeed = Disabler.CreateSlider({
