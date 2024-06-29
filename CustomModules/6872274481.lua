@@ -9098,7 +9098,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 				clonethingy = lplr.Character:Clone()
 				clonethingy.Parent = workspace
 				clonethingy.Name = "clonethingy"
-				clonethingy.Anchored = true
+				clonethingy.HumanoidRootPart.Anchored = true
 				workspace.Camera.CameraSubject = clonethingy.Humanoid
 				RunLoops:BindToHeartbeat("BoostSilentFly", function(delta)
 					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,pos9,lplr.Character.HumanoidRootPart.CFrame.Z)
