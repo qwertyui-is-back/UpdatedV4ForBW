@@ -9097,7 +9097,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, but it should work
 				partthingy.Anchored = true
 				partthingy.Transparency = 1
 				RunLoops:BindToHeartbeat("BoostSilentFly", function(delta)
-					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,entity.character.HumanoidRootPart.CFrame.Z)
+					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,lplr.Character.HumanoidRootPart.CFrame.Z)
 					clonethingy.HumanoidRootPart.Rotation = lplr.Character.UpperTorso.Rotation
 				end)
 				task.spawn(function()
