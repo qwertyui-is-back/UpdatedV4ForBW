@@ -1,3 +1,9 @@
+
+-- Cat V.. Source Code --
+local catver = "V5"
+-- Cat V.. Source Code --
+
+
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
 local textService = game:GetService("TextService")
@@ -9082,7 +9088,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 	
 	local testing = false
 	local partthingy
-	local pos9
+	local pos9 = 0
 	BoostSilentFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "BoostSilentFly",
 		Function = function(callback)
@@ -9095,7 +9101,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 				clonethingy.Anchored = true
 				workspace.Camera.CameraSubject = clonethingy.Humanoid
 				RunLoops:BindToHeartbeat("BoostSilentFly", function(delta)
-					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,lplr.Character.HumanoidRootPart.CFrame.Z)
+					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,pos9,lplr.Character.HumanoidRootPart.CFrame.Z)
 					clonethingy.HumanoidRootPart.Rotation = lplr.Character.HumanoidRootPart.Rotation
 				end)
 				task.spawn(function()
@@ -9105,7 +9111,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 						if lplr.Character.HumanoidRootPart.CFrame.Y <= 1000 then
 							lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,9000,0)
 							lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-							warningNotification("CatV5","Added Velocity",1.5)
+							warningNotification("Cat "..catvar,"Added Velocity",1.5)
 						end
 					until BoostSilentFly["Enabled"] == false
 				end)
@@ -9115,7 +9121,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,pos9,lplr.Character.HumanoidRootPart.CFrame.Z)
 				until testing == true
 			else
-				warningNotification("CatV5","Please wait",5)
+				warningNotification("Cat "..catvar,"Please wait",5)
 				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.HumanoidRootPart.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
 				lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
 				clonethingy.HumanoidRootPart.Touched:Connect(function(ok)
@@ -9123,10 +9129,9 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 						task.wait(1.1)
 						RunLoops:UnbindFromHeartbeat("BoostSilentFly")
 						testing = true
-						warningNotification("CatV5","Finished",5)
+						warningNotification("Cat "..catvar,"Finished",5)
 						workspace.Camera.CameraSubject = lplr.Character.Humanoid
 						clonethingy:Destroy()
-						partthingy:Destroy()
 						clonethingy.HumanoidRootPart.Touched:Disconnect()
 					end
 				end)
@@ -9155,6 +9160,7 @@ run(function()
 		if game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat") then
 			game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat"):Destroy()
 		end
+		warningNotification("Cat "..catver, "Disabled Client", 3)
 	end
 	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "Disabler",
@@ -9163,6 +9169,11 @@ run(function()
 				task.spawn(function()
 					repeat
 						task.wait()
+						if zd then
+							disablerZephyr = true
+						else
+							disablerZephyr = false
+						end
 						if sd then
 							local item = getItemNear("scythe")
 							if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
@@ -9174,11 +9185,6 @@ run(function()
 						end
 					until (not Disabler.Enabled)
 				end)
-				if zd then
-					disablerZephyr = true
-				else
-					disablerZephyr = false
-				end
 				if csd then
 					DeleteClientSidedAnticheat()
 				end
@@ -9196,6 +9202,8 @@ run(function()
 		Default = true,
 		Function = function(callback)
 			csd = callback
+			Disabler.ToggleButton(false)
+			Disabler.ToggleButton(false)
 		end
 	})
 	Scythe = Disabler.CreateToggle({
@@ -9203,6 +9211,8 @@ run(function()
 		Default = true,
 		Function = function(callback)
 			sd = callback
+			Disabler.ToggleButton(false)
+			Disabler.ToggleButton(false)
 		end
 	})
 	Zephyr = Disabler.CreateToggle({
@@ -9210,6 +9220,8 @@ run(function()
 		Default = true,
 		Function = function(callback)
 			zd = callback
+			Disabler.ToggleButton(false)
+			Disabler.ToggleButton(false)
 		end
 	})
 	ZephyrSpeed = Disabler.CreateSlider({
@@ -9218,6 +9230,8 @@ run(function()
 		Max = 2,
 		Function = function(callback)
 			disablerBoost = callback
+			Disabler.ToggleButton(false)
+			Disabler.ToggleButton(false)
 		end,
 		Default = 1
 	})
