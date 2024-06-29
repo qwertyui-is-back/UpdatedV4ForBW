@@ -9082,20 +9082,18 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 	
 	local testing = false
 	local partthingy
+	local pos9
 	BoostSilentFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "BoostSilentFly",
 		Function = function(callback)
 			if callback then
+				pos9 = lplr.Character.HumanoidRootPart.CFrame.Y
 				lplr.Character.Archivable = true
 				clonethingy = lplr.Character:Clone()
 				clonethingy.Parent = workspace
 				clonethingy.Name = "clonethingy"
+				clonethingy.Anchored = true
 				workspace.Camera.CameraSubject = clonethingy.Humanoid
-				partthingy = Instance.new("Part",workspace)
-				partthingy.Size = Vector3.new(2048,1,2048)
-				partthingy.CFrame = clonethingy.HumanoidRootPart.CFrame * CFrame.new(0,-4,0)
-				partthingy.Anchored = true
-				partthingy.Transparency = 1
 				RunLoops:BindToHeartbeat("BoostSilentFly", function(delta)
 					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,lplr.Character.HumanoidRootPart.CFrame.Z)
 					clonethingy.HumanoidRootPart.Rotation = lplr.Character.HumanoidRootPart.Rotation
@@ -9104,8 +9102,9 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 					repeat
 						task.wait(0.1)
 						if BoostSilentFly["Enabled"] == false then break end
-						if lplr.Character.HumanoidRootPart.CFrame.Y <= 4000 then
+						if lplr.Character.HumanoidRootPart.CFrame.Y <= 1000 then
 							lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,9000,0)
+							lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
 							warningNotification("CatV5","Added Velocity",1.5)
 						end
 					until BoostSilentFly["Enabled"] == false
@@ -9113,11 +9112,12 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 				repeat
 					task.wait(0.001)
 					if BoostSilentFly["Enabled"] == false then break end
-					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,lplr.Character.HumanoidRootPart.CFrame.Z)
+					clonethingy.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X,pos9,lplr.Character.HumanoidRootPart.CFrame.Z)
 				until testing == true
 			else
 				warningNotification("CatV5","Please wait",5)
 				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.HumanoidRootPart.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
+				lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
 				clonethingy.HumanoidRootPart.Touched:Connect(function(ok)
 					if ok.Name == "HumanoidRootPart" and ok.Parent.Name == lplr.Name then
 						task.wait(1.1)
