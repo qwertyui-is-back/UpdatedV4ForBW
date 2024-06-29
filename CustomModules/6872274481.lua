@@ -9117,7 +9117,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 				until testing == true
 			else
 				warningNotification("CatV5","Please wait",5)
-				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.HumanoidRootPart.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.HumanoidRootPart.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
 				clonethingy.HumanoidRootPart.Touched:Connect(function(ok)
 					if ok.Name == "HumanoidRootPart" and ok.Parent.Name == lplr.Name then
 						RunLoops:UnbindFromHeartbeat("BoostSilentFly")
