@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 local GuiLibrary
-local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
+local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "cat/")
 local vapeInjected = true
 local oldRainbow = false
 local errorPopupShown = false
@@ -18,72 +18,72 @@ end
 local setidentity = syn and syn.set_thread_identity or set_thread_identity or setidentity or setthreadidentity or function() end
 local getidentity = syn and syn.get_thread_identity or get_thread_identity or getidentity or getthreadidentity or function() return 0 end
 local vapeAssetTable = {
-	["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
-	["vape/assets/AddRemoveIcon1.png"] = "rbxassetid://13350764147",
-	["vape/assets/ArrowIndicator.png"] = "rbxassetid://13350766521",
-	["vape/assets/BackIcon.png"] = "rbxassetid://13350767223",
-	["vape/assets/BindBackground.png"] = "rbxassetid://13350767577",
-	["vape/assets/BlatantIcon.png"] = "rbxassetid://13350767943",
-	["vape/assets/CircleListBlacklist.png"] = "rbxassetid://13350768647",
-	["vape/assets/CircleListWhitelist.png"] = "rbxassetid://13350769066",
-	["vape/assets/ColorSlider1.png"] = "rbxassetid://13350769439",
-	["vape/assets/ColorSlider2.png"] = "rbxassetid://13350769842",
-	["vape/assets/CombatIcon.png"] = "rbxassetid://13350770192",
-	["vape/assets/DownArrow.png"] = "rbxassetid://13350770749",
-	["vape/assets/ExitIcon1.png"] = "rbxassetid://13350771140",
-	["vape/assets/FriendsIcon.png"] = "rbxassetid://13350771464",
-	["vape/assets/HoverArrow.png"] = "rbxassetid://13350772201",
-	["vape/assets/HoverArrow2.png"] = "rbxassetid://13350772588",
-	["vape/assets/HoverArrow3.png"] = "rbxassetid://13350773014",
-	["vape/assets/HoverArrow4.png"] = "rbxassetid://13350773643",
-	["vape/assets/InfoNotification.png"] = "rbxassetid://13350774006",
-	["vape/assets/KeybindIcon.png"] = "rbxassetid://13350774323",
-	["vape/assets/LegitModeIcon.png"] = "rbxassetid://13436400428",
-	["vape/assets/MoreButton1.png"] = "rbxassetid://13350775005",
-	["vape/assets/MoreButton2.png"] = "rbxassetid://13350775731",
-	["vape/assets/MoreButton3.png"] = "rbxassetid://13350776241",
-	["vape/assets/NotificationBackground.png"] = "rbxassetid://13350776706",
-	["vape/assets/NotificationBar.png"] = "rbxassetid://13350777235",
-	["vape/assets/OnlineProfilesButton.png"] = "rbxassetid://13350777717",
-	["vape/assets/PencilIcon.png"] = "rbxassetid://13350778187",
-	["vape/assets/PinButton.png"] = "rbxassetid://13350778654",
-	["vape/assets/ProfilesIcon.png"] = "rbxassetid://13350779149",
-	["vape/assets/RadarIcon1.png"] = "rbxassetid://13350779545",
-	["vape/assets/RadarIcon2.png"] = "rbxassetid://13350779992",
-	["vape/assets/RainbowIcon1.png"] = "rbxassetid://13350780571",
-	["vape/assets/RainbowIcon2.png"] = "rbxassetid://13350780993",
-	["vape/assets/RightArrow.png"] = "rbxassetid://13350781908",
-	["vape/assets/SearchBarIcon.png"] = "rbxassetid://13350782420",
-	["vape/assets/SettingsWheel1.png"] = "rbxassetid://13350782848",
-	["vape/assets/SettingsWheel2.png"] = "rbxassetid://13350783258",
-	["vape/assets/SliderArrow1.png"] = "rbxassetid://13350783794",
-	["vape/assets/SliderArrowSeperator.png"] = "rbxassetid://13350784477",
-	["vape/assets/SliderButton1.png"] = "rbxassetid://13350785680",
-	["vape/assets/TargetIcon.png"] = "rbxassetid://13350786128",
-	["vape/assets/TargetIcon1.png"] = "rbxassetid://13350786776",
-	["vape/assets/TargetIcon2.png"] = "rbxassetid://13350787228",
-	["vape/assets/TargetIcon3.png"] = "rbxassetid://13350787729",
-	["vape/assets/TargetIcon4.png"] = "rbxassetid://13350788379",
-	["vape/assets/TargetInfoIcon1.png"] = "rbxassetid://13350788860",
-	["vape/assets/TargetInfoIcon2.png"] = "rbxassetid://13350789239",
-	["vape/assets/TextBoxBKG.png"] = "rbxassetid://13350789732",
-	["vape/assets/TextBoxBKG2.png"] = "rbxassetid://13350790229",
-	["vape/assets/TextGUIIcon1.png"] = "rbxassetid://13350790634",
-	["vape/assets/TextGUIIcon2.png"] = "rbxassetid://13350791175",
-	["vape/assets/TextGUIIcon3.png"] = "rbxassetid://13350791758",
-	["vape/assets/TextGUIIcon4.png"] = "rbxassetid://13350792279",
-	["vape/assets/ToggleArrow.png"] = "rbxassetid://13350792786",
-	["vape/assets/UpArrow.png"] = "rbxassetid://13350793386",
-	["vape/assets/UtilityIcon.png"] = "rbxassetid://13350793918",
-	["vape/assets/WarningNotification.png"] = "rbxassetid://13350794868",
-	["vape/assets/WindowBlur.png"] = "rbxassetid://13350795660",
-	["vape/assets/WorldIcon.png"] = "rbxassetid://13350796199",
-	["vape/assets/VapeIcon.png"] = "rbxassetid://13350808582",
-	["vape/assets/RenderIcon.png"] = "rbxassetid://13350832775",
-	["vape/assets/VapeLogo1.png"] = "rbxassetid://13350860863",
-	["vape/assets/VapeLogo3.png"] = "rbxassetid://13350872035",
-	["vape/assets/VapeLogo2.png"] = "rbxassetid://13350876307",
-	["vape/assets/VapeLogo4.png"] = "rbxassetid://13350877564"
+	["cat/assets/AddItem.png"] = "rbxassetid://13350763121",
+	["cat/assets/AddRemoveIcon1.png"] = "rbxassetid://13350764147",
+	["cat/assets/ArrowIndicator.png"] = "rbxassetid://13350766521",
+	["cat/assets/BackIcon.png"] = "rbxassetid://13350767223",
+	["cat/assets/BindBackground.png"] = "rbxassetid://13350767577",
+	["cat/assets/BlatantIcon.png"] = "rbxassetid://13350767943",
+	["cat/assets/CircleListBlacklist.png"] = "rbxassetid://13350768647",
+	["cat/assets/CircleListWhitelist.png"] = "rbxassetid://13350769066",
+	["cat/assets/ColorSlider1.png"] = "rbxassetid://13350769439",
+	["cat/assets/ColorSlider2.png"] = "rbxassetid://13350769842",
+	["cat/assets/CombatIcon.png"] = "rbxassetid://13350770192",
+	["cat/assets/DownArrow.png"] = "rbxassetid://13350770749",
+	["cat/assets/ExitIcon1.png"] = "rbxassetid://13350771140",
+	["cat/assets/FriendsIcon.png"] = "rbxassetid://13350771464",
+	["cat/assets/HoverArrow.png"] = "rbxassetid://13350772201",
+	["cat/assets/HoverArrow2.png"] = "rbxassetid://13350772588",
+	["cat/assets/HoverArrow3.png"] = "rbxassetid://13350773014",
+	["cat/assets/HoverArrow4.png"] = "rbxassetid://13350773643",
+	["cat/assets/InfoNotification.png"] = "rbxassetid://13350774006",
+	["cat/assets/KeybindIcon.png"] = "rbxassetid://13350774323",
+	["cat/assets/LegitModeIcon.png"] = "rbxassetid://13436400428",
+	["cat/assets/MoreButton1.png"] = "rbxassetid://13350775005",
+	["cat/assets/MoreButton2.png"] = "rbxassetid://13350775731",
+	["cat/assets/MoreButton3.png"] = "rbxassetid://13350776241",
+	["cat/assets/NotificationBackground.png"] = "rbxassetid://13350776706",
+	["cat/assets/NotificationBar.png"] = "rbxassetid://13350777235",
+	["cat/assets/OnlineProfilesButton.png"] = "rbxassetid://13350777717",
+	["cat/assets/PencilIcon.png"] = "rbxassetid://13350778187",
+	["cat/assets/PinButton.png"] = "rbxassetid://13350778654",
+	["cat/assets/ProfilesIcon.png"] = "rbxassetid://13350779149",
+	["cat/assets/RadarIcon1.png"] = "rbxassetid://13350779545",
+	["cat/assets/RadarIcon2.png"] = "rbxassetid://13350779992",
+	["cat/assets/RainbowIcon1.png"] = "rbxassetid://13350780571",
+	["cat/assets/RainbowIcon2.png"] = "rbxassetid://13350780993",
+	["cat/assets/RightArrow.png"] = "rbxassetid://13350781908",
+	["cat/assets/SearchBarIcon.png"] = "rbxassetid://13350782420",
+	["cat/assets/SettingsWheel1.png"] = "rbxassetid://13350782848",
+	["cat/assets/SettingsWheel2.png"] = "rbxassetid://13350783258",
+	["cat/assets/SliderArrow1.png"] = "rbxassetid://13350783794",
+	["cat/assets/SliderArrowSeperator.png"] = "rbxassetid://13350784477",
+	["cat/assets/SliderButton1.png"] = "rbxassetid://13350785680",
+	["cat/assets/TargetIcon.png"] = "rbxassetid://13350786128",
+	["cat/assets/TargetIcon1.png"] = "rbxassetid://13350786776",
+	["cat/assets/TargetIcon2.png"] = "rbxassetid://13350787228",
+	["cat/assets/TargetIcon3.png"] = "rbxassetid://13350787729",
+	["cat/assets/TargetIcon4.png"] = "rbxassetid://13350788379",
+	["cat/assets/TargetInfoIcon1.png"] = "rbxassetid://13350788860",
+	["cat/assets/TargetInfoIcon2.png"] = "rbxassetid://13350789239",
+	["cat/assets/TextBoxBKG.png"] = "rbxassetid://13350789732",
+	["cat/assets/TextBoxBKG2.png"] = "rbxassetid://13350790229",
+	["cat/assets/TextGUIIcon1.png"] = "rbxassetid://13350790634",
+	["cat/assets/TextGUIIcon2.png"] = "rbxassetid://13350791175",
+	["cat/assets/TextGUIIcon3.png"] = "rbxassetid://13350791758",
+	["cat/assets/TextGUIIcon4.png"] = "rbxassetid://13350792279",
+	["cat/assets/ToggleArrow.png"] = "rbxassetid://13350792786",
+	["cat/assets/UpArrow.png"] = "rbxassetid://13350793386",
+	["cat/assets/UtilityIcon.png"] = "rbxassetid://13350793918",
+	["cat/assets/WarningNotification.png"] = "rbxassetid://13350794868",
+	["cat/assets/WindowBlur.png"] = "rbxassetid://13350795660",
+	["cat/assets/WorldIcon.png"] = "rbxassetid://13350796199",
+	["cat/assets/VapeIcon.png"] = "rbxassetid://13350808582",
+	["cat/assets/RenderIcon.png"] = "rbxassetid://13350832775",
+	["cat/assets/VapeLogo1.png"] = "rbxassetid://13350860863",
+	["cat/assets/VapeLogo3.png"] = "rbxassetid://13350872035",
+	["cat/assets/VapeLogo2.png"] = "rbxassetid://13350876307",
+	["cat/assets/VapeLogo4.png"] = "rbxassetid://13350877564"
 }
 if inputService:GetPlatform() ~= Enum.Platform.Windows then 
 	--mobile exploit fix
@@ -135,7 +135,7 @@ local function displayErrorPopup(text, funclist)
 end
 
 local function vapeGithubRequest(scripturl)
-	if not isfile("vape/"..scripturl) then
+	if not isfile("cat/"..scripturl) then
 		local suc, res
 		task.delay(15, function()
 			if not res and not errorPopupShown then 
@@ -143,15 +143,15 @@ local function vapeGithubRequest(scripturl)
 				displayErrorPopup("The connection to github is taking a while, Please be patient.")
 			end
 		end)
-		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("cat/commithash.txt").."/"..scripturl, true) end)
 		if not suc or res == "404: Not Found" then
 			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
 			error(res) -- wtf??
 		end
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
-		writefile("vape/"..scripturl, res)
+		writefile("cat/"..scripturl, res)
 	end
-	return readfile("vape/"..scripturl)
+	return readfile("cat/"..scripturl)
 end
 
 local function downloadVapeAsset(path)
@@ -171,7 +171,7 @@ local function downloadVapeAsset(path)
 				repeat task.wait() until isfile(path)
 				textlabel:Destroy()
 			end)
-			local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+			local suc, req = pcall(function() return vapeGithubRequest(path:gsub("cat/assets", "assets")) end)
 			if suc and req then
 				writefile(path, req)
 			else
@@ -185,32 +185,32 @@ end
 assert(not shared.VapeExecuted, "Vape Already Injected")
 shared.VapeExecuted = true
 
-for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/CustomModules", "vape/Profiles", baseDirectory.."Profiles", "vape/assets"}) do 
+for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "cat/Libraries", "cat/CustomModules", "cat/Profiles", baseDirectory.."Profiles", "cat/assets"}) do 
 	if not isfolder(v) then makefolder(v) end
 end
 task.spawn(function()
 	local success, assetver = pcall(function() return vapeGithubRequest("assetsversion.txt") end)
-	if not isfile("vape/assetsversion.txt") then writefile("vape/assetsversion.txt", "0") end
-	if success and assetver > readfile("vape/assetsversion.txt") then
+	if not isfile("cat/assetsversion.txt") then writefile("cat/assetsversion.txt", "0") end
+	if success and assetver > readfile("cat/assetsversion.txt") then
 		redownloadedAssets = true
-		if isfolder("vape/assets") and not shared.VapeDeveloper then
+		if isfolder("cat/assets") and not shared.VapeDeveloper then
 			if delfolder then
-				delfolder("vape/assets")
-				makefolder("vape/assets")
+				delfolder("cat/assets")
+				makefolder("cat/assets")
 			end
 		end
-		writefile("vape/assetsversion.txt", assetver)
+		writefile("cat/assetsversion.txt", assetver)
 	end
 end)
-if not isfile("vape/CustomModules/cachechecked.txt") then
+if not isfile("cat/CustomModules/cachechecked.txt") then
 	local isNotCached = false
-	for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
+	for i,v in pairs({"cat/Universal.lua", "cat/MainScript.lua", "cat/GuiLibrary.lua"}) do 
 		if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 			isNotCached = true
 		end 
 	end
-	if isfolder("vape/CustomModules") then 
-		for i,v in pairs(listfiles("vape/CustomModules")) do 
+	if isfolder("cat/CustomModules") then 
+		for i,v in pairs(listfiles("cat/CustomModules")) do 
 			if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 				isNotCached = true
 			end 
@@ -218,24 +218,24 @@ if not isfile("vape/CustomModules/cachechecked.txt") then
 	end
 	if isNotCached and not shared.VapeDeveloper then
 		displayErrorPopup("Vape has detected uncached files, If you have CustomModules click no, else click yes.", {No = function() end, Yes = function()
-			for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
+			for i,v in pairs({"cat/Universal.lua", "cat/MainScript.lua", "cat/GuiLibrary.lua"}) do 
 				if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 					delfile(v)
 				end 
 			end
-			for i,v in pairs(listfiles("vape/CustomModules")) do 
+			for i,v in pairs(listfiles("cat/CustomModules")) do 
 				if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 					local last = v:split('\\')
 					last = last[#last]
-					local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/CustomModules/"..last) end)
+					local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("cat/commithash.txt").."/CustomModules/"..last) end)
 					if suc and publicrepo and publicrepo ~= "404: Not Found" then
-						writefile("vape/CustomModules/"..last, "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
+						writefile("cat/CustomModules/"..last, "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
 					end
 				end 
 			end
 		end})
 	end
-	writefile("vape/CustomModules/cachechecked.txt", "verified")
+	writefile("cat/CustomModules/cachechecked.txt", "verified")
 end
 
 GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
@@ -251,7 +251,7 @@ end)
 
 task.spawn(function()
 	local image = Instance.new("ImageLabel")
-	image.Image = downloadVapeAsset("vape/assets/CombatIcon.png")
+	image.Image = downloadVapeAsset("cat/assets/CombatIcon.png")
 	image.Position = UDim2.new()
 	image.BackgroundTransparency = 1
 	image.Size = UDim2.fromOffset(100, 100)
@@ -263,10 +263,10 @@ task.spawn(function()
     end)
 	task.spawn(function()
 		task.wait(15)
-		if image and image.ContentImageSize == Vector2.zero and (not errorPopupShown) and (not redownloadedAssets) and (not isfile("vape/assets/check3.txt")) then 
+		if image and image.ContentImageSize == Vector2.zero and (not errorPopupShown) and (not redownloadedAssets) and (not isfile("cat/assets/check3.txt")) then 
             errorPopupShown = true
             displayErrorPopup("Assets failed to load, Try another executor (executor : "..(identifyexecutor and identifyexecutor() or "Unknown")..")", {OK = function()
-                writefile("vape/assets/check3.txt", "")
+                writefile("cat/assets/check3.txt", "")
             end})
         end
 	end)
@@ -275,73 +275,73 @@ end)
 local GUI = GuiLibrary.CreateMainWindow()
 local Combat = GuiLibrary.CreateWindow({
 	Name = "Combat", 
-	Icon = "vape/assets/CombatIcon.png", 
+	Icon = "cat/assets/CombatIcon.png", 
 	IconSize = 15
 })
 local Blatant = GuiLibrary.CreateWindow({
 	Name = "Blatant", 
-	Icon = "vape/assets/BlatantIcon.png", 
+	Icon = "cat/assets/BlatantIcon.png", 
 	IconSize = 16
 })
 local Render = GuiLibrary.CreateWindow({
 	Name = "Render", 
-	Icon = "vape/assets/RenderIcon.png", 
+	Icon = "cat/assets/RenderIcon.png", 
 	IconSize = 17
 })
 local Utility = GuiLibrary.CreateWindow({
 	Name = "Utility", 
-	Icon = "vape/assets/UtilityIcon.png", 
+	Icon = "cat/assets/UtilityIcon.png", 
 	IconSize = 17
 })
 local World = GuiLibrary.CreateWindow({
 	Name = "World", 
-	Icon = "vape/assets/WorldIcon.png", 
+	Icon = "cat/assets/WorldIcon.png", 
 	IconSize = 16
 })
 local Friends = GuiLibrary.CreateWindow2({
 	Name = "Friends", 
-	Icon = "vape/assets/FriendsIcon.png", 
+	Icon = "cat/assets/FriendsIcon.png", 
 	IconSize = 17
 })
 local Targets = GuiLibrary.CreateWindow2({
 	Name = "Targets", 
-	Icon = "vape/assets/FriendsIcon.png", 
+	Icon = "cat/assets/FriendsIcon.png", 
 	IconSize = 17
 })
 local Profiles = GuiLibrary.CreateWindow2({
 	Name = "Profiles", 
-	Icon = "vape/assets/ProfilesIcon.png", 
+	Icon = "cat/assets/ProfilesIcon.png", 
 	IconSize = 19
 })
 GUI.CreateDivider()
 GUI.CreateButton({
 	Name = "Combat", 
 	Function = function(callback) Combat.SetVisible(callback) end, 
-	Icon = "vape/assets/CombatIcon.png", 
+	Icon = "cat/assets/CombatIcon.png", 
 	IconSize = 15
 })
 GUI.CreateButton({
 	Name = "Blatant", 
 	Function = function(callback) Blatant.SetVisible(callback) end, 
-	Icon = "vape/assets/BlatantIcon.png", 
+	Icon = "cat/assets/BlatantIcon.png", 
 	IconSize = 16
 })
 GUI.CreateButton({
 	Name = "Render", 
 	Function = function(callback) Render.SetVisible(callback) end, 
-	Icon = "vape/assets/RenderIcon.png", 
+	Icon = "cat/assets/RenderIcon.png", 
 	IconSize = 17
 })
 GUI.CreateButton({
 	Name = "Utility", 
 	Function = function(callback) Utility.SetVisible(callback) end, 
-	Icon = "vape/assets/UtilityIcon.png", 
+	Icon = "cat/assets/UtilityIcon.png", 
 	IconSize = 17
 })
 GUI.CreateButton({
 	Name = "World", 
 	Function = function(callback) World.SetVisible(callback) end, 
-	Icon = "vape/assets/WorldIcon.png", 
+	Icon = "cat/assets/WorldIcon.png", 
 	IconSize = 16
 })
 GUI.CreateDivider("MISC")
@@ -469,7 +469,7 @@ ProfilesTextList = Profiles.CreateTextList({
 		bindbkg.Visible = GuiLibrary.Profiles[profileName].Keybind ~= ""
 		bindbkg.Parent = profileObject
 		local bindimg = Instance.new("ImageLabel")
-		bindimg.Image = downloadVapeAsset("vape/assets/KeybindIcon.png")
+		bindimg.Image = downloadVapeAsset("cat/assets/KeybindIcon.png")
 		bindimg.BackgroundTransparency = 1
 		bindimg.Size = UDim2.new(0, 12, 0, 12)
 		bindimg.Position = UDim2.new(0, 4, 0, 5)
@@ -533,14 +533,14 @@ ProfilesTextList = Profiles.CreateTextList({
 			end
 		end)
 		bindbkg.MouseEnter:Connect(function() 
-			bindimg.Image = downloadVapeAsset("vape/assets/PencilIcon.png") 
+			bindimg.Image = downloadVapeAsset("cat/assets/PencilIcon.png") 
 			bindimg.Visible = true
 			bindtext.Visible = false
 			bindbkg.Size = UDim2.new(0, 20, 0, 21)
 			bindbkg.Position = UDim2.new(1, -50, 0, 6)
 		end)
 		bindbkg.MouseLeave:Connect(function() 
-			bindimg.Image = downloadVapeAsset("vape/assets/KeybindIcon.png")
+			bindimg.Image = downloadVapeAsset("cat/assets/KeybindIcon.png")
 			if GuiLibrary.Profiles[profileName].Keybind ~= "" then
 				bindimg.Visible = false
 				bindtext.Visible = true
@@ -594,7 +594,7 @@ local OnlineProfilesButtonImage = Instance.new("ImageLabel")
 OnlineProfilesButtonImage.BackgroundTransparency = 1
 OnlineProfilesButtonImage.Position = UDim2.new(0, 14, 0, 7)
 OnlineProfilesButtonImage.Size = UDim2.new(0, 17, 0, 16)
-OnlineProfilesButtonImage.Image = downloadVapeAsset("vape/assets/OnlineProfilesButton.png")
+OnlineProfilesButtonImage.Image = downloadVapeAsset("cat/assets/OnlineProfilesButton.png")
 OnlineProfilesButtonImage.ImageColor3 = Color3.fromRGB(121, 121, 121)
 OnlineProfilesButtonImage.ZIndex = 1
 OnlineProfilesButtonImage.Active = false
@@ -615,7 +615,7 @@ OnlineProfilesExitButton.Name = "OnlineProfilesExitButton"
 OnlineProfilesExitButton.ImageColor3 = Color3.fromRGB(121, 121, 121)
 OnlineProfilesExitButton.Size = UDim2.new(0, 24, 0, 24)
 OnlineProfilesExitButton.AutoButtonColor = false
-OnlineProfilesExitButton.Image = downloadVapeAsset("vape/assets/ExitIcon1.png")
+OnlineProfilesExitButton.Image = downloadVapeAsset("cat/assets/ExitIcon1.png")
 OnlineProfilesExitButton.Visible = true
 OnlineProfilesExitButton.Position = UDim2.new(1, -31, 0, 8)
 OnlineProfilesExitButton.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
@@ -632,7 +632,7 @@ end)
 local OnlineProfilesFrameShadow = Instance.new("ImageLabel")
 OnlineProfilesFrameShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 OnlineProfilesFrameShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-OnlineProfilesFrameShadow.Image = downloadVapeAsset("vape/assets/WindowBlur.png")
+OnlineProfilesFrameShadow.Image = downloadVapeAsset("cat/assets/WindowBlur.png")
 OnlineProfilesFrameShadow.BackgroundTransparency = 1
 OnlineProfilesFrameShadow.ZIndex = -1
 OnlineProfilesFrameShadow.Size = UDim2.new(1, 6, 1, 6)
@@ -642,7 +642,7 @@ OnlineProfilesFrameShadow.SliceCenter = Rect.new(10, 10, 118, 118)
 OnlineProfilesFrameShadow.Parent = OnlineProfilesFrame
 local OnlineProfilesFrameIcon = Instance.new("ImageLabel")
 OnlineProfilesFrameIcon.Size = UDim2.new(0, 19, 0, 16)
-OnlineProfilesFrameIcon.Image = downloadVapeAsset("vape/assets/ProfilesIcon.png")
+OnlineProfilesFrameIcon.Image = downloadVapeAsset("cat/assets/ProfilesIcon.png")
 OnlineProfilesFrameIcon.Name = "WindowIcon"
 OnlineProfilesFrameIcon.BackgroundTransparency = 1
 OnlineProfilesFrameIcon.Position = UDim2.new(0, 10, 0, 13)
@@ -800,13 +800,13 @@ GUI.CreateDivider()
 
 local TextGUI = GuiLibrary.CreateCustomWindow({
 	Name = "Text GUI", 
-	Icon = "vape/assets/TextGUIIcon1.png", 
+	Icon = "cat/assets/TextGUIIcon1.png", 
 	IconSize = 21
 })
 local TextGUICircleObject = {CircleList = {}}
 GUI.CreateCustomToggle({
 	Name = "Text GUI", 
-	Icon = "vape/assets/TextGUIIcon3.png",
+	Icon = "cat/assets/TextGUIIcon3.png",
 	Function = function(callback) TextGUI.SetVisible(callback) end,
 	Priority = 2
 })	
@@ -830,7 +830,7 @@ VapeLogo.BackgroundColor3 = Color3.new()
 VapeLogo.BorderSizePixel = 0
 VapeLogo.BackgroundTransparency = 1
 VapeLogo.Visible = true
-VapeLogo.Image = downloadVapeAsset("vape/assets/VapeLogo3.png")
+VapeLogo.Image = downloadVapeAsset("cat/assets/VapeLogo3.png")
 local VapeLogoV4 = Instance.new("ImageLabel")
 VapeLogoV4.Parent = VapeLogo
 VapeLogoV4.Size = UDim2.new(0, 41, 0, 24)
@@ -839,7 +839,7 @@ VapeLogoV4.Position = UDim2.new(1, 0, 0, 1)
 VapeLogoV4.BorderSizePixel = 0
 VapeLogoV4.BackgroundColor3 = Color3.new()
 VapeLogoV4.BackgroundTransparency = 1
-VapeLogoV4.Image = downloadVapeAsset("vape/assets/VapeLogo4.png")
+VapeLogoV4.Image = downloadVapeAsset("cat/assets/VapeLogo4.png")
 local VapeLogoShadow = VapeLogo:Clone()
 VapeLogoShadow.ImageColor3 = Color3.new()
 VapeLogoShadow.ImageTransparency = 0.5
@@ -1103,25 +1103,25 @@ TextGUIMode = TextGUI.CreateDropdown({
 		end
 		if val == "Drawing" then
 			local VapeLogoDrawing = Drawing.new("Image")
-			VapeLogoDrawing.Data = readfile("vape/assets/VapeLogo3.png")
+			VapeLogoDrawing.Data = readfile("cat/assets/VapeLogo3.png")
 			VapeLogoDrawing.Size = VapeLogo.AbsoluteSize
 			VapeLogoDrawing.Position = VapeLogo.AbsolutePosition + Vector2.new(0, 36)
 			VapeLogoDrawing.ZIndex = 2
 			VapeLogoDrawing.Visible = VapeLogo.Visible
 			local VapeLogoV4Drawing = Drawing.new("Image")
-			VapeLogoV4Drawing.Data = readfile("vape/assets/VapeLogo4.png")
+			VapeLogoV4Drawing.Data = readfile("cat/assets/VapeLogo4.png")
 			VapeLogoV4Drawing.Size = VapeLogoV4.AbsoluteSize
 			VapeLogoV4Drawing.Position = VapeLogoV4.AbsolutePosition + Vector2.new(0, 36)
 			VapeLogoV4Drawing.ZIndex = 2
 			VapeLogoV4Drawing.Visible = VapeLogo.Visible
 			local VapeLogoShadowDrawing = Drawing.new("Image")
-			VapeLogoShadowDrawing.Data = readfile("vape/assets/VapeLogo3.png")
+			VapeLogoShadowDrawing.Data = readfile("cat/assets/VapeLogo3.png")
 			VapeLogoShadowDrawing.Size = VapeLogo.AbsoluteSize
 			VapeLogoShadowDrawing.Position = VapeLogo.AbsolutePosition + Vector2.new(1, 37)
 			VapeLogoShadowDrawing.Transparency = 0.5
 			VapeLogoShadowDrawing.Visible = VapeLogo.Visible and VapeLogoShadow.Visible
 			local VapeLogo4Drawing = Drawing.new("Image")
-			VapeLogo4Drawing.Data = readfile("vape/assets/VapeLogo4.png")
+			VapeLogo4Drawing.Data = readfile("cat/assets/VapeLogo4.png")
 			VapeLogo4Drawing.Size = VapeLogoV4.AbsoluteSize
 			VapeLogo4Drawing.Position = VapeLogoV4.AbsolutePosition + Vector2.new(1, 37)
 			VapeLogo4Drawing.Transparency = 0.5
@@ -1341,7 +1341,7 @@ end
 
 local TargetInfo = GuiLibrary.CreateCustomWindow({
 	Name = "Target Info",
-	Icon = "vape/assets/TargetInfoIcon1.png",
+	Icon = "cat/assets/TargetInfoIcon1.png",
 	IconSize = 16
 })
 local TargetInfoBackground = {Enabled = false}
@@ -1390,7 +1390,7 @@ TargetInfoHealthBackground.Parent = TargetInfoMainInfo
 local TargetInfoHealthBackgroundShadow = Instance.new("ImageLabel")
 TargetInfoHealthBackgroundShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 TargetInfoHealthBackgroundShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-TargetInfoHealthBackgroundShadow.Image = downloadVapeAsset("vape/assets/WindowBlur.png")
+TargetInfoHealthBackgroundShadow.Image = downloadVapeAsset("cat/assets/WindowBlur.png")
 TargetInfoHealthBackgroundShadow.BackgroundTransparency = 1
 TargetInfoHealthBackgroundShadow.ImageTransparency = 0.6
 TargetInfoHealthBackgroundShadow.ZIndex = -1
@@ -1494,7 +1494,7 @@ task.spawn(function()
 end)
 GUI.CreateCustomToggle({
 	Name = "Target Info", 
-	Icon = "vape/assets/TargetInfoIcon2.png", 
+	Icon = "cat/assets/TargetInfoIcon2.png", 
 	Function = function(callback) TargetInfo.SetVisible(callback) end,
 	Priority = 1
 })
@@ -1793,9 +1793,9 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 		local teleportScript = [[
 			shared.VapeSwitchServers = true 
 			if shared.VapeDeveloper then 
-				loadstring(readfile("vape/NewMainScript.lua"))() 
+				loadstring(readfile("cat/NewMainScript.lua"))() 
 			else 
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/NewMainScript.lua", true))() 
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("cat/commithash.txt").."/NewMainScript.lua", true))() 
 			end
 		]]
 		if shared.VapeDeveloper then
@@ -1940,14 +1940,14 @@ GeneralSettings.CreateButton2({
 local function loadVape()
 	if not shared.VapeIndependent then
 		loadstring(vapeGithubRequest("Universal.lua"))()
-		if isfile("vape/CustomModules/"..game.PlaceId..".lua") then
-			loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
+		if isfile("cat/CustomModules/"..game.PlaceId..".lua") then
+			loadstring(readfile("cat/CustomModules/"..game.PlaceId..".lua"))()
 		else
 			if not shared.VapeDeveloper then
-				local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/CustomModules/"..game.PlaceId..".lua") end)
+				local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("cat/commithash.txt").."/CustomModules/"..game.PlaceId..".lua") end)
 				if suc and publicrepo and publicrepo ~= "404: Not Found" then
-					writefile("vape/CustomModules/"..game.PlaceId..".lua", "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
-					loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
+					writefile("cat/CustomModules/"..game.PlaceId..".lua", "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
+					loadstring(readfile("cat/CustomModules/"..game.PlaceId..".lua"))()
 				end
 			end
 		end
