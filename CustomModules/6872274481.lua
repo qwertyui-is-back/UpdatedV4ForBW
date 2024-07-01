@@ -108,14 +108,14 @@ local worldtoviewportpoint = function(pos)
 end
 
 local function vapeGithubRequest(scripturl)
-	if not isfile("cat/"..scripturl) then
-		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("cat/commithash.txt").."/"..scripturl, true) end)
+	if not isfile("vape/"..scripturl) then
+		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
 		assert(suc, res)
 		assert(res ~= "404: Not Found", res)
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
-		writefile("cat/"..scripturl, res)
+		writefile("vape/"..scripturl, res)
 	end
-	return readfile("cat/"..scripturl)
+	return readfile("vape/"..scripturl)
 end
 
 local function downloadVapeAsset(path)
@@ -134,7 +134,7 @@ local function downloadVapeAsset(path)
 			repeat task.wait() until isfile(path)
 			textlabel:Destroy()
 		end)
-		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("cat/assets", "assets")) end)
+		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
 		if suc and req then
 			writefile(path, req)
 		else
@@ -814,7 +814,7 @@ local function CreateAutoHotbarGUI(children2, argstable)
 	addbutton.Position = UDim2.new(0, 93, 0, 9)
 	addbutton.Size = UDim2.new(0, 12, 0, 12)
 	addbutton.ImageColor3 = Color3.fromRGB(5, 133, 104)
-	addbutton.Image = downloadVapeAsset("cat/assets/AddItem.png")
+	addbutton.Image = downloadVapeAsset("vape/assets/AddItem.png")
 	addbutton.Parent = toggleframe1
 	local children3 = Instance.new("Frame")
 	children3.Name = argstable["Name"].."Children"
@@ -855,7 +855,7 @@ local function CreateAutoHotbarGUI(children2, argstable)
 	ItemListExitButton.ImageColor3 = Color3.fromRGB(121, 121, 121)
 	ItemListExitButton.Size = UDim2.new(0, 24, 0, 24)
 	ItemListExitButton.AutoButtonColor = false
-	ItemListExitButton.Image = downloadVapeAsset("cat/assets/ExitIcon1.png")
+	ItemListExitButton.Image = downloadVapeAsset("vape/assets/ExitIcon1.png")
 	ItemListExitButton.Visible = true
 	ItemListExitButton.Position = UDim2.new(1, -31, 0, 8)
 	ItemListExitButton.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
@@ -876,7 +876,7 @@ local function CreateAutoHotbarGUI(children2, argstable)
 	local ItemListFrameShadow = Instance.new("ImageLabel")
 	ItemListFrameShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 	ItemListFrameShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-	ItemListFrameShadow.Image = downloadVapeAsset("cat/assets/WindowBlur.png")
+	ItemListFrameShadow.Image = downloadVapeAsset("vape/assets/WindowBlur.png")
 	ItemListFrameShadow.BackgroundTransparency = 1
 	ItemListFrameShadow.ZIndex = -1
 	ItemListFrameShadow.Size = UDim2.new(1, 6, 1, 6)
@@ -9354,7 +9354,7 @@ run(function()
 	local origtpstring = store.TPString
 	local Overlay = GuiLibrary.CreateCustomWindow({
 		Name = "Overlay",
-		Icon = "cat/assets/TargetIcon1.png",
+		Icon = "vape/assets/TargetIcon1.png",
 		IconSize = 16
 	})
 	local overlayframe = Instance.new("Frame")
@@ -9454,7 +9454,7 @@ run(function()
 
 	GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Api.CreateCustomToggle({
 		Name = "Overlay",
-		Icon = "cat/assets/TargetIcon1.png",
+		Icon = "vape/assets/TargetIcon1.png",
 		Function = function(callback)
 			overlayenabled = callback
 			Overlay.SetVisible(callback)
