@@ -399,7 +399,7 @@ local function getSpeed()
 	if lplr.Character then
 		local SpeedDamageBoost = lplr.Character:GetAttribute("SpeedBoost")
 		if SpeedDamageBoost and SpeedDamageBoost > 1 then
-			speed = speed * (1.25 * (SpeedDamageBoost - 1))
+			speed = speed * 1.6
 		end
 		if store.grapple > tick() then
 			speed = speed * 3
