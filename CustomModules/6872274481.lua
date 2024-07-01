@@ -9063,6 +9063,7 @@ run(function()
 			if callback then 
 				bticks = 0
 				clonepos = Instance.new("Part",workspace)
+				clonepos.Position = lplr.Character.HumanoidRootPart.Position
 				clonepos.CanCollide = false
 				clonepos.Anchored = true
 				clonepos.Size = Vector3.new(3.9,5,3.9)
