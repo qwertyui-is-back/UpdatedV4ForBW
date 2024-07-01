@@ -9051,6 +9051,7 @@ run(function()
 	local clonepos
 	local bticks = 0
 	local Blinking = false
+	local show = false
 
 	local function roundup(num)
 		return math.ceil(num)
@@ -9076,13 +9077,17 @@ run(function()
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
 							bticks = 0
 							Blinking = false
+							show = true
+						elseif bticks >= (roundup(PingSpoofDelay.Value / 50)) then
+							show = true
 						else
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
 							Blinking = true
+							show = false
 						end
 					end
-					if clonepos and not Blinking then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
-						local twsp = (PingSpoofDelay.Value / 10000)
+					if clonepos and show then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
+						local twsp = (PingSpoofDelay.Value / 1000)
 						local tweenInfo = TweenInfo.new(twsp)
 
 						local goal = {}
