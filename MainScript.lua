@@ -185,7 +185,7 @@ end
 assert(not shared.VapeExecuted, "Vape Already Injected")
 shared.VapeExecuted = true
 
-for i,v in pairs({baseDirectory:gsub("/", ""), "cat", "cat/Libraries", "cat/CustomModules", "cat/Profiles", baseDirectory.."Profiles", "cat/assets"}) do 
+for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "cat/Libraries", "cat/CustomModules", "cat/Profiles", baseDirectory.."Profiles", "cat/assets"}) do 
 	if not isfolder(v) then makefolder(v) end
 end
 task.spawn(function()
