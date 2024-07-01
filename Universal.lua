@@ -30,7 +30,7 @@ local isnetworkowner = function(part)
 	end
 	return networkownerswitch <= tick()
 end
-local vapeAssetTable = {["cat/assets/VapeCape.png"] = "rbxassetid://13380453812", ["cat/assets/ArrowIndicator.png"] = "rbxassetid://13350766521"}
+local vapeAssetTable = {["vape/assets/VapeCape.png"] = "rbxassetid://13380453812", ["vape/assets/ArrowIndicator.png"] = "rbxassetid://13350766521"}
 local getcustomasset = getsynasset or getcustomasset or function(location) return vapeAssetTable[location] or "" end
 local queueonteleport = syn and syn.queue_on_teleport or queue_on_teleport or function() end
 local synapsev3 = syn and syn.toast_notification and "V3" or ""
@@ -50,14 +50,14 @@ local worldtoviewportpoint = function(pos)
 end
 
 local function vapeGithubRequest(scripturl)
-	if not isfile("cat/"..scripturl) then
-		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("cat/commithash.txt").."/"..scripturl, true) end)
+	if not isfile("vape/"..scripturl) then
+		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
 		assert(suc, res)
 		assert(res ~= "404: Not Found", res)
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
-		writefile("cat/"..scripturl, res)
+		writefile("vape/"..scripturl, res)
 	end
-	return readfile("cat/"..scripturl)
+	return readfile("vape/"..scripturl)
 end
 
 local function downloadVapeAsset(path)
@@ -76,7 +76,7 @@ local function downloadVapeAsset(path)
 			repeat task.wait() until isfile(path)
 			textlabel:Destroy()
 		end)
-		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("cat/assets", "assets")) end)
+		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
         if suc and req then
 		    writefile(path, req)
         else
@@ -762,7 +762,7 @@ run(function()
 	radargameCamera.FieldOfView = 45
 	local Radar = GuiLibrary.CreateCustomWindow({
 		Name = "Radar",
-		Icon = "cat/assets/RadarIcon1.png",
+		Icon = "vape/assets/RadarIcon1.png",
 		IconSize = 16
 	})
 	local RadarColor = Radar.CreateColorSlider({
@@ -815,7 +815,7 @@ run(function()
 	end))
 	GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Api.CreateCustomToggle({
 		Name = "Radar",
-		Icon = "cat/assets/RadarIcon2.png",
+		Icon = "vape/assets/RadarIcon2.png",
 		Function = function(callback)
 			Radar.SetVisible(callback)
 			if callback then
@@ -2780,7 +2780,7 @@ run(function()
         arrowObject.AnchorPoint = Vector2.new(0.5, 0.5)
         arrowObject.Position = UDim2.new(0.5, 0, 0.5, 0)
         arrowObject.Visible = false
-        arrowObject.Image = downloadVapeAsset("cat/assets/ArrowIndicator.png")
+        arrowObject.Image = downloadVapeAsset("vape/assets/ArrowIndicator.png")
 		arrowObject.ImageColor3 = getPlayerColor(plr.Player) or Color3.fromHSV(ArrowsColor.Hue, ArrowsColor.Sat, ArrowsColor.Value)
         arrowObject.Name = plr.Player.Name
         arrowObject.Parent = ArrowsFolder
@@ -4812,14 +4812,14 @@ run(function()
 				table.insert(Cape.Connections, lplr.CharacterAdded:Connect(function(char)
 					task.spawn(function()
 						pcall(function()
-							capeFunction(char, (successfulcustom or downloadVapeAsset("cat/assets/VapeCape.png")))
+							capeFunction(char, (successfulcustom or downloadVapeAsset("vape/assets/VapeCape.png")))
 						end)
 					end)
 				end))
 				if lplr.Character then
 					task.spawn(function()
 						pcall(function()
-							capeFunction(lplr.Character, (successfulcustom or downloadVapeAsset("cat/assets/VapeCape.png")))
+							capeFunction(lplr.Character, (successfulcustom or downloadVapeAsset("vape/assets/VapeCape.png")))
 						end)
 					end)
 				end
@@ -5634,12 +5634,12 @@ run(function()
 				chair.Material = Enum.Material.SmoothPlastic
 				chair.Parent = workspace
 				movingsound = Instance.new("Sound")
-				movingsound.SoundId = downloadVapeAsset("cat/assets/ChairRolling.mp3")
+				movingsound.SoundId = downloadVapeAsset("vape/assets/ChairRolling.mp3")
 				movingsound.Volume = 0.4
 				movingsound.Looped = true
 				movingsound.Parent = workspace
 				flyingsound = Instance.new("Sound")
-				flyingsound.SoundId = downloadVapeAsset("cat/assets/ChairFlying.mp3")
+				flyingsound.SoundId = downloadVapeAsset("vape/assets/ChairFlying.mp3")
 				flyingsound.Volume = 0.4
 				flyingsound.Looped = true
 				flyingsound.Parent = workspace
