@@ -9122,7 +9122,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 				until testing == true
 			else
 				warningNotification("Cat "..catver,"Please wait",5)
-				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.Head.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.HumanoidRootPart.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
 				lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
 				clonethingy.HumanoidRootPart.Touched:Connect(function(ok)
 					if ok.Name == "HumanoidRootPart" and ok.Parent.Name == lplr.Name then
@@ -9131,8 +9131,8 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 						testing = true
 						warningNotification("Cat "..catver,"Finished",5)
 						workspace.Camera.CameraSubject = lplr.Character.Humanoid
-						clonethingy:Destroy()
 						clonethingy.HumanoidRootPart.Touched:Disconnect()
+						clonethingy:Destroy()
 					end
 				end)
 			end
