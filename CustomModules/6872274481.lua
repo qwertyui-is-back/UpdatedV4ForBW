@@ -9111,7 +9111,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 						if lplr.Character.HumanoidRootPart.CFrame.Y <= 1000 then
 							lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,9000,0)
 							lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-							warningNotification("Cat "..catvar,"Added Velocity",1.5)
+							warningNotification("Cat "..catver,"Added Velocity",1.5)
 						end
 					until BoostSilentFly["Enabled"] == false
 				end)
@@ -9131,7 +9131,6 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 						testing = true
 						warningNotification("Cat "..catver,"Finished",5)
 						workspace.Camera.CameraSubject = lplr.Character.Humanoid
-						clonethingy.HumanoidRootPart.Touched:Disconnect()
 						clonethingy:Destroy()
 					end
 				end)
