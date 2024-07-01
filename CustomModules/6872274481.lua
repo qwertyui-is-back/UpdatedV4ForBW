@@ -9108,8 +9108,8 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 					repeat
 						task.wait(0.1)
 						if BoostSilentFly["Enabled"] == false then break end
-						if lplr.Character.HumanoidRootPart.CFrame.Y <= 1000 then
-							lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,9000,0)
+						if lplr.Character.HumanoidRootPart.CFrame.Y <= 500 then
+							lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,10000,0)
 							lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
 							warningNotification("Cat "..catver,"Added Velocity",1.5)
 						end
