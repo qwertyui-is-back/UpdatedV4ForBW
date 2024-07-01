@@ -399,7 +399,7 @@ local function getSpeed()
 	if lplr.Character then
 		local SpeedDamageBoost = lplr.Character:GetAttribute("SpeedBoost")
 		if SpeedDamageBoost and SpeedDamageBoost > 1 then
-			speed = speed + (1.25 * (SpeedDamageBoost - 1))
+			speed = speed * (1.25 * (SpeedDamageBoost - 1))
 		end
 		if store.grapple > tick() then
 			speed = speed * 3
@@ -414,7 +414,6 @@ local function getSpeed()
 		if type(armor) ~= "table" then armor = {itemType = ""} end
 		if armor.itemType == "speed_boots" then
 			speed = speed * 1.375
-			print("rizz potion")
 		end
 		if store.zephyrOrb ~= 0 then
 			if disablerZephyr then
