@@ -9122,7 +9122,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 				until testing == true
 			else
 				warningNotification("Cat "..catvar,"Please wait",5)
-				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.HumanoidRootPart.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
+				lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, clonethingy.Head.CFrame.Y, lplr.Character.HumanoidRootPart.CFrame.Z)
 				lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
 				clonethingy.HumanoidRootPart.Touched:Connect(function(ok)
 					if ok.Name == "HumanoidRootPart" and ok.Parent.Name == lplr.Name then
