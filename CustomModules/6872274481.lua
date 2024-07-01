@@ -9052,6 +9052,10 @@ run(function()
 	local bticks = 0
 	local Blinking = false
 
+	local function roundup(num)
+		return math.ceil(num)
+	end
+
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof",
 		Function = function(callback)
@@ -9064,10 +9068,11 @@ run(function()
 				clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
 				clonepos.Name = "SkibidiPing"
 				RunLoops:BindToHeartbeat("PingSpoof",function()
+					clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
 					bticks = bticks + 1
 					AddedPing = PingSpoofDelay.Value * 1.35
 					if entityLibrary.isAlive then
-						if bticks >= (PingSpoofDelay.Value / 100) then
+						if bticks >= (PingSpoofDelay.Value) then
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
 							bticks = 0
 							Blinking = false
@@ -9076,7 +9081,7 @@ run(function()
 							Blinking = true
 						end
 					end
-					if clonepos and bticks == (PingSpoofDelay.Value / 2500) then
+					if clonepos and not Blinking then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
 						local twsp = (PingSpoofDelay.Value / 10000)
 						local tweenInfo = TweenInfo.new(twsp)
 
@@ -9096,7 +9101,7 @@ run(function()
 		end,
 		HoverText = "Helps PingSpoof the anticheat",
 		ExtraText = function()
-			return PingSpoofDelay.Value / 100
+			return PingSpoofDelay.Value
 		end
 	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
@@ -9104,7 +9109,6 @@ run(function()
 		Min = 0,
 		Max = 300,
 		Default = 50,
-		Double = 100,
 		Function = function() end
 	})
 	PingSpoofPart = PingSpoof.CreateToggle({
