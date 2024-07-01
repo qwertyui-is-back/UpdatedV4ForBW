@@ -413,7 +413,8 @@ local function getSpeed()
 		local armor = store.localInventory.inventory.armor[3]
 		if type(armor) ~= "table" then armor = {itemType = ""} end
 		if armor.itemType == "speed_boots" then
-			speed = speed * 1.575
+			speed = speed * 1.375
+			print("rizz potion")
 		end
 		if store.zephyrOrb ~= 0 then
 			if disablerZephyr then
