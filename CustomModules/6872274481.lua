@@ -9164,7 +9164,7 @@ run(function()
 				until not InvisibleExploit.Enabled
 				if InvisMode.Value == "Semi" then
 					inidid = "11360825341"
-				elseif InvisMode.Value == "Full"
+				elseif InvisMode.Value == "Full" then
 					inidid = "1"
 				end
 				if entityLibrary.isAlive then
