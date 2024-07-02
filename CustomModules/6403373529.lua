@@ -495,25 +495,6 @@ BindToStepped("getpos", 1, function()
     end
 end)
 
-local dovelo = false
-local velomode = "Anchor"
-run(function()
-	local VelocityMode = {Value = "Anchor"}
-	local Velocity = {Enabled = false}
-
-	Velocity = GuiLibrary["ObjectsThatCanBeSaved"]["CombatWindow"]["Api"].CreateOptionsButton({
-		Name = "Velocity",
-		Function = function(callback)
-			if callback then
-				lplr.Character.Humanoid.Health = 0
-				dovelo = true
-			else
-				dovelo = false
-			end
-		end
-	})
-end)
-
 
 -- ingame remote bypass
 
