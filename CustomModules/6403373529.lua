@@ -105,7 +105,7 @@ local function vischeck(char, part)
 	return not unpack(cam:GetPartsObscuringTarget({lplr.Character[part].Position, char[part].Position}, {lplr.Character, char}))
 end
 
-local function run(func)
+local function runcode(func)
 	func()
 end
 
@@ -386,7 +386,7 @@ local function glove()
     return game.Players.LocalPlayer.leaderstats.Glove.Value
 end
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
-run(function()
+runcode(function()
 	local killauraaps = {["GetRandomValue"] = function() return 1 end}
 	local killaurarange = {["Value"] = 1}
 	local killauraangle = {["Value"] = 90}
@@ -476,22 +476,6 @@ run(function()
 	killauraragdoll = Killaura.CreateToggle({
 		["Name"] = "Hit while Ragdolled", 
 		["Function"] = function() end
-	})
-end)
-
-run(function()
-	local VelocityMode = {Value = "Anchor"}
-	local Velocity = {Enabled = false}
-
-	Velocity = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
-		Name = "Velocity",
-		Function = function(callback)
-			if callback then
-				dovelo = true
-			else
-				dovelo = false
-			end
-		end
 	})
 end)
 
