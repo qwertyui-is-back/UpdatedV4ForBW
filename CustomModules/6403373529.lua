@@ -496,12 +496,12 @@ runcode(function()
 		Name = "Speed",
 		Function = function(callback)
 			if callback then
-				w = inputService:IsKeyDown(Enum.KeyCode.W) and -1 or 0
-				s = inputService:IsKeyDown(Enum.KeyCode.S) and 1 or 0
-				a = inputService:IsKeyDown(Enum.KeyCode.A) and -1 or 0
-				d = inputService:IsKeyDown(Enum.KeyCode.D) and 1 or 0
-				table.insert(Speed.Connections, inputService.InputBegan:Connect(function(input1)
-					if inputService:GetFocusedTextBox() == nil then
+				w = uis:IsKeyDown(Enum.KeyCode.W) and -1 or 0
+				s = uis:IsKeyDown(Enum.KeyCode.S) and 1 or 0
+				a = uis:IsKeyDown(Enum.KeyCode.A) and -1 or 0
+				d = uis:IsKeyDown(Enum.KeyCode.D) and 1 or 0
+				table.insert(Speed.Connections, uis.InputBegan:Connect(function(input1)
+					if uis:GetFocusedTextBox() == nil then
 						if input1.KeyCode == Enum.KeyCode.W then
 							w = -1
 						end
@@ -516,7 +516,7 @@ runcode(function()
 						end
 					end
 				end))
-				table.insert(Speed.Connections, inputService.InputEnded:Connect(function(input1)
+				table.insert(Speed.Connections, uis.InputEnded:Connect(function(input1)
 					if input1.KeyCode == Enum.KeyCode.W then
 						w = 0
 					end
@@ -530,13 +530,6 @@ runcode(function()
 						d = 0
 					end
 				end))
-				local pulsetick = tick()
-				task.spawn(function()
-					repeat
-						pulsetick = tick() + (SpeedPulseDuration.Value / 100)
-						task.wait((SpeedDelay.Value / 10) + (SpeedPulseDuration.Value / 100))
-					until (not Speed.Enabled)
-				end)
 				BindToStepped("Speed", 1, function(delta)
 					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
 						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
