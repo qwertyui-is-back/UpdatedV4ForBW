@@ -501,7 +501,7 @@ run(function()
 	local VelocityMode = {Value = "Anchor"}
 	local Velocity = {Enabled = false}
 
-	Velocity = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+	Velocity = GuiLibrary["ObjectsThatCanBeSaved"]["CombatWindow"]["Api"].CreateOptionsButton({
 		Name = "Velocity",
 		Function = function(callback)
 			if callback then
