@@ -537,7 +537,7 @@ runcode(function()
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
 						local speed = SpeedValue.Value
 						if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) then
-							speed = speed * 2
+							speed = speed * 1.35
 						end
 						local newvelo = lplr.Character.Humanoid.MoveDirection * speed
 						lplr.Character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, lplr.Character.HumanoidRootPart.Velocity.Y, newvelo.Z)
