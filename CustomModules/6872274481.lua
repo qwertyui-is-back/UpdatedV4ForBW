@@ -9168,7 +9168,7 @@ run(function()
 					local args = {
 						[1] = {
 							["user"] = game:GetService("Players").LocalPlayer,
-							["victimEntity"] = gn(game.Players.GetChildren(), "Model")
+							["victimEntity"] = gn(game.Players:GetChildren(), "Model")
 						}
 					}
 
@@ -9374,6 +9374,7 @@ run(function()
 						end
 						if fd then
 							game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("TridentUnanchor"):InvokeServer()
+							game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("TridentAnchor"):InvokeServer()
 						end
 						if sd then
 							local item = getItemNear("scythe")
