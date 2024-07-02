@@ -386,6 +386,8 @@ local function glove()
     return game.Players.LocalPlayer.leaderstats.Glove.Value
 end
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
+GuiLibrary["RemoveObject"]("SpeedOptionsButton")
+local killauranear = false
 runcode(function()
 	local killauraaps = {["GetRandomValue"] = function() return 1 end}
 	local killaurarange = {["Value"] = 1}
@@ -461,6 +463,180 @@ runcode(function()
 	killauracframe = Killaura.CreateToggle({
 		["Name"] = "Face target", 
 		["Function"] = function() end
+	})
+end)
+run(function()
+	local Speed = {Enabled = false}
+	local SpeedValue = {Value = 1}
+	local SpeedMethod = {Value = "AntiCheat A"}
+	local SpeedMoveMethod = {Value = "MoveDirection"}
+	local SpeedDelay = {Value = 0.7}
+	local SpeedPulseDuration = {Value = 100}
+	local SpeedWallCheck = {Enabled = true}
+	local SpeedJump = {Enabled = false}
+	local SpeedJumpHeight = {Value = 20}
+	local SpeedJumpVanilla = {Enabled = false}
+	local SpeedJumpAlways = {Enabled = false}
+	local SpeedAnimation = {Enabled = false}
+	local SpeedDelayTick = tick()
+	local SpeedRaycast = RaycastParams.new()
+	SpeedRaycast.FilterType = Enum.RaycastFilterType.Blacklist
+	SpeedRaycast.RespectCanCollide = true
+	local oldWalkSpeed
+	local SpeedDown
+	local SpeedUp
+	local w = 0
+	local s = 0
+	local a = 0
+	local d = 0
+
+	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B", "AntiCheat C", "AntiCheat D"}
+	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "Speed",
+		Function = function(callback)
+			if callback then
+				w = inputService:IsKeyDown(Enum.KeyCode.W) and -1 or 0
+				s = inputService:IsKeyDown(Enum.KeyCode.S) and 1 or 0
+				a = inputService:IsKeyDown(Enum.KeyCode.A) and -1 or 0
+				d = inputService:IsKeyDown(Enum.KeyCode.D) and 1 or 0
+				table.insert(Speed.Connections, inputService.InputBegan:Connect(function(input1)
+					if inputService:GetFocusedTextBox() == nil then
+						if input1.KeyCode == Enum.KeyCode.W then
+							w = -1
+						end
+						if input1.KeyCode == Enum.KeyCode.S then
+							s = 1
+						end
+						if input1.KeyCode == Enum.KeyCode.A then
+							a = -1
+						end
+						if input1.KeyCode == Enum.KeyCode.D then
+							d = 1
+						end
+					end
+				end))
+				table.insert(Speed.Connections, inputService.InputEnded:Connect(function(input1)
+					if input1.KeyCode == Enum.KeyCode.W then
+						w = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.S then
+						s = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.A then
+						a = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.D then
+						d = 0
+					end
+				end))
+				local pulsetick = tick()
+				task.spawn(function()
+					repeat
+						pulsetick = tick() + (SpeedPulseDuration.Value / 100)
+						task.wait((SpeedDelay.Value / 10) + (SpeedPulseDuration.Value / 100))
+					until (not Speed.Enabled)
+				end)
+				RunLoops:BindToHeartbeat("Speed", function(delta)
+					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
+						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
+						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
+						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
+						for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
+							if v.Name == "WalkAnim" or v.Name == "RunAnim" then
+								v:AdjustSpeed(SpeedValue.Value / 15)
+							end
+						end
+						local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
+						if SpeedWallCheck.Enabled then
+							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
+							if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
+						end
+						entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
+							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
+								if SpeedJumpVanilla.Enabled then
+									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+								else
+									entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(entityLibrary.character.HumanoidRootPart.Velocity.X, SpeedJumpHeight.Value, entityLibrary.character.HumanoidRootPart.Velocity.Z)
+								end
+							end
+						end
+					end
+				end)
+			else
+				SpeedDelayTick = 0
+				if oldWalkSpeed then
+					entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
+					oldWalkSpeed = nil
+				end
+				RunLoops:UnbindFromHeartbeat("Speed")
+			end
+		end,
+		ExtraText = function()
+			if GuiLibrary.ObjectsThatCanBeSaved["Text GUIAlternate TextToggle"].Api.Enabled then
+				return alternatelist[table.find(SpeedMethod.List, SpeedMethod.Value)]
+			end
+			return SpeedMethod.Value
+		end
+	})
+	SpeedValue = Speed.CreateSlider({
+		Name = "Speed",
+		Min = 1,
+		Max = 150,
+		Function = function(val) end
+	})
+	SpeedJump = Speed.CreateToggle({
+		Name = "AutoJump",
+		Function = function(callback)
+			if SpeedJumpHeight.Object then SpeedJumpHeight.Object.Visible = callback end
+			if SpeedJumpAlways.Object then
+				SpeedJump.Object.ToggleArrow.Visible = callback
+				SpeedJumpAlways.Object.Visible = callback
+			end
+			if SpeedJumpVanilla.Object then SpeedJumpVanilla.Object.Visible = callback end
+		end,
+		Default = true
+	})
+	SpeedJumpHeight = Speed.CreateSlider({
+		Name = "Jump Height",
+		Min = 0,
+		Max = 30,
+		Default = 25,
+		Function = function() end
+	})
+	SpeedJumpAlways = Speed.CreateToggle({
+		Name = "Always Jump",
+		Function = function() end
+	})
+	SpeedJumpVanilla = Speed.CreateToggle({
+		Name = "Real Jump",
+		Function = function() end
+	})
+	SpeedAnimation = Speed.CreateToggle({
+		Name = "Slowdown Anim",
+		Function = function() end
+	})
+end)
+
+runcode(function()
+	local VelocityMode = {Value = "Anchor"}
+	local Velocity = {Enabled = false}
+
+	Velocity = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+		Name = "Velocity",
+		Function = function(callback)
+			if callback then
+				BindToRenderStep("velo",1,function()
+					if lplr.Character.Ragdolled.Value then
+						lplr.Character.HumanoidRootPart.Anchored = true
+					else
+						lplr.Character.HumanoidRootPart.Anchored = false
+					end
+				end)
+			else
+				UnbindFromRenderStep("velo")
+			end
+		end
 	})
 end)
 
