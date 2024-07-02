@@ -9182,7 +9182,7 @@ run(function()
 	})
 end)
 
-run(function()
+/*run(function()
 	local InvisibleExploit = {Enabled = false}
 	local InvisMode = {Value = "Semi"}
 	local playedanim
@@ -9277,7 +9277,7 @@ run(function()
 			InvisibleExploit.ToggleButton(false)
 		end
 	})
-end)
+end)*/
 
 run(function() -- Yes, this is old. I know. It isn't skidded, and it should work still because Infinite Fly does.
 	local BoostSilentFly = {["Enabled"] = false}
