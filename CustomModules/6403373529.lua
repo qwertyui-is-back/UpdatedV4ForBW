@@ -465,7 +465,7 @@ runcode(function()
 		["Function"] = function() end
 	})
 end)
-run(function()
+runcode(function()
 	local Speed = {Enabled = false}
 	local SpeedValue = {Value = 1}
 	local SpeedMethod = {Value = "AntiCheat A"}
