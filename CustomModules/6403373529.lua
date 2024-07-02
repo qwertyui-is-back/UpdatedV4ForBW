@@ -74,7 +74,7 @@ local function getcustomassetfunc(path)
 			textlabel:Remove()
 		end)
 		local req = requestfunc({
-			Url = "https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/"..path:gsub("vape/assets", "assets"),
+			Url = "https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/main/"..path:gsub("vape/assets", "assets"),
 			Method = "GET"
 		})
 		writefile(path, req.Body)
@@ -482,7 +482,7 @@ end)
 local donerag = true
 local pos
 local pos2
-BindToStepped("getpos",function()
+BindToStepped("getpos", 1, function()
     if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
         if not lplr.Character.Ragdolled.Value and donerag then
             pos = lplr.Character.HumanoidRootPart.CFrame
@@ -512,11 +512,6 @@ run(function()
 			end
 		end
 	})
-	VelocityMode = Velocity.CreateDropdown({
-		Name = "Mode",
-		List = {"Anchor", "TP", "Lag"},
-		Function = function(cb) velomode = cb end
-	})
 end)
 
 local lagticks = 0
@@ -538,7 +533,7 @@ lplr.CharacterAdded:Connect(function()
                 lplr.Character.Torso.Anchored = false
                 donerag = true
             elseif velomode == "Lag" then
-                BindToStepped("Lag",function()
+                BindToStepped("Lag", 1, function()
                     lagticks += 1
                     if lagticks == 6 then
                         lplr.Character.Torso.Anchored = true
