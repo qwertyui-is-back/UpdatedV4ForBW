@@ -479,6 +479,7 @@ run(function()
 	})
 end)
 
+local donerag = true
 local pos
 local pos2
 doLoop("getpos",function()
