@@ -2550,7 +2550,7 @@ run(function()
 						elseif SpeedMethod.Value == "CFrame" then
 							for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
 								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-									v:AdjustSpeed((SpeedValue.Value * getSpeed()) / 15)
+									v:AdjustSpeed(SpeedValue.Value / 15)
 								end
 							end
 							local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
