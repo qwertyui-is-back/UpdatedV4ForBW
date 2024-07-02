@@ -1,4 +1,6 @@
 -- Credits to Inf Yield & all the other scripts that helped me make bypasses
+local catver = "V5"
+
 local GuiLibrary = shared.GuiLibrary
 local players = game:GetService("Players")
 local textservice = game:GetService("TextService")
@@ -273,3 +275,20 @@ runcode(function()
 		["Function"] = function() end
 	})
 end)
+
+-- ingame remote bypass
+
+if hookmetamethod ~= nil then
+    byp = hookmetamethod(game, "__namecall", function(method, ...) 
+    if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Ban then
+        return
+        elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.AdminGUI then
+            return
+        elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.WalkSpeedChanged then
+            return
+        end
+        return byp(method, ...)
+    end)
+else
+    createwarning("Cat "..catver, "Hookmetamethod not found, may have issues with being kicked", 7.5)
+end
