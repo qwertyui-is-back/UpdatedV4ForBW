@@ -539,7 +539,7 @@ runcode(function()
 						if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) then
 							speed = speed * 2
 						end
-						local newvelo = lplr.Character.Humanoid.MoveDirection * SpeedValue.Value
+						local newvelo = lplr.Character.Humanoid.MoveDirection * speed
 						lplr.Character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, lplr.Character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
