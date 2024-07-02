@@ -548,10 +548,8 @@ runcode(function()
 							end
 						end
 						local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
-						if SpeedWallCheck.Enabled then
-							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
-							if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
-						end
+						local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
+						if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
 						entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
@@ -565,11 +563,6 @@ runcode(function()
 					end
 				end)
 			else
-				SpeedDelayTick = 0
-				if oldWalkSpeed then
-					entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
-					oldWalkSpeed = nil
-				end
 				UnbindFromStepped("Speed")
 			end
 		end,
