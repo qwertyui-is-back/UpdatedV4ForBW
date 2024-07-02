@@ -514,50 +514,6 @@ run(function()
 	})
 end)
 
-local lagticks = 0
-lplr.CharacterAdded:Connect(function()
-    task.wait(1)
-    local ragdoll = lplr.Character.Ragdolled
-    lplr.Character.Ragdolled.Changed:Connect(function()
-        if dovelo then
-            if velomode == "TP" then
-                donerag = false
-                task.wait(1)
-                repeat task.wait() until not ragdoll.Value
-                lplr.Character.HumanoidRootPart.CFrame = pos
-                donerag = true
-            elseif velomode == "Anchor" then
-                lplr.Character.Torso.Anchored = true
-                task.wait(1)
-                repeat task.wait() until not ragdoll.Value or lplr.Character.Torso == nil
-                lplr.Character.Torso.Anchored = false
-                donerag = true
-            elseif velomode == "Lag" then
-                BindToStepped("Lag", 1, function()
-                    lagticks += 1
-                    if lagticks == 6 then
-                        lplr.Character.Torso.Anchored = true
-                    end
-                    if lagticks == 9 then
-                        lplr.Character.Torso.Anchored = false
-                    end
-                    if lagticks == 14 then
-                        lplr.Character.Torso.Anchored = true
-                    end
-                    if lagticks == 19 then
-                        lplr.Character.Torso.Anchored = false
-                        lagticks = 0
-                    end
-                end)
-                task.wait(1)
-                repeat task.wait() until not ragdoll.Value or lplr.Character.Torso == nil
-                UnbindToStepped("Lag")
-                lplr.Character.Torso.Anchored = false
-                donerag = true
-            end
-        end
-    end)
-end)
 
 -- ingame remote bypass
 
