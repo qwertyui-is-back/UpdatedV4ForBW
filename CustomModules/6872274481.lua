@@ -9043,6 +9043,27 @@ run(function()
 	})
 end)
 
+run(function() -- i dont know why bedwars hasnt patched it but they havent (ive had this for a month i believe by now)
+	local MelodyExploit = {Enabled = false}
+
+	MelodyExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({ -- how does this work? idk honestly
+		Name = "MelodyExploit",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("melody",function()
+					if getItem("guitar") then
+						bedwars.Client:Get(bedwars.GuitarHealRemote):SendToServer({healTarget = lplr})
+						-- stop playing for faster heal aaaaggh
+						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("StopPlayingGuitar"):FireServer()
+					end
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("melody")
+			end
+		end
+	})
+end)
+
 run(function()
 	local tws = game:GetService("TweenService")
 	local PingSpoof = {Enabled = false}
