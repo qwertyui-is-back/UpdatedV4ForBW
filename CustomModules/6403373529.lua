@@ -482,7 +482,7 @@ end)
 local donerag = true
 local pos
 local pos2
-RunLoops:BindToStepped("getpos",function()
+BindToStepped("getpos",function()
     if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
         if not lplr.Character.Ragdolled.Value and donerag then
             pos = lplr.Character.HumanoidRootPart.CFrame
@@ -538,7 +538,7 @@ lplr.CharacterAdded:Connect(function()
                 lplr.Character.Torso.Anchored = false
                 donerag = true
             elseif velomode == "Lag" then
-                RunLoops:BindToStepped("Lag",function()
+                BindToStepped("Lag",function()
                     lagticks += 1
                     if lagticks == 6 then
                         lplr.Character.Torso.Anchored = true
@@ -556,7 +556,7 @@ lplr.CharacterAdded:Connect(function()
                 end)
                 task.wait(1)
                 repeat task.wait() until not ragdoll.Value or lplr.Character.Torso == nil
-                RunLoops:UnbindFromStepped("Lag")
+                UnbindToStepped("Lag")
                 lplr.Character.Torso.Anchored = false
                 donerag = true
             end
