@@ -74,7 +74,7 @@ local function getcustomassetfunc(path)
 			textlabel:Remove()
 		end)
 		local req = requestfunc({
-			Url = "https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/main/"..path:gsub("vape/assets", "assets"),
+			Url = "https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/"..path:gsub("vape/assets", "assets"),
 			Method = "GET"
 		})
 		writefile(path, req.Body)
@@ -479,22 +479,21 @@ run(function()
 	})
 end)
 
-local donerag = true
-local pos
-local pos2
-BindToStepped("getpos", 1, function()
-    if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
-        if not lplr.Character.Ragdolled.Value and donerag then
-            pos = lplr.Character.HumanoidRootPart.CFrame
-        end
-    end
-    if lplr.Character ~= nil and lplr.Character.Humanoid ~= nil then
-        if lplr.Character.Humanoid.FloorMaterial ~= "Air" then
-            pos2 = lplr.Character.HumanoidRootPart.CFrame
-        end
-    end
-end)
+run(function()
+	local VelocityMode = {Value = "Anchor"}
+	local Velocity = {Enabled = false}
 
+	Velocity = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+		Name = "Velocity",
+		Function = function(callback)
+			if callback then
+				dovelo = true
+			else
+				dovelo = false
+			end
+		end
+	})
+end)
 
 -- ingame remote bypass
 
