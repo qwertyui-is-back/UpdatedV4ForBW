@@ -469,6 +469,7 @@ end)
 
 local byp
 if hookmetamethod ~= nil then
+	local old
     byp = hookmetamethod(game, "__namecall", function(method, ...) 
     if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Ban then
         return
@@ -479,6 +480,12 @@ if hookmetamethod ~= nil then
         end
         return byp(method, ...)
     end)
+	old = hookmetamethod(game, "__namecall", function(self, ...)
+		local method = getnamecallmethod()
+		if method == "Kick" or method == "kick" then
+			return createwarning("Cat "..catver, "Blocked a kick!",1.5)
+		return old(self, ...)
+	end)
 else
     createwarning("Cat "..catver, "Hookmetamethod not found, may have issues with being kicked", 7.5)
 end
