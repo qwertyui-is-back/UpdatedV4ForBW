@@ -482,7 +482,7 @@ end)
 local donerag = true
 local pos
 local pos2
-doLoop("getpos",function()
+RunLoops:BindToStepped("getpos",function()
     if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
         if not lplr.Character.Ragdolled.Value and donerag then
             pos = lplr.Character.HumanoidRootPart.CFrame
