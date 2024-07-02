@@ -396,7 +396,6 @@ runcode(function()
 	local killauracframe = {["Enabled"] = false}
 	local Killaura = {["Enabled"] = false}
 	local killauratick = tick()
-	local killauranear = false
 	Killaura = GuiLibrary["ObjectsThatCanBeSaved"]["BlatantWindow"]["Api"].CreateOptionsButton({
 		["Name"] = "Killaura", 
 		["Function"] = function(callback)
@@ -426,7 +425,7 @@ runcode(function()
 									if killauratick <= tick() then
 										hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
 										lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
-										killauratick = tick() + 1
+										killauratick = tick() + 0.75
 									end
 								end
 							end
