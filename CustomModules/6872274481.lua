@@ -9149,6 +9149,39 @@ run(function()
 end)
 
 run(function()
+	local HannahExploit = {Enabled = false}
+
+	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "HannahExploit",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("hannah",function()
+					function getNil(name,class)
+						for _,v in next, getnilinstances() do
+							if v.ClassName==class and v.Name==name then
+								return v
+							end
+						end
+					end
+
+					local args = {
+						[1] = {
+							["user"] = game:GetService("Players").LocalPlayer,
+							["victimEntity"] = getNil(game.Players.GetChildren(), "Model")
+						}
+					}
+
+					game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args))
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("hannah")
+			end
+		end,
+		HovorText = "Sometimes you will teleport across the map with Hannah"
+	})
+end)
+
+run(function()
 	local InvisibleExploit = {Enabled = false}
 	local InvisMode = {Value = "Semi"}
 	local playedanim
@@ -9157,6 +9190,9 @@ run(function()
 		Name = "InvisibleExploit",
 		Function = function(callback)
 			if callback then
+				repeat task.wait() until entityLibrary.isAlive or not InvisibleExploit.Enabled
+				task.wait(0.5)
+				if not InvisibleExploit.Enabled then return end
 				repeat
 					task.wait(0.1)
 					if lplr.Character.Humanoid.Health == 0 or lplr.Character.Humanoid == nil then return end
@@ -9310,6 +9346,7 @@ run(function()
 	local sd = false
 	local csd = false
 	local zd = false
+	local fd = false
 	local function DeleteClientSidedAnticheat()
 		if lplr.PlayerScripts.Modules:FindFirstChild("anticheat") then
 			lplr.PlayerScripts.Modules.anticheat:Destroy()
@@ -9333,6 +9370,9 @@ run(function()
 							disablerZephyr = true
 						else
 							disablerZephyr = false
+						end
+						if fd then
+							game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("TridentUnanchor"):InvokeServer()
 						end
 						if sd then
 							local item = getItemNear("scythe")
@@ -9380,6 +9420,15 @@ run(function()
 		Default = true,
 		Function = function(callback)
 			zd = callback
+			Disabler.ToggleButton(false)
+			Disabler.ToggleButton(false)
+		end
+	})
+	Float = Disabler.CreateToggle({
+		Name = "Float (EXPERIMENTAL)",
+		Default = true,
+		Function = function(callback)
+			fd = callback
 			Disabler.ToggleButton(false)
 			Disabler.ToggleButton(false)
 		end
