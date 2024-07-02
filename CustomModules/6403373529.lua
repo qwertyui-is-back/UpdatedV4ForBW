@@ -537,7 +537,7 @@ runcode(function()
 						task.wait((SpeedDelay.Value / 10) + (SpeedPulseDuration.Value / 100))
 					until (not Speed.Enabled)
 				end)
-				BindToHeartbeat("Speed", 1, function(delta)
+				BindToStepped("Speed", 1, function(delta)
 					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
 						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
@@ -570,7 +570,7 @@ runcode(function()
 					entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
 					oldWalkSpeed = nil
 				end
-				UnbindFromHeartbeat("Speed")
+				UnbindFromStepped("Speed")
 			end
 		end,
 		ExtraText = function()
