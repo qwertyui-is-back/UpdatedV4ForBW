@@ -105,7 +105,7 @@ local function vischeck(char, part)
 	return not unpack(cam:GetPartsObscuringTarget({lplr.Character[part].Position, char[part].Position}, {lplr.Character, char}))
 end
 
-local function runcode(func)
+local function run(func)
 	func()
 end
 
@@ -386,7 +386,7 @@ local function glove()
     return game.Players.LocalPlayer.leaderstats.Glove.Value
 end
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
-runcode(function()
+run(function()
 	local killauraaps = {["GetRandomValue"] = function() return 1 end}
 	local killaurarange = {["Value"] = 1}
 	local killauraangle = {["Value"] = 90}
@@ -394,15 +394,18 @@ runcode(function()
 	local killauramouse = {["Enabled"] = false}
 	local killauratargetframe = {["Players"] = {["Enabled"] = false}}
 	local killauracframe = {["Enabled"] = false}
+	local killauraragdoll = {Enabled = false}
 	local Killaura = {["Enabled"] = false}
 	local killauratick = tick()
 	local killauranear = false
+	local hitdelay = 0
 	Killaura = GuiLibrary["ObjectsThatCanBeSaved"]["BlatantWindow"]["Api"].CreateOptionsButton({
 		["Name"] = "Killaura", 
 		["Function"] = function(callback)
 			if callback then
 				BindToRenderStep("Killaura", 1, function() 
 					killauranear = false
+					hitdelay -= 1
 					if isAlive() then
 						local plr = GetAllNearestHumanoidToPosition(killauratargetframe["Players"]["Enabled"], killaurarange["Value"], 100)
 						if (killauramouse["Enabled"] and uis:IsMouseButtonPressed(0) or (not killauramouse["Enabled"])) then
@@ -423,11 +426,18 @@ runcode(function()
 									if killauracframe["Enabled"] then
 										lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
 									end
-									if killauratick <= tick() then
-										hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
-										lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
-										killauratick = tick() + 0.1
+									if killauratick <= tick() and hitdelay == 0 and then
+										if killauraragdoll.Enabled and targ.Character.Ragdolled ~= true then
+											hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
+											lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
+											killauratick = tick() + 0.1
+										elseif not killauraragdoll.Enabled then
+											hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
+											lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
+											killauratick = tick() + 0.1
+										end
 									end
+									if hitdelay == 0 then hitdelay = 15 end
 								end
 							end
 							targetinfo.UpdateInfo(targettable, targetsize)
@@ -463,6 +473,94 @@ runcode(function()
 		["Name"] = "Face target", 
 		["Function"] = function() end
 	})
+	killauraragdoll = Killaura.CreateToggle({
+		["Name"] = "Hit while Ragdolled", 
+		["Function"] = function() end
+	})
+end)
+
+local pos
+local pos2
+doLoop("getpos",function()
+    if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
+        if not lplr.Character.Ragdolled.Value and donerag then
+            pos = lplr.Character.HumanoidRootPart.CFrame
+        end
+    end
+    if lplr.Character ~= nil and lplr.Character.Humanoid ~= nil then
+        if lplr.Character.Humanoid.FloorMaterial ~= "Air" then
+            pos2 = lplr.Character.HumanoidRootPart.CFrame
+        end
+    end
+end)
+
+local dovelo = false
+local velomode = "Anchor"
+run(function()
+	local VelocityMode = {Value = "Anchor"}
+	local Velocity = {Enabled = false}
+
+	Velocity = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+		Name = "Velocity",
+		Function = function(callback)
+			if callback then
+				lplr.Character.Humanoid.Health = 0
+				dovelo = true
+			else
+				dovelo = false
+			end
+		end
+	})
+	VelocityMode = Velocity.CreateDropdown({
+		Name = "Mode",
+		List = {"Anchor", "TP", "Lag"},
+		Function = function(cb) velomode = cb end
+	})
+end)
+
+local lagticks = 0
+lplr.CharacterAdded:Connect(function()
+    task.wait(1)
+    local ragdoll = lplr.Character.Ragdolled
+    lplr.Character.Ragdolled.Changed:Connect(function()
+        if dovelo then
+            if velomode == "TP" then
+                donerag = false
+                task.wait(1)
+                repeat task.wait() until not ragdoll.Value
+                lplr.Character.HumanoidRootPart.CFrame = pos
+                donerag = true
+            elseif velomode == "Anchor" then
+                lplr.Character.Torso.Anchored = true
+                task.wait(1)
+                repeat task.wait() until not ragdoll.Value or lplr.Character.Torso == nil
+                lplr.Character.Torso.Anchored = false
+                donerag = true
+            elseif velomode == "Lag" then
+                RunLoops:BindToStepped("Lag",function()
+                    lagticks += 1
+                    if lagticks == 6 then
+                        lplr.Character.Torso.Anchored = true
+                    end
+                    if lagticks == 9 then
+                        lplr.Character.Torso.Anchored = false
+                    end
+                    if lagticks == 14 then
+                        lplr.Character.Torso.Anchored = true
+                    end
+                    if lagticks == 19 then
+                        lplr.Character.Torso.Anchored = false
+                        lagticks = 0
+                    end
+                end)
+                task.wait(1)
+                repeat task.wait() until not ragdoll.Value or lplr.Character.Torso == nil
+                RunLoops:UnbindFromStepped("Lag")
+                lplr.Character.Torso.Anchored = false
+                donerag = true
+            end
+        end
+    end)
 end)
 
 -- ingame remote bypass
@@ -471,14 +569,14 @@ local byp
 local old
 if hookmetamethod ~= nil then
     byp = hookmetamethod(game, "__namecall", function(method, ...) 
-    if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Ban then
-        return
-        elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.AdminGUI then
-            return
-        elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.WalkSpeedChanged then
-            return
-        end
-        return byp(method, ...)
+		if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Ban then
+			return
+		elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.AdminGUI then
+			return
+		elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.WalkSpeedChanged then
+			return
+		end
+		return byp(method, ...)
     end)
 	old = hookmetamethod(game, "__namecall", function(self, ...)
 		local method = getnamecallmethod()
