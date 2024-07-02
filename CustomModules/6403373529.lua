@@ -535,15 +535,8 @@ runcode(function()
 						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
-						for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
-							if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-								v:AdjustSpeed(SpeedValue.Value / 15)
-							end
-						end
-						local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
-						local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
-						if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
-						entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+						local newvelo = lplr.Character.Humanoid.MoveDirection * SpeedValue.Value
+						lplr.Character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, lplr.Character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
 								if SpeedJumpVanilla.Enabled then
