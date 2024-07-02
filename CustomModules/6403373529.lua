@@ -427,7 +427,7 @@ runcode(function()
 										lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
 									end
 									if killauratick <= tick() and hitdelay == 0 and then
-										if killauraragdoll.Enabled and targ.Character.Ragdolled ~= true then
+										if killauraragdoll.Enabled and lplr.Character.Ragdolled ~= true and v.Character.Ragdolled ~= true then
 											hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
 											lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
 											killauratick = tick() + 0.1
