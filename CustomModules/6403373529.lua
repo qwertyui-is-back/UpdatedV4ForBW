@@ -394,18 +394,15 @@ runcode(function()
 	local killauramouse = {["Enabled"] = false}
 	local killauratargetframe = {["Players"] = {["Enabled"] = false}}
 	local killauracframe = {["Enabled"] = false}
-	local killauraragdoll = {Enabled = false}
 	local Killaura = {["Enabled"] = false}
 	local killauratick = tick()
 	local killauranear = false
-	local hitdelay = 0
 	Killaura = GuiLibrary["ObjectsThatCanBeSaved"]["BlatantWindow"]["Api"].CreateOptionsButton({
 		["Name"] = "Killaura", 
 		["Function"] = function(callback)
 			if callback then
 				BindToRenderStep("Killaura", 1, function() 
 					killauranear = false
-					hitdelay -= 1
 					if isAlive() then
 						local plr = GetAllNearestHumanoidToPosition(killauratargetframe["Players"]["Enabled"], killaurarange["Value"], 100)
 						if (killauramouse["Enabled"] and uis:IsMouseButtonPressed(0) or (not killauramouse["Enabled"])) then
@@ -426,18 +423,11 @@ runcode(function()
 									if killauracframe["Enabled"] then
 										lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
 									end
-									if killauratick <= tick() and hitdelay == 0 and then
-										if killauraragdoll.Enabled and lplr.Character.Ragdolled ~= true and v.Character.Ragdolled ~= true then
-											hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
-											lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
-											killauratick = tick() + 0.1
-										elseif not killauraragdoll.Enabled then
-											hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
-											lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
-											killauratick = tick() + 0.1
-										end
+									if killauratick <= tick() then
+										hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
+										lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
+										killauratick = tick() + 1
 									end
-									if hitdelay == 0 then hitdelay = 15 end
 								end
 							end
 							targetinfo.UpdateInfo(targettable, targetsize)
@@ -471,10 +461,6 @@ runcode(function()
 	})
 	killauracframe = Killaura.CreateToggle({
 		["Name"] = "Face target", 
-		["Function"] = function() end
-	})
-	killauraragdoll = Killaura.CreateToggle({
-		["Name"] = "Hit while Ragdolled", 
 		["Function"] = function() end
 	})
 end)
