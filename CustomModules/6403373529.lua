@@ -2,6 +2,7 @@
 local catver = "V5"
 
 local GuiLibrary = shared.GuiLibrary
+local entityLibrary = shared.vapeentity
 local players = game:GetService("Players")
 local textservice = game:GetService("TextService")
 local lplr = players.LocalPlayer
@@ -536,7 +537,7 @@ runcode(function()
 						task.wait((SpeedDelay.Value / 10) + (SpeedPulseDuration.Value / 100))
 					until (not Speed.Enabled)
 				end)
-				RunLoops:BindToHeartbeat("Speed", function(delta)
+				BindToHeartbeat("Speed", 1, function(delta)
 					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
 						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
@@ -569,7 +570,7 @@ runcode(function()
 					entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
 					oldWalkSpeed = nil
 				end
-				RunLoops:UnbindFromHeartbeat("Speed")
+				UnbindFromHeartbeat("Speed")
 			end
 		end,
 		ExtraText = function()
