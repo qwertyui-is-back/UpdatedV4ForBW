@@ -9151,23 +9151,24 @@ end)
 run(function()
 	local HannahExploit = {Enabled = false}
 
+	local function gn(name,class)
+		for _,v in next, getnilinstances() do
+			if v.ClassName==class and v.Name==name then
+				return v
+			end
+		end
+	end
+
 	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "HannahExploit",
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("hannah",function()
-					function getNil(name,class)
-						for _,v in next, getnilinstances() do
-							if v.ClassName==class and v.Name==name then
-								return v
-							end
-						end
-					end
 
 					local args = {
 						[1] = {
 							["user"] = game:GetService("Players").LocalPlayer,
-							["victimEntity"] = getNil(game.Players.GetChildren(), "Model")
+							["victimEntity"] = gn(game.Players.GetChildren(), "Model")
 						}
 					}
 
