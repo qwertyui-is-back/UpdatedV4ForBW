@@ -468,8 +468,8 @@ end)
 -- ingame remote bypass
 
 local byp
+local old
 if hookmetamethod ~= nil then
-	local old
     byp = hookmetamethod(game, "__namecall", function(method, ...) 
     if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Ban then
         return
@@ -484,6 +484,7 @@ if hookmetamethod ~= nil then
 		local method = getnamecallmethod()
 		if method == "Kick" or method == "kick" then
 			return createwarning("Cat "..catver, "Blocked a kick!",1.5)
+		end
 		return old(self, ...)
 	end)
 else
