@@ -235,7 +235,7 @@ runcode(function()
 										lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
 									end
 									if killauratick <= tick() then
-										pcall(function() game:GetService("ReplicatedStorage")[hitremote]:FireServer(v.Character.Torso) end)
+										game:GetService("ReplicatedStorage")[hitremote]:FireServer(v.Character.Torso)
 										lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
 										killauratick = tick() + 0.1
 									end
