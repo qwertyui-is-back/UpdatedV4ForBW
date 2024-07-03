@@ -2352,7 +2352,7 @@ run(function()
 		Function = function(callback)
 			if callback then
 				oldws = entityLibrary.character.Humanoid.WalkSpeed
-				boostt = 0
+				if boostt >= math.ceil(BFlyTicks.Value * 1.85) then boostt = 0 end
 				olddeflate = bedwars.BalloonController.deflateBalloon
 				bedwars.BalloonController.deflateBalloon = function() end
 
