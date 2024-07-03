@@ -446,7 +446,7 @@ runcode(function()
 									if killauratick <= tick() then
 										hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
 										lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
-										killauratick = tick() + 0.45
+										killauratick = tick() + 0.58
 									end
 								end
 							end
