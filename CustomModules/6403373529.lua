@@ -388,6 +388,7 @@ local function glove()
 end
 local pos
 local pos2
+local pos3
 BindToRenderStep("getpos",1,function()
     if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
         if not lplr.Character.Ragdolled.Value then
@@ -395,8 +396,10 @@ BindToRenderStep("getpos",1,function()
         end
     end
     if lplr.Character ~= nil and lplr.Character.Humanoid ~= nil then
-        if lplr.Character.Humanoid.FloorMaterial ~= "Air" then
-            pos2 = lplr.Character.HumanoidRootPart.CFrame
+        if lplr.Character.Humanoid.FloorMaterial == "Air" then
+            pos3 = lplr.Character.HumanoidRootPart.CFrame
+		else
+			pos2 = lplr.Character.HumanoidRootPart.CFrame
         end
     end
 end)
@@ -443,7 +446,7 @@ runcode(function()
 									if killauratick <= tick() then
 										hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
 										lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
-										killauratick = tick() + 0.75
+										killauratick = tick() + 0.45
 									end
 								end
 							end
