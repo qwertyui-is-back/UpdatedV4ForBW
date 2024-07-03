@@ -549,10 +549,7 @@ runcode(function()
 					end
 				end))
 				BindToStepped("Speed", 1, function(delta)
-					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
-						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
-						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
-						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
+					if isAlive() then
 						local speed = SpeedValue.Value
 						if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) then
 							speed = speed * 1.35
