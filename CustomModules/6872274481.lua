@@ -9174,29 +9174,21 @@ end)
 
 run(function()
 	local HannahExploit = {Enabled = false}
-
-	local function gn(name,class)
-		for _,v in next, getnilinstances() do
-			if v.ClassName==class and v.Name==name then
-				return v
-			end
-		end
-	end
-
 	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "HannahExploit",
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("hannah",function()
-
-					local args = {
-						[1] = {
-							["user"] = game:GetService("Players").LocalPlayer,
-							["victimEntity"] = gn(game.Players:GetChildren(), "Model")
+					for i,v in pairs(game.Players:GetChildren()) do
+						local args = {
+							[1] = {
+								["user"] = game:GetService("Players").LocalPlayer,
+								["victimEntity"] = v.Character
+							}
 						}
-					}
-
-					game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args))
+	
+						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args))
+					end
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("hannah")
