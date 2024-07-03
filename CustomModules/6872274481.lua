@@ -2352,7 +2352,7 @@ run(function()
 		Function = function(callback)
 			if callback then
 				oldws = entityLibrary.character.Humanoid.WalkSpeed
-				if boostt >= math.ceil(BFlyTicks.Value * 1.85) then boostt = 0 end
+				boostt = 0
 				olddeflate = bedwars.BalloonController.deflateBalloon
 				bedwars.BalloonController.deflateBalloon = function() end
 
@@ -2567,7 +2567,7 @@ run(function()
 		Min = 1,
 		Max = 10,
 		Function = function(val) end,
-		Default = 3.125
+		Default = 3
 	})
 	BFlyMulti.Object.Visible = false
 	BFlyTicks = Fly.CreateSlider({
