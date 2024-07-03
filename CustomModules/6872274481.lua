@@ -2567,7 +2567,7 @@ run(function()
 		Min = 1,
 		Max = 10,
 		Function = function(val) end,
-		Default = 1.35
+		Default = 3.2
 	})
 	BFlyMulti.Object.Visible = false
 	BFlyTicks = Fly.CreateSlider({
@@ -2575,7 +2575,7 @@ run(function()
 		Min = 1,
 		Max = 120,
 		Function = function(val) end,
-		Default = 30
+		Default = 8
 	})
 	BFlyTicks.Object.Visible = false
 	FlyAutoPop = Fly.CreateToggle({
