@@ -2522,6 +2522,7 @@ run(function()
 				end
 				bedwars.BalloonController.deflateBalloon = olddeflate
 				olddeflate = nil
+				entityLibrary.character.Humanoid.WalkSpeed = oldws
 			end
 		end,
 		HoverText = "Makes you go zoom (longer Fly discovered by exelys and Cqded)",
@@ -2548,18 +2549,6 @@ run(function()
 		Function = function() end,
 		Default = true
 	})
-	BoostFly = Fly.CreateToggle({
-		Name = "Speed Boost",
-		Function = function(callback)
-			if BFlyMulti.Object then
-				BFlyMulti.Object.Visible = callback
-			end
-			if BFlyTicks.Object then
-				BFlyTicks.Object.Visible = callback
-			end
-		end,
-		Default = true
-	})
 	BFlyMulti = Fly.CreateSlider({
 		Name = "Boost Multiplier",
 		Min = 1,
@@ -2580,6 +2569,18 @@ run(function()
 		Name = "Pop Balloon",
 		Function = function() end,
 		HoverText = "Pops balloons when Fly is disabled."
+	})
+	BoostFly = Fly.CreateToggle({
+		Name = "Speed Boost",
+		Function = function(callback)
+			if BFlyMulti.Object then
+				BFlyMulti.Object.Visible = callback
+			end
+			if BFlyTicks.Object then
+				BFlyTicks.Object.Visible = callback
+			end
+		end,
+		Default = true
 	})
 	local oldcamupdate
 	local camcontrol
