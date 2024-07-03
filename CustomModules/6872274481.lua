@@ -9392,7 +9392,7 @@ run(function()
 			if callback then
 				RunLoops:BindToHeartbeat("amogus",function()
 					for i,v in pairs(game.Players:GetChildren()) do
-						if v.Character.Humanoid ~= nil then
+						if v.Character:FindFirstChild("Humanoid") ~= nil then
 							if v.Character.Humanoid.Health == 0 and v.Character:FindFirstChild("amogus") then
 								v.Character:FindFirstChild("amogus"):Destroy()
 							end
