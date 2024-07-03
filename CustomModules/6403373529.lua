@@ -386,8 +386,23 @@ local hit = {
 local function glove()
     return game.Players.LocalPlayer.leaderstats.Glove.Value
 end
+local pos
+local pos2
+BindToHeartbeat("getpos",1,function()
+    if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
+        if not lplr.Character.Ragdolled.Value then
+            pos = lplr.Character.HumanoidRootPart.CFrame
+        end
+    end
+    if lplr.Character ~= nil and lplr.Character.Humanoid ~= nil then
+        if lplr.Character.Humanoid.FloorMaterial ~= "Air" then
+            pos2 = lplr.Character.HumanoidRootPart.CFrame
+        end
+    end
+end)
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
 GuiLibrary["RemoveObject"]("SpeedOptionsButton")
+GuiLibrary["RemoveObject"]("AntiVoidOptionsButton")
 local killauranear = false
 runcode(function()
 	local killauraaps = {["GetRandomValue"] = function() return 1 end}
@@ -414,7 +429,7 @@ runcode(function()
 								local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
 								local vec = (v.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
 								local angle = math.acos(localfacing:Dot(vec))
-								if angle <= math.rad(killauraangle["Value"]) and v.Character:FindFirstChild("Reversed") == nil then
+								if angle <= math.rad(killauraangle["Value"]) and v.Character:FindFirstChild("Reversed") == nil and v.Character.Torso.CFrame.Y <= 65 then
 									killauranear = true
 									targettable[v.Name] = {
 										["UserId"] = v.UserId,
@@ -641,6 +656,41 @@ runcode(function()
 			end
 		end,
 		HovorText = "Fling people"
+	})
+end)
+
+runcode(function()
+	local part
+	local part2
+	local AntiVoid = {Enabled = false}
+
+	AntiVoid = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+		Name = "AntiVoid",
+		Function = function(callback)
+			if callback then
+				part = Instance.new("Part",workspace)
+				part.Anchored = true
+				part.CFrame = CFrame.new(0,-15,0)
+				part.Size = Vector3.new(2048,1,2048)
+				part.CanCollide = true
+				part.Transparency = 0.5
+				part.Touched:Connect(function(part)
+					if part.Parent.Name == lplr.Name then
+						lplr.Character.HumanoidRootPart.CFrame = pos2
+					end
+				end)
+				part2 = Instance.new("Part",workspace)
+				part2.Anchored = true
+				part2.CFrame = CFrame.new(0,-77.5,0)
+				part2.Size = Vector3.new(2048,1,2048)
+				part2.CanCollide = true
+				part2.Transparency = 0.5
+			else
+				part.Touched:Disconnect()
+				part:Destroy()
+				part2:Destroy()
+			end
+		end
 	})
 end)
 
