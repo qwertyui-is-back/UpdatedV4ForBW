@@ -2488,8 +2488,16 @@ run(function()
 
 						local flysp = FlySpeed.Value
 
+						local bft = BFlyTicks.Value
+
+						if (FlySpeed.Value * getSpeed()) >= 35 then
+							bft = BFlyTicks.Value * 1.25
+						elseif (FlySpeed.Value * getSpeed()) >= 40 then
+							bft = BFlyTicks.Value * 1.50015
+						end
+
 						if BoostFly.Enabled then
-							if boostt <= math.ceil(BFlyTicks.Value) then
+							if boostt <= math.ceil(bft) then
 								flysp = (FlySpeed.Value * BFlyMulti.Value)
 							else
 								flysp = FlySpeed.Value
@@ -2524,6 +2532,9 @@ run(function()
 				bedwars.BalloonController.deflateBalloon = olddeflate
 				olddeflate = nil
 				entityLibrary.character.Humanoid.WalkSpeed = oldws
+				if BoostFly.Enabled then
+					warningNotification("Cat "..catver, "You can fly again when this notification is gone", BFlyMulti / (BFlyTicks / 35))
+				end
 			end
 		end,
 		HoverText = "Makes you go zoom (longer Fly discovered by exelys and Cqded)",
