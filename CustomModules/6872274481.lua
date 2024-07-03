@@ -9055,7 +9055,7 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 						if lplr.Character.Humanoid.Health < lplr.Character.Humanoid.MaxHealth then
 							bedwars.Client:Get(bedwars.GuitarHealRemote):SendToServer({healTarget = lplr})
 							-- stop playing for faster heal aaaaggh
-							--game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("StopPlayingGuitar"):FireServer()
+							game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("StopPlayingGuitar"):FireServer()
 						else
 							game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("StopPlayingGuitar"):FireServer()
 						end
