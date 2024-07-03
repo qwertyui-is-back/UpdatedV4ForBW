@@ -675,7 +675,7 @@ runcode(function()
 				part.CanCollide = true
 				part.Transparency = 0.5
 				part.Touched:Connect(function(part)
-					if part.Parent.Name == lplr.Name then
+					if part.Parent.Name == lplr.Name or part.Name == lplr.Name then
 						lplr.Character.HumanoidRootPart.CFrame = pos2
 					end
 				end)
