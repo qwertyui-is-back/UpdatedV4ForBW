@@ -2497,7 +2497,7 @@ run(function()
 						end
 
 						if BoostFly.Enabled then
-							if boostt <= math.ceil(bft) then
+							if boostt <= math.ceil(bft * delta) then
 								flysp = (FlySpeed.Value * BFlyMulti.Value)
 							else
 								flysp = FlySpeed.Value
