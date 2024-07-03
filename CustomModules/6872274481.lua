@@ -9097,7 +9097,6 @@ run(function()
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
 					bticks = bticks + 1
-					AddedPing = PingSpoofDelay.Value * 1.35
 					if entityLibrary.isAlive then
 						if bticks >= (PingSpoofDelay.Value) then
 							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
@@ -9116,9 +9115,7 @@ run(function()
 						local twsp = (PingSpoofDelay.Value / 1000)
 						local tweenInfo = TweenInfo.new(twsp)
 
-						local goal = {}
-						goal.Position = lplr.Character.HumanoidRootPart.Position
-						local tween = tws:Create(clonepos, tweenInfo, goal)
+						local tween = tws:Create(clonepos, tweenInfo, {Position = lplr.Character.HumanoidRootPart.Position})
 						tween:Play()
 					end
 				end)
@@ -9243,7 +9240,6 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 		end,
 		HoverText = "entirely made by liltypicscripter and qwertyui."
 	})
-	
 end)
 
 run(function()
@@ -9412,56 +9408,6 @@ run(function()
 			end
 		end,
 		HoverText = "Turns you into Among Us"
-	})
-end)
-
-run(function() -- snoopy gave me permission to use this like a year ago
-	local BedTP = {Enabled = false}
-	local hasTeleported = false
-	local TweenService = game:GetService("TweenService")
-
-	function findNearestBed()
-		local nearestBed = nil
-		local minDistance = math.huge
-
-		for _,v in pairs(game.Workspace:GetDescendants()) do
-			if v.Name:lower() == "bed" and v:FindFirstChild("Covers") and v:FindFirstChild("Covers").BrickColor ~= lplr.Team.TeamColor then
-				local distance = (v.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-				if distance < minDistance then
-					nearestBed = v
-					minDistance = distance
-				end
-			end
-		end
-		return nearestBed
-	end
-
-	function tweenToNearestBed()
-		local nearestBed = findNearestBed()
-		if nearestBed and not hasTeleported then
-			hasTeleported = true
-
-			local tweenInfo = TweenInfo.new(0, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0)
-
-			local tween = TweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.64), {CFrame = nearestBed.CFrame + Vector3.new(0, 2, 0)})
-			tween:Play()
-		end
-	end
-
-	BedTP = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = "BedTP",
-		Function = function(callback)
-			if callback then
-				lplr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
-				lplr.CharacterAdded:Connect(function()
-					wait(0.3) 
-					tweenToNearestBed()
-				end)
-				hasTeleported = false
-				BedTP.ToggleButton(false)
-			end
-		end,
-		HoverText = "Teleports you to the nearest bed."
 	})
 end)
 
