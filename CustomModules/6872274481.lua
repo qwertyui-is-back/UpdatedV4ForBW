@@ -9396,19 +9396,19 @@ run(function()
 							if v.Character.Humanoid.Health == 0 and v.Character:FindFirstChild("amogus") then
 								v.Character:FindFirstChild("amogus"):Destroy()
 							end
-						end
-						if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
-							for o,b in pairs(v.Character:GetChildren()) do
-								if b.Name == "SkibidiPing" then
-									return
-								elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
-									b.Transparency = 1
-								elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
-									b.Handle.Transparency = 1
+							if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
+								for o,b in pairs(v.Character:GetChildren()) do
+									if b.Name == "SkibidiPing" then
+										return
+									elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
+										b.Transparency = 1
+									elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
+										b.Handle.Transparency = 1
+									end
 								end
-							end
-							if v.Character:FindFirstChild("amogus") == nil then
-								camu(v)
+								if v.Character:FindFirstChild("amogus") == nil then
+									camu(v)
+								end
 							end
 						end
 					end
