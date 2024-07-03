@@ -2533,7 +2533,7 @@ run(function()
 				olddeflate = nil
 				entityLibrary.character.Humanoid.WalkSpeed = oldws
 				if BoostFly.Enabled then
-					warningNotification("Cat "..catver, "You can fly again when this notification is gone", BFlyMulti / (BFlyTicks / 35))
+					warningNotification("Cat "..catver, "You can fly again when this notification is gone", (FlySpeed.Value * BFlyMulti.Value) / 10)
 				end
 			end
 		end,
