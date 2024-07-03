@@ -16,6 +16,10 @@ local collectionService = game:GetService("CollectionService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
+local cam = workspace.CurrentCamera
+workspace:GetPropertyChangedSignal("CurrentCamera"):connect(function()
+	cam = (workspace.CurrentCamera or workspace:FindFirstChild("Camera") or Instance.new("Camera"))
+end)
 local vapeConnections = {}
 local vapeCachedAssets = {}
 local vapeEvents = setmetatable({}, {
@@ -2316,6 +2320,9 @@ run(function()
 	local FlyAnywayProgressBar = {Enabled = false}
 	local FlyDamageAnimation = {Enabled = false}
 	local FlyTP = {Enabled = false}
+	local BoostFly = {Enabled = false}
+	local BFlyMulti = {Enabled = false}
+	local BFlyTicks = {Value = 30}
 	local FlyAnywayProgressBarFrame
 	local olddeflate
 	local FlyUp = false
@@ -2324,6 +2331,8 @@ run(function()
 	local groundtime = tick()
 	local onground = false
 	local lastonground = false
+	local boostt = 0
+	local oldws = 20
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
 
 	local function inflateBalloon()
@@ -2342,6 +2351,8 @@ run(function()
 		Name = "Fly",
 		Function = function(callback)
 			if callback then
+				oldws = entityLibrary.character.Humanoid.WalkSpeed
+				boostt = 0
 				olddeflate = bedwars.BalloonController.deflateBalloon
 				bedwars.BalloonController.deflateBalloon = function() end
 
@@ -2440,6 +2451,7 @@ run(function()
 						if bedwars.matchState == 0 then return end
 					end
 					if entityLibrary.isAlive then
+						boostt = boostt + 1
 						local playerMass = (entityLibrary.character.HumanoidRootPart:GetMass() - 1.4) * (delta * 100)
 						flyAllowed = ((lplr.Character:GetAttribute("InflatedBalloons") and lplr.Character:GetAttribute("InflatedBalloons") > 0) or store.matchState == 2 or megacheck) and 1 or 0
 						playerMass = playerMass + (flyAllowed > 0 and 4 or 0) * (tick() % 0.4 < 0.2 and -1 or 1)
@@ -2472,6 +2484,15 @@ run(function()
 						else
 							onground = true
 							lastonground = true
+						end
+
+						if BoostFly.Enabled then
+							if boostt <= BFlyTicks.Value then
+								entityLibrary.character.Humanoid.WalkSpeed = (FlySpeed.Value * BFlyMulti.Value)
+							end
+							if boostt == BFlyTicks.Value + 1 then
+								entityLibrary.character.Humanoid.WalkSpeed = oldws
+							end
 						end
 
 						local flyVelocity = entityLibrary.character.Humanoid.MoveDirection * (FlyMode.Value == "Normal" and FlySpeed.Value or 20)
@@ -2527,6 +2548,34 @@ run(function()
 		Function = function() end,
 		Default = true
 	})
+	BoostFly = Fly.CreateToggle({
+		Name = "Speed Boost",
+		Function = function(callback)
+			if BFlyMulti.Object then
+				BFlyMulti.Object.Visible = callback
+			end
+			if BFlyTicks.Object then
+				BFlyTicks.Object.Visible = callback
+			end
+		end,
+		Default = true
+	})
+	BFlyMulti = Fly.CreateSlider({
+		Name = "Boost Multiplier",
+		Min = 1,
+		Max = 10,
+		Function = function(val) end,
+		Default = 1.35
+	})
+	BFlyMulti.Object.Visible = false
+	BFlyTicks = Fly.CreateSlider({
+		Name = "Boost Time (Miliseconds)",
+		Min = 1,
+		Max = 120,
+		Function = function(val) end,
+		Default = 30
+	})
+	BFlyTicks.Object.Visible = false
 	FlyAutoPop = Fly.CreateToggle({
 		Name = "Pop Balloon",
 		Function = function() end,
