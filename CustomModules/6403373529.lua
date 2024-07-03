@@ -679,7 +679,7 @@ runcode(function()
 				part.Transparency = 0.5
 				part.Touched:Connect(function(part)
 					if part.Parent.Name == lplr.Name or part.Name == lplr.Name then
-						lplr.Character.HumanoidRootPart.CFrame = pos2
+						lplr.Character.HumanoidRootPart.CFrame = pos3
 					end
 				end)
 				part2 = Instance.new("Part",workspace)
