@@ -9043,6 +9043,29 @@ run(function()
 	})
 end)
 
+run(function() -- thank you SystemXVoid for letting me use this
+    local RichExploit = {};
+    RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "FortuneExploit",
+        HoverText = "Makes you rich with fortune enchant :money:, CREDITS TO SYSTEMXVOID!",
+        Function = function(calling)
+            if calling then 
+                repeat 
+                    for i = 1, 2 do 
+                        for i2, stack in ({700, 797, 1250, 9e9}) do 
+                            bedwars.Client:Get("RequestFortuneCashOut").instance:FireServer({
+                                statusEffectType = "fortune_1",
+                                fortuneStacks = stack
+                            })
+                        end
+                    end
+                    task.wait(0.2)
+                until (not RichExploit.Enabled)
+            end
+        end
+    })
+end) -- thank you SystemXVoid for letting me use this
+
 run(function() -- i dont know why bedwars hasnt patched it but they havent (ive had this for a month i believe by now)
 	local MelodyExploit = {Enabled = false}
 
