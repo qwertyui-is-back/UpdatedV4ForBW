@@ -446,7 +446,7 @@ runcode(function()
 									if killauratick <= tick() then
 										hit[glove()]:FireServer(v.Character:FindFirstChild("Torso"))
 										lplr.Character.Humanoid.Animator:LoadAnimation(game:GetService("ReplicatedStorage").Slap):Play()
-										killauratick = tick() + 0.58
+										killauratick = tick() + 0.69
 									end
 								end
 							end
@@ -631,13 +631,14 @@ runcode(function()
 				BindToRenderStep("velo",1,function()
 					if lplr.Character.Ragdolled.Value then
 						lplr.Character.HumanoidRootPart.Anchored = true
-						lplr.Character.HumanoidRootPart.CFrame = lplr.Character.Torso.CFrame
+						lplr.Character.HumanoidRootPart.CFrame = pos
 					else
 						lplr.Character.HumanoidRootPart.Anchored = false
 					end
 				end)
 			else
 				UnbindFromRenderStep("velo")
+				lplr.Character.HumanoidRootPart.CFrame = pos
 			end
 		end
 	})
@@ -659,6 +660,32 @@ runcode(function()
 			end
 		end,
 		HovorText = "Fling people"
+	})
+end)
+
+runcode(function()
+	local AutoSlapple = {Enabled = false}
+
+	AutoSlapple = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "AutoSlapple",
+		Function = function(callback)
+			if callback then
+				BindToRenderStep("slapple",1,function()
+					for i,v in next, workspace.Arena.island5.Slapples:GetDescendants() do
+						if v.ClassName == "TouchTransmitter" then
+							if firetouchinterest ~= nil then
+								firetouchinterest(lplr.Character.Head, v.Parent, 1)
+								firetouchinterest(lplr.Character.Head, v.Parent, 0)
+							else
+								lplr.Character.HumanoidRootPart.CFrame = v.Parent.CFrame
+							end
+						end
+					end
+				end)
+			else
+				UnbindFromRenderStep("slapple")
+			end
+		end
 	})
 end)
 
@@ -689,7 +716,6 @@ runcode(function()
 				part2.CanCollide = true
 				part2.Transparency = 0.5
 			else
-				part.Touched:Disconnect()
 				part:Destroy()
 				part2:Destroy()
 			end
