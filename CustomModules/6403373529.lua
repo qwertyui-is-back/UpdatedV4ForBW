@@ -388,7 +388,7 @@ local function glove()
 end
 local pos
 local pos2
-BindToHeartbeat("getpos",1,function()
+BindToRenderStep("getpos",1,function()
     if lplr.Character ~= nil and lplr.Character.Ragdolled ~= nil then
         if not lplr.Character.Ragdolled.Value then
             pos = lplr.Character.HumanoidRootPart.CFrame
