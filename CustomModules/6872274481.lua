@@ -9265,7 +9265,6 @@ run(function()
 		if game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat") then
 			game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat"):Destroy()
 		end
-		warningNotification("Cat "..catver, "Disabled Client", 3)
 	end
 	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "Disabler",
@@ -9296,6 +9295,7 @@ run(function()
 				end)
 				if csd then
 					DeleteClientSidedAnticheat()
+					warningNotification("Cat "..catver, "Disabled Client", 3)
 				end
 			else
 				disablerZephyr = false
@@ -9333,7 +9333,7 @@ run(function()
 			Disabler.ToggleButton(false)
 		end
 	})
-	Float = Disabler.CreateToggle({
+	--[[Float = Disabler.CreateToggle({
 		Name = "Float (EXPERIMENTAL)",
 		Default = true,
 		Function = function(callback)
@@ -9341,7 +9341,7 @@ run(function()
 			Disabler.ToggleButton(false)
 			Disabler.ToggleButton(false)
 		end
-	})
+	})]]--
 	ZephyrSpeed = Disabler.CreateSlider({
 		Name = "Speed Multiplier",
 		Min = 0,
@@ -9357,11 +9357,31 @@ end)
 
 run(function()
 	local AmongUs = {Enabled = false}
+
+	local function camu()
+		local asset = "http://www.roblox.com/asset/?id=6235963214"
+		local text = "http://www.roblox.com/asset/?id=6235963270"
+		local part = Instance.new("Part",lplr.Character)
+		local mesh = Instance.new("SpecialMesh",part)
+		local weld = Instance.new("Weld",part)
+		part.Name = "amogus"
+		mesh.MeshId = asset
+		mesh.TextureId = text
+		part.CanCollide = false
+		mesh.Offset = Vector3.new(0,-0.3,0)
+		mesh.Scale = Vector3.new(0.11,0.11,0.11)
+		weld.Part0 = part
+		weld.Part1 = part.Parent.UpperTorso
+	end
+
 	AmongUs = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = "AmongUs",
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("amogus",function()
+					if lplr.Character.Humanoid.Health == 0 then
+						lplr.Character:FindFirstChild("amogus"):Destroy()
+					end
 					if lplr.Character.Humanoid ~= nil and (lplr.Character ~= nil and lplr.Character.HumanoidRootPart ~= nil and lplr.Character.Humanoid ~= nil and lplr.Character.Humanoid.Health ~= 0) then
 						for o,b in pairs(lplr.Character:GetChildren()) do
 							if b.Name == "SkibidiPing" then
@@ -9373,24 +9393,22 @@ run(function()
 							end
 						end
 						if lplr.Character:FindFirstChild("amogus") == nil then
-							local asset = "http://www.roblox.com/asset/?id=6235963214"
-							local text = "http://www.roblox.com/asset/?id=6235963270"
-							local part = Instance.new("Part",lplr.Character)
-							part.Name = "amogus"
-							local mesh = Instance.new("SpecialMesh",part)
-							mesh.MeshId = asset
-							mesh.TextureId = text
-							part.CanCollide = false
-							mesh.Offset = Vector3.new(0,-0.3,0)
-							mesh.Scale = Vector3.new(0.11,0.11,0.11)
-							local weld = Instance.new("Weld",part)
-							weld.Part0 = part
-							weld.Part1 = part.Parent.UpperTorso
+							camu()
 						end
 					end
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("amogus")
+				for o,b in pairs(lplr.Character:GetChildren()) do
+					if b.Name == "SkibidiPing" then
+						return
+					elseif b:IsA("MeshPart") then
+						b.Transparency = 0
+					elseif b:IsA("Accessory") then
+						b.Handle.Transparency = 0
+					end
+				end
+				lplr.Character:FindFirstChild("amogus"):Destroy()
 			end
 		end,
 		HoverText = "Turns you into Among Us"
@@ -9458,11 +9476,9 @@ run(function()
 	})
 	game:GetService("UserInputService").JumpRequest:Connect(function()
 		if not InfiniteJump.Enabled then return end
-		local localPlayer = game:GetService("Players").LocalPlayer
-		local character = localPlayer.Character
-		if character and character:FindFirstChildOfClass("Humanoid") then
-			local humanoid = character:FindFirstChildOfClass("Humanoid")
-			humanoid:ChangeState("Jumping")
+		if lplr.Character and lplr.Character:FindFirstChildOfClass("Humanoid") then
+			local hum = lplr.Character:FindFirstChildOfClass("Humanoid")
+			hum:ChangeState("Jumping")
 		end
 	end)         
 end)
