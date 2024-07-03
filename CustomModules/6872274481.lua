@@ -2486,19 +2486,20 @@ run(function()
 							lastonground = true
 						end
 
+						local flysp = FlySpeed.Value
+
 						if BoostFly.Enabled then
 							if boostt <= BFlyTicks.Value then
-								entityLibrary.character.Humanoid.WalkSpeed = (FlySpeed.Value * BFlyMulti.Value)
-							end
-							if boostt == BFlyTicks.Value + 1 then
-								entityLibrary.character.Humanoid.WalkSpeed = oldws
+								flysp = (FlySpeed.Value * BFlyMulti.Value)
+							else
+								flysp = FlySpeed.Value
 							end
 						end
 
-						local flyVelocity = entityLibrary.character.Humanoid.MoveDirection * (FlyMode.Value == "Normal" and FlySpeed.Value or 20)
+						local flyVelocity = entityLibrary.character.Humanoid.MoveDirection * (FlyMode.Value == "Normal" and flysp or 20)
 						entityLibrary.character.HumanoidRootPart.Velocity = flyVelocity + (Vector3.new(0, playerMass + (FlyUp and FlyVerticalSpeed.Value or 0) + (FlyDown and -FlyVerticalSpeed.Value or 0), 0))
 						if FlyMode.Value ~= "Normal" then
-							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((FlySpeed.Value * getSpeed()) - 20)) * delta
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((flysp * getSpeed()) - 20)) * delta
 						end
 					end
 				end)
@@ -2549,6 +2550,18 @@ run(function()
 		Function = function() end,
 		Default = true
 	})
+	BoostFly = Fly.CreateToggle({
+		Name = "Speed Boost",
+		Function = function(callback)
+			if BFlyMulti.Object then
+				BFlyMulti.Object.Visible = callback
+			end
+			if BFlyTicks.Object then
+				BFlyTicks.Object.Visible = callback
+			end
+		end,
+		Default = false
+	})
 	BFlyMulti = Fly.CreateSlider({
 		Name = "Boost Multiplier",
 		Min = 1,
@@ -2569,18 +2582,6 @@ run(function()
 		Name = "Pop Balloon",
 		Function = function() end,
 		HoverText = "Pops balloons when Fly is disabled."
-	})
-	BoostFly = Fly.CreateToggle({
-		Name = "Speed Boost",
-		Function = function(callback)
-			if BFlyMulti.Object then
-				BFlyMulti.Object.Visible = callback
-			end
-			if BFlyTicks.Object then
-				BFlyTicks.Object.Visible = callback
-			end
-		end,
-		Default = true
 	})
 	local oldcamupdate
 	local camcontrol
