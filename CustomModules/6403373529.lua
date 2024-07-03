@@ -613,6 +613,7 @@ runcode(function()
 				BindToRenderStep("velo",1,function()
 					if lplr.Character.Ragdolled.Value then
 						lplr.Character.HumanoidRootPart.Anchored = true
+						lplr.Character.HumanoidRootPart.CFrame = lplr.Character.Torso.CFrame
 					else
 						lplr.Character.HumanoidRootPart.Anchored = false
 					end
@@ -621,6 +622,25 @@ runcode(function()
 				UnbindFromRenderStep("velo")
 			end
 		end
+	})
+end)
+
+runcode(function()
+	local SoundExploit = {Enabled = false}
+
+	SoundExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "RhythmExploit",
+		Function = function(callback)
+			if callback then
+				BindToRenderStep("sound",1,function()
+					game:GetService("ReplicatedStorage").rhythmevent:FireServer("AoeExplosion",1)
+					game:GetService("ReplicatedStorage").rhythmevent:FireServer("AoeExplosion",0)
+				end)
+			else
+				UnbindFromRenderStep("sound")
+			end
+		end,
+		HovorText = "Fling people"
 	})
 end)
 
