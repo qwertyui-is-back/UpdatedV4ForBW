@@ -2489,7 +2489,7 @@ run(function()
 						local flysp = FlySpeed.Value
 
 						if BoostFly.Enabled then
-							if boostt <= BFlyTicks.Value then
+							if boostt <= math.ceil(BFlyTicks.Value) then
 								flysp = (FlySpeed.Value * BFlyMulti.Value)
 							else
 								flysp = FlySpeed.Value
