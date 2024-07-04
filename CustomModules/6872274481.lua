@@ -9148,7 +9148,6 @@ run(function()
 end)
 
 run(function() -- thank you SystemXVoid for letting me use this
-<<<<<<< Updated upstream
     local RichExploit = {};
 	local ftick = 0
     RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
@@ -9180,9 +9179,7 @@ end) -- thank you SystemXVoid for letting me use this
 
 run(function() -- thank you SystemXVoid for letting me use this
     local enchantexploit = {};
-=======
     local enchantexploit = {}
->>>>>>> Stashed changes
 	local enchantnum = 0
 	local et = 0
     local effects = {
