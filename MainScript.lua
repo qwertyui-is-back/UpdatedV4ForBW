@@ -138,6 +138,9 @@ local function displayErrorPopup(text, funclist)
 end
 
 local function vapeGithubRequest(scripturl)
+	if shared.beta then
+		writefile("vape/commithash.txt","beta")
+	end
 	if not isfile("vape/"..scripturl) then
 		local suc, res
 		task.delay(15, function()
