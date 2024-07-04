@@ -9106,24 +9106,24 @@ run(function()
 end)
 
 run(function() -- thank you SystemXVoid for letting me use this
-    local RichExploit = {};
-    RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-        Name = "FortuneExploit",
-        HoverText = "Makes you rich with fortune enchant :money:, CREDITS TO SYSTEMXVOID!",
+    local enchantexploit = {};
+    local effects = {
+        'fire_3', 'forest_3', 'void_3', 'static_3', 'updraft_2', 
+        'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
+        'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
+        'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
+    };
+    enchantexploit = exploit.Api.CreateOptionsButton({
+        Name = 'EnchantExploit',
+        HoverText = 'Gives you most enchants.',
         Function = function(calling)
             if calling then 
                 repeat 
-                    for i = 1, 2 do 
-                        for i2, stack in ({700, 797, 1250, 9e9}) do 
-                            game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
-							:FireServer({
-                                statusEffectType = "fortune_1",
-                                fortuneStacks = stack
-                            })
-                        end
+                    for i,v in effects do 
+                        bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
                     end
-                    task.wait(0.2)
-                until (not RichExploit.Enabled)
+                    task.wait(1)
+                until (not enchantexploit.Enabled)
             end
         end
     })
