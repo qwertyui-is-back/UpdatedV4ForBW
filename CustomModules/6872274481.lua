@@ -4494,7 +4494,7 @@ run(function()
 							if pulset <= 60 then
 								pls = speedValue
 							elseif pulset <= 70 then
-								pls = speedValue * 1.85
+								pls = speedValue * 1.685
 							elseif pulset >= 70 then
 								pls = speedValue
 								pulset = 0
