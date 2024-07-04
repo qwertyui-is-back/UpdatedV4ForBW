@@ -9119,10 +9119,11 @@ run(function() -- thank you SystemXVoid for letting me use this
         Function = function(calling)
             if calling then 
                 repeat
-					if store.matchState == 0 then return end
-                    for i,v in effects do 
-                        bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
-                    end
+					if store.matchState ~= 0 then
+						for i,v in effects do 
+							bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
+						end
+					end
                     task.wait(1)
                 until (not enchantexploit.Enabled)
             end
