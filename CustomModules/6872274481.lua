@@ -9119,6 +9119,7 @@ run(function() -- thank you SystemXVoid for letting me use this
         HoverText = 'Gives you most enchants.',
         Function = function(calling)
             if calling then 
+				enchantnum = 0
                 repeat
 					if enchantnum >= 17 then
 						enchantexploit.ToggleButton(false)
