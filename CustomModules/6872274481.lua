@@ -9118,7 +9118,8 @@ run(function() -- thank you SystemXVoid for letting me use this
         HoverText = 'Gives you most enchants.',
         Function = function(calling)
             if calling then 
-                repeat 
+                repeat
+					if store.matchState == 0 then return end
                     for i,v in effects do 
                         bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
                     end
