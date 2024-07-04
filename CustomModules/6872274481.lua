@@ -9107,6 +9107,7 @@ end)
 
 run(function() -- thank you SystemXVoid for letting me use this
     local enchantexploit = {};
+	local enchantnum = 0
     local effects = {
         'fire_3', 'forest_3', 'void_3', 'static_3', 'updraft_2', 
         'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
@@ -9119,8 +9120,14 @@ run(function() -- thank you SystemXVoid for letting me use this
         Function = function(calling)
             if calling then 
                 repeat
+					if enchantnum >= 17 then
+						enchantexploit.ToggleButton(false)
+						warningNotification("Cat "..catver, "EnchantExploit disabled, all enchants given!", 4.5)
+						return
+					end
 					if store.matchState ~= 0 then
 						for i,v in effects do 
+							enchantnum = enchantnum + 1
 							bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
 						end
 					end
