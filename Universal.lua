@@ -1,4 +1,5 @@
 local GuiLibrary = shared.GuiLibrary
+local catver = "V5 BETA"
 local playersService = game:GetService("Players")
 local coreGui = game:GetService("CoreGui")
 local textService = game:GetService("TextService")
