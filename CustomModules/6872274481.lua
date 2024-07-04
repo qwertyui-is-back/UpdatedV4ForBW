@@ -9183,9 +9183,6 @@ run(function() -- thank you SystemXVoid for letting me use this
         "grounded_3", "clingy_3", "life_steal_3", "fortune_1", "fortune_2", "fortune_3"
 	   }
 	local function addEnchants()
-		for i,v in effects do 
-			bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
-		end
 	end
     enchantexploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
         Name = 'EnchantExploit',
@@ -9196,7 +9193,9 @@ run(function() -- thank you SystemXVoid for letting me use this
 				RunLoops:BindToStepped("enchant",function()
 					et = et + 1
 					if et == 45 then
-						addEnchants()
+						for i,v in effects do 
+							bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
+						end
 						et = 0
 					end
 				end)
