@@ -9162,7 +9162,7 @@ run(function() -- thank you SystemXVoid for letting me use this
 							for i2, stack in ({700, 797, 1250, 9e9}) do 
 								game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
 								:FireServer({
-									statusEffectType = "fortune_1",
+									statusEffectType = "fortune_3",
 									fortuneStacks = stack
 								})
 							end
