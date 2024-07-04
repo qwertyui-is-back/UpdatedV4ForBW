@@ -9113,7 +9113,7 @@ run(function() -- thank you SystemXVoid for letting me use this
         'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
         'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
     };
-    enchantexploit = exploit.Api.CreateOptionsButton({
+    enchantexploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
         Name = 'EnchantExploit',
         HoverText = 'Gives you most enchants.',
         Function = function(calling)
