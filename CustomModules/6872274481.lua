@@ -4450,6 +4450,7 @@ run(function()
 	local SpeedJumpVanilla = {Enabled = false}
 	local SpeedAnimation = {Enabled = false}
 	local raycastparameters = RaycastParams.new()
+	local pulset = 0
 
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
 	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
@@ -4473,7 +4474,7 @@ run(function()
 						else
 							for i, v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
 								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-									v:AdjustSpeed((SpeedValue.Value * getSpeed()) / 15)
+									v:AdjustSpeed((SpeedValue.Value * getSpeed()) / 14.35)
 								end
 							end
 						end
@@ -4481,8 +4482,24 @@ run(function()
 						local speedValue = SpeedValue.Value * getSpeed()
 						local speedVelocity = entityLibrary.character.Humanoid.MoveDirection * (SpeedMode.Value == "Normal" and SpeedValue.Value or 20)
 						entityLibrary.character.HumanoidRootPart.Velocity = antivoidvelo or Vector3.new(speedVelocity.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, speedVelocity.Z)
-						if SpeedMode.Value ~= "Normal" then
+						if SpeedMode.Value ~= "Pulse" then
 							local speedCFrame = entityLibrary.character.Humanoid.MoveDirection * (speedValue - 20) * delta
+							raycastparameters.FilterDescendantsInstances = {lplr.Character}
+							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, speedCFrame, raycastparameters)
+							if ray then speedCFrame = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + speedCFrame
+						else
+							pulset = pulset + 1
+							local pls = speedValue
+							if pulset <= 10 then
+								pls = speedValue
+							elseif pulset <= 15 then
+								pls = speedValue * 1.85
+							elseif pulset >= 15 then
+								pls = speedValue
+								pulset = 0
+							end
+							local speedCFrame = entityLibrary.character.Humanoid.MoveDirection * (pls - 20) * delta
 							raycastparameters.FilterDescendantsInstances = {lplr.Character}
 							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, speedCFrame, raycastparameters)
 							if ray then speedCFrame = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
