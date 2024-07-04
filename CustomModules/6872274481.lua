@@ -9118,7 +9118,7 @@ run(function() -- thank you SystemXVoid for letting me use this
 					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
 					:FireServer({
 						statusEffectType = "fortune_1",
-						fortuneStacks = math.random(90000, 9e9) -- thanks to whoever told me these values
+						fortuneStacks = math.random(90000, 9e9)
 					})
 					ftick = 0
 				end)
@@ -9131,17 +9131,18 @@ end) -- thank you SystemXVoid for letting me use this
 
 run(function() -- thank you SystemXVoid for letting me use this
     local enchantexploit = {};
+    local enchantexploit = {}
 	local enchantnum = 0
 	local et = 0
     local effects = {
-        'fire_3', 'forest_3', 'void_3', 'static_3', 'updraft_2', 
-        'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
-        'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
-        'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
-    };
+        "fire_3", "forest_3", "void_3", "static_3", "updraft_2", 
+        "shield_gen_3", "anti_knockback_2", "rapid_regen_3", "execute_3", 
+        "wind_3", "plunder_2", "critical_strike_3", "volley_3", 
+        "grounded_3", "clingy_3", "life_steal_3", "fortune_1", "fortune_2", "fortune_3"
+	   }
 	local function addEnchants()
 		for i,v in effects do 
-			bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
+			bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
 			et = 0
 		end
 	end
