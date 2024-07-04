@@ -4529,6 +4529,11 @@ run(function()
 			return "Heatseeker"
 		end
 	})
+	SpeedMode = Speed.CreateDropdown({
+		Name = "Mode",
+		List = {"CFrame", "Heatseeker"},
+		Function = function() end
+	})
 	SpeedValue = Speed.CreateSlider({
 		Name = "Speed",
 		Min = 1,
