@@ -9148,6 +9148,36 @@ run(function()
 end)
 
 run(function() -- thank you SystemXVoid for letting me use this
+    local RichExploit = {};
+	local ftick = 0
+    RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "FortuneExploit",
+        HoverText = "Makes you rich with fortune enchant :money:, CREDITS TO SYSTEMXVOID!",
+        Function = function(calling)
+            if calling then 
+				RunLoops:BindToStepped("fortune", function(testing)
+					ftick = ftick + 1
+					if ftick >= 20 then
+						for i = 1, 2 do 
+							for i2, stack in ({700, 797, 1250, 9e9}) do 
+								game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
+								:FireServer({
+									statusEffectType = "fortune_1",
+									fortuneStacks = stack
+								})
+							end
+						end
+						ftick = 0
+					end
+				end)
+			else
+				RunLoops:UnbindFromRenderStep('fortune')
+            end
+        end
+    })
+end) -- thank you SystemXVoid for letting me use this
+
+run(function() -- thank you SystemXVoid for letting me use this
     local enchantexploit = {};
 	local enchantnum = 0
 	local et = 0
