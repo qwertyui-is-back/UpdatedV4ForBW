@@ -9197,7 +9197,7 @@ run(function() -- thank you SystemXVoid for letting me use this
 				RunLoops:BindToStepped("enchant",function()
 					et = et + 1
 					if et == 45 then
-						task.delay(1,addEnchants())
+						addEnchants()
 						et = 0
 					end
 				end)
