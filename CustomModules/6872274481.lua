@@ -2565,7 +2565,7 @@ run(function()
 		end,
 		HoverText = "Makes you go zoom (longer Fly discovered by exelys and Cqded)",
 		ExtraText = function()
-			return "Heatseeker"
+			return FlyMode.Value
 		end
 	})
 	FlyMode = Fly.CreateDropdown({
@@ -4546,7 +4546,7 @@ run(function()
 		end,
 		HoverText = "Increases your movement.",
 		ExtraText = function()
-			return "Heatseeker"
+			return SpeedMode.Value
 		end
 	})
 	SpeedMode = Speed.CreateDropdown({
