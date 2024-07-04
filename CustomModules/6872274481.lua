@@ -9122,12 +9122,9 @@ run(function() -- thank you SystemXVoid for letting me use this
             if calling then 
 				enchantnum = 0
 				RunLoops:BindToHeartbeat("enchant",function()
-					et  = et + 1
 					for i,v in effects do 
-						if et == 60 then
-							bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
-							et = 0
-						end
+						bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
+						et = 0
 					end
 				end)
 			else
