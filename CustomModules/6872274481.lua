@@ -9105,7 +9105,7 @@ run(function()
 	})
 end)
 
-run(function() -- thank you SystemXVoid for letting me use this
+--[[run(function() -- thank you SystemXVoid for letting me use this
     local RichExploit = {};
 	local ftick = 0
     RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
@@ -9164,7 +9164,7 @@ run(function() -- thank you SystemXVoid for letting me use this
             end
         end
     })
-end) -- thank you SystemXVoid for letting me use this
+end)]] -- thank you SystemXVoid for letting me use this
 
 run(function() -- i dont know why bedwars hasnt patched it but they havent (ive had this for a month i believe by now)
 	local MelodyExploit = {Enabled = false}
