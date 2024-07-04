@@ -2309,6 +2309,29 @@ run(function()
 	})
 end)
 
+local pulset = 0
+local pulsespeed = 23
+local speedneeded
+RunLoops:BindToStepped("Pulse",function()
+	pulset = pulset + 1
+	local multiply = 1.685
+	if speedneeded == nil then speedneeded = 23 end
+	if pulset <= 60 then
+		pulsespeed = speedneeded
+	elseif pulset <= 70 then
+		pulsespeed = speedneeded * multiply
+	elseif pulset >= 70 then
+		pulsespeed = speedneeded
+		pulset = 0
+	end
+end)
+
+local function getPulseValue(spd)
+	speedneeded = spd
+	local pls = pulsespeed
+	return pls
+end
+
 local autobankballoon = false
 run(function()
 	local Fly = {Enabled = false}
@@ -2506,8 +2529,10 @@ run(function()
 
 						local flyVelocity = entityLibrary.character.Humanoid.MoveDirection * (FlyMode.Value == "Normal" and flysp or 20)
 						entityLibrary.character.HumanoidRootPart.Velocity = flyVelocity + (Vector3.new(0, playerMass + (FlyUp and FlyVerticalSpeed.Value or 0) + (FlyDown and -FlyVerticalSpeed.Value or 0), 0))
-						if FlyMode.Value ~= "Normal" then
+						if FlyMode.Value ~= "CFrame" then
 							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((flysp * getSpeed()) - 20)) * delta
+						else
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((getPulseValue(flysp * getSpeed())) - 20)) * delta
 						end
 					end
 				end)
@@ -2541,6 +2566,11 @@ run(function()
 		ExtraText = function()
 			return "Heatseeker"
 		end
+	})
+	FlyMode = Fly.CreateDropdown({
+		Name = "Mode",
+		List = {"CFrame", "Pulse"},
+		Function = function() end
 	})
 	FlySpeed = Fly.CreateSlider({
 		Name = "Speed",
@@ -4450,7 +4480,6 @@ run(function()
 	local SpeedJumpVanilla = {Enabled = false}
 	local SpeedAnimation = {Enabled = false}
 	local raycastparameters = RaycastParams.new()
-	local pulset = 0
 
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
 	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
@@ -4489,17 +4518,7 @@ run(function()
 							if ray then speedCFrame = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
 							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + speedCFrame
 						else
-							pulset = pulset + 1
-							local pls = speedValue
-							if pulset <= 60 then
-								pls = speedValue
-							elseif pulset <= 70 then
-								pls = speedValue * 1.685
-							elseif pulset >= 70 then
-								pls = speedValue
-								pulset = 0
-							end
-							local speedCFrame = entityLibrary.character.Humanoid.MoveDirection * (pls - 20) * delta
+							local speedCFrame = entityLibrary.character.Humanoid.MoveDirection * (getPulseValue(speedValue) - 20) * delta
 							raycastparameters.FilterDescendantsInstances = {lplr.Character}
 							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, speedCFrame, raycastparameters)
 							if ray then speedCFrame = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
@@ -4529,7 +4548,6 @@ run(function()
 			return "Heatseeker"
 		end
 	})
-	print("Added SpeedMode")
 	SpeedMode = Speed.CreateDropdown({
 		Name = "Mode",
 		List = {"CFrame", "Pulse", "Watchdog"},
