@@ -4529,6 +4529,7 @@ run(function()
 			return "Heatseeker"
 		end
 	})
+	print("Added SpeedMode")
 	SpeedMode = Speed.CreateDropdown({
 		Name = "Mode",
 		List = {"CFrame", "Heatseeker"},
