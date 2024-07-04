@@ -4491,11 +4491,11 @@ run(function()
 						else
 							pulset = pulset + 1
 							local pls = speedValue
-							if pulset <= 10 then
+							if pulset <= 60 then
 								pls = speedValue
-							elseif pulset <= 15 then
+							elseif pulset <= 70 then
 								pls = speedValue * 1.85
-							elseif pulset >= 15 then
+							elseif pulset >= 70 then
 								pls = speedValue
 								pulset = 0
 							end
