@@ -9115,6 +9115,12 @@ run(function() -- thank you SystemXVoid for letting me use this
         'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
         'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
     };
+	local function addEnchants()
+		for i,v in effects do 
+			bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
+			et = 0
+		end
+	end
     enchantexploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
         Name = 'EnchantExploit',
         HoverText = 'Gives you most enchants.',
@@ -9122,10 +9128,7 @@ run(function() -- thank you SystemXVoid for letting me use this
             if calling then 
 				enchantnum = 0
 				RunLoops:BindToHeartbeat("enchant",function()
-					for i,v in effects do 
-						bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
-						et = 0
-					end
+					task.delay(1,addEnchants())
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("enchant")
