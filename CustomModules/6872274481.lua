@@ -4532,7 +4532,7 @@ run(function()
 	print("Added SpeedMode")
 	SpeedMode = Speed.CreateDropdown({
 		Name = "Mode",
-		List = {"CFrame", "Pulse"},
+		List = {"CFrame", "Pulse", "Watchdog"},
 		Function = function() end
 	})
 	SpeedValue = Speed.CreateSlider({
