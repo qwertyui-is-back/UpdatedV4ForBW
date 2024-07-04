@@ -9148,6 +9148,7 @@ run(function()
 end)
 
 run(function() -- thank you SystemXVoid for letting me use this
+<<<<<<< Updated upstream
     local RichExploit = {};
 	local ftick = 0
     RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
@@ -9179,17 +9180,20 @@ end) -- thank you SystemXVoid for letting me use this
 
 run(function() -- thank you SystemXVoid for letting me use this
     local enchantexploit = {};
+=======
+    local enchantexploit = {}
+>>>>>>> Stashed changes
 	local enchantnum = 0
 	local et = 0
     local effects = {
-        'fire_3', 'forest_3', 'void_3', 'static_3', 'updraft_2', 
-        'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
-        'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
-        'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
-    };
+        "fire_3", "forest_3", "void_3", "static_3", "updraft_2", 
+        "shield_gen_3", "anti_knockback_2", "rapid_regen_3", "execute_3", 
+        "wind_3", "plunder_2", "critical_strike_3", "volley_3", 
+        "grounded_3", "clingy_3", "life_steal_3", "fortune_1"
+    }
 	local function addEnchants()
 		for i,v in effects do 
-			bedwars.Client:Get('RequestFortuneDoubleDown').instance:FireServer({statusEffectType = v});
+			bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
 			et = 0
 		end
 	end
