@@ -9158,7 +9158,7 @@ run(function() -- thank you SystemXVoid for letting me use this
 				RunLoops:BindToStepped("fortune", function(testing)
 					ftick = ftick + 1
 					for i = 1, 2 do 
-						for i2, stack in ({700, 797, 1250, 9e9}) do 
+						for i2, stack in ({90000, 9e9}) do -- thanks whoever told me this,i forgot
 							game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
 							:FireServer({
 								statusEffectType = "fortune_3",
