@@ -9160,7 +9160,7 @@ run(function() -- thank you SystemXVoid for letting me use this
 					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
 					:FireServer({
 						statusEffectType = "fortune_1",
-						fortuneStacks = math.random(90000, 9e9)
+						fortuneStacks = math.random(9e9, 9e99)
 					})
 					ftick = 0
 				end)
