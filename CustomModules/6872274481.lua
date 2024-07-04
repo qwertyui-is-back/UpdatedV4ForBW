@@ -9157,25 +9157,11 @@ run(function() -- thank you SystemXVoid for letting me use this
             if calling then 
 				RunLoops:BindToStepped("fortune", function(testing)
 					ftick = ftick + 1
-					for i = 1, 2 do 
-						for i2, stack in ({90000, 9e9}) do -- thanks whoever told me this,i forgot
-							game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
-							:FireServer({
-								statusEffectType = "fortune_3",
-								fortuneStacks = stack
-							})
-							game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
-							:FireServer({
-								statusEffectType = "fortune_2",
-								fortuneStacks = stack
-							})
-							game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
-							:FireServer({
-								statusEffectType = "fortune_1",
-								fortuneStacks = stack
-							})
-						end
-					end
+					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
+					:FireServer({
+						statusEffectType = "fortune_1",
+						fortuneStacks = math.random(90000, 9e9)
+					})
 					ftick = 0
 				end)
 			else
