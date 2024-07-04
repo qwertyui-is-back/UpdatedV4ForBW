@@ -9160,7 +9160,7 @@ run(function() -- thank you SystemXVoid for letting me use this
 					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
 					:FireServer({
 						statusEffectType = "fortune_1",
-						fortuneStacks = math.random(9e9, 9e99)
+						fortuneStacks = 9e9
 					})
 					ftick = 0
 				end)
@@ -9185,7 +9185,6 @@ run(function() -- thank you SystemXVoid for letting me use this
 	local function addEnchants()
 		for i,v in effects do 
 			bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
-			et = 0
 		end
 	end
     enchantexploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
