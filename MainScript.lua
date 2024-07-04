@@ -1,4 +1,7 @@
 repeat task.wait() until game:IsLoaded()
+if shared.beta then
+	writefile("vape/commithash.txt","beta")
+end
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 local vapeInjected = true
