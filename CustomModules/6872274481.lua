@@ -9115,18 +9115,12 @@ run(function() -- thank you SystemXVoid for letting me use this
             if calling then 
 				RunLoops:BindToStepped("fortune", function(testing)
 					ftick = ftick + 1
-					if ftick >= 20 then
-						for i = 1, 2 do 
-							for i2, stack in ({700, 797, 1250, 9e9}) do 
-								game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
-								:FireServer({
-									statusEffectType = "fortune_1",
-									fortuneStacks = stack
-								})
-							end
-						end
-						ftick = 0
-					end
+					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
+					:FireServer({
+						statusEffectType = "fortune_1",
+						fortuneStacks = math.random(90000, 9e9) -- thanks to whoever told me these values
+					})
+					ftick = 0
 				end)
 			else
 				RunLoops:UnbindFromRenderStep('fortune')
