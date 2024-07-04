@@ -9196,7 +9196,7 @@ run(function() -- thank you SystemXVoid for letting me use this
         "fire_3", "forest_3", "void_3", "static_3", "updraft_2", 
         "shield_gen_3", "anti_knockback_2", "rapid_regen_3", "execute_3", 
         "wind_3", "plunder_2", "critical_strike_3", "volley_3", 
-        "grounded_3", "clingy_3", "life_steal_3", "fortune_3"
+        "grounded_3", "clingy_3", "life_steal_3", "fortune_2"
     }
 	local function addEnchants()
 		for i,v in effects do 
