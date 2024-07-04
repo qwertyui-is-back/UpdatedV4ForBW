@@ -2314,13 +2314,13 @@ local pulsespeed = 23
 local speedneeded
 RunLoops:BindToStepped("Pulse",function()
 	pulset = pulset + 1
-	local multiply = 1.685
+	local multiply = 1.699
 	if speedneeded == nil then speedneeded = 23 end
-	if pulset <= 60 then
+	if pulset <= 50 then
 		pulsespeed = speedneeded
-	elseif pulset <= 70 then
+	elseif pulset <= 55 then
 		pulsespeed = speedneeded * multiply
-	elseif pulset >= 70 then
+	elseif pulset >= 55 then
 		pulsespeed = speedneeded
 		pulset = 0
 	end
