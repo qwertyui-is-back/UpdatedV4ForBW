@@ -9126,12 +9126,16 @@ run(function() -- thank you SystemXVoid for letting me use this
         HoverText = 'Gives you most enchants.',
         Function = function(calling)
             if calling then 
-				enchantnum = 0
-				RunLoops:BindToHeartbeat("enchant",function()
-					task.delay(1,addEnchants())
+				et = 0
+				RunLoops:BindToStepped("enchant",function()
+					et = et + 1
+					if et == 45 then
+						task.delay(1,addEnchants())
+						et = 0
+					end
 				end)
 			else
-				RunLoops:UnbindFromHeartbeat("enchant")
+				RunLoops:UnbindFromStepped("enchant")
             end
         end
     })
