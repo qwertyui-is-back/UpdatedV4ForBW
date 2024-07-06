@@ -5641,7 +5641,7 @@ run(function()
 	Sigmas.Text = toptext
 	Sigmas.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Sigmas.TextSize = 50.000
-	Sigmas.TextTransparency = 1
+	Sigmas.TextTransparency = Watermark.Enabled and 0.935 or 1
 
 	Jello.Name = "Jello"
 	Jello.Parent = Sigmas
@@ -5655,7 +5655,7 @@ run(function()
 	Jello.Text = bottomtext
 	Jello.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Jello.TextSize = 18.000
-	Jello.TextTransparency = 1
+	Jello.TextTransparency = Watermark.Enabled and 0.795 or 1
 
 	Watermark = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = "Watermark",
