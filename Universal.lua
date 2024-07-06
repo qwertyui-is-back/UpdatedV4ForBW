@@ -5649,7 +5649,8 @@ run(function()
 	Jello.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Jello.BackgroundTransparency = 1.000
 	Jello.BorderSizePixel = 0
-	Jello.Position = UDim2.new(0.0617283992, 0, 0.65625, 0)
+	Jello.Position = UDim2.new(0.0617283992, 0, 0.0567473955, 0)
+	--Sigmas.Position = UDim2.new(0.00865922309, 0, 0.0567473955, 0)
 	Jello.Size = UDim2.new(0, 59, 0, 28)
 	Jello.Font = Enum.Font.Roboto
 	Jello.Text = bottomtext
