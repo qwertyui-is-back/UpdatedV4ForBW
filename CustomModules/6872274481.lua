@@ -9127,7 +9127,8 @@ run(function()
 	})
 end)
 
---[[run(function() -- thank you SystemXVoid for letting me use this
+
+run(function() -- thank you SystemXVoid for letting me use this
     local RichExploit = {};
 	local ftick = 0
     RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
@@ -9140,7 +9141,7 @@ end)
 					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
 					:FireServer({
 						statusEffectType = "fortune_1",
-						fortuneStacks = math.random(90000, 9e9)
+						fortuneStacks = 9e9
 					})
 					ftick = 0
 				end)
@@ -9163,10 +9164,6 @@ run(function() -- thank you SystemXVoid for letting me use this
         "grounded_3", "clingy_3", "life_steal_3", "fortune_1", "fortune_2", "fortune_3"
 	   }
 	local function addEnchants()
-		for i,v in effects do 
-			bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
-			et = 0
-		end
 	end
     enchantexploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
         Name = 'EnchantExploit',
@@ -9177,7 +9174,9 @@ run(function() -- thank you SystemXVoid for letting me use this
 				RunLoops:BindToStepped("enchant",function()
 					et = et + 1
 					if et == 45 then
-						task.delay(1,addEnchants())
+						for i,v in effects do 
+							bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
+						end
 						et = 0
 					end
 				end)
@@ -9186,7 +9185,7 @@ run(function() -- thank you SystemXVoid for letting me use this
             end
         end
     })
-end)]] -- thank you SystemXVoid for letting me use this
+end) -- thank you SystemXVoid for letting me use this
 
 run(function() -- i dont know why bedwars hasnt patched it but they havent (ive had this for a month i believe by now)
 	local MelodyExploit = {Enabled = false}
