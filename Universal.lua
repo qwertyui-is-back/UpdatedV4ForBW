@@ -5659,7 +5659,7 @@ run(function()
 	Watermark = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = "Watermark",
 		Function = function(callback)
-			if callback themefunctions
+			if callback then
 				RunLoops:BindToStepped("sigma",function()
 					Sigmas.TextTransparency = 0.175
 					Jello.TextTransparency = 0.305
