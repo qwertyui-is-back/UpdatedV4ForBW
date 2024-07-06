@@ -5628,7 +5628,6 @@ run(function()
 	SigmasClient.Name = "TitleOverlay"
 	SigmasClient.Parent = game.CoreGui
 	SigmasClient.ResetOnSpawn = false
-	SigmasClient.Visible = false
 
 	Sigmas.Name = "Sigma"
 	Sigmas.Parent = SigmasClient
@@ -5661,14 +5660,16 @@ run(function()
 		Name = "Watermark",
 		Function = function(callback)
 			if callback then
-				SigmasClient.Visibile = true
+				Sigmas.TextTransparency = 0.500
+				Jello.TextTransparency = 0.200
 				RunLoops:BindToStepped("sigma",function()
 					Sigmas.Text = tt.Value == "" and "Cat" or tt.Value
 					Jello.Text = bb.Value == "" and "V5" or bb.Value
 				end)
 			else
 				RunLoops:UnbindFromStepped("sigma")
-				SigmasClient.Visibile = false
+				Sigmas.TextTransparency = 1
+				Jello.TextTransparency = 1
 			end
 		end
 	})
