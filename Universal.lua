@@ -5641,7 +5641,7 @@ run(function()
 	Sigmas.Text = toptext
 	Sigmas.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Sigmas.TextSize = 50.000
-	Sigmas.TextTransparency = 0.500
+	Sigmas.TextTransparency = 1
 
 	Jello.Name = "Jello"
 	Jello.Parent = Sigmas
@@ -5649,21 +5649,20 @@ run(function()
 	Jello.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Jello.BackgroundTransparency = 1.000
 	Jello.BorderSizePixel = 0
-	Jello.Position = UDim2.new(0.0617283992, 0, 0.0567473955, 0)
-	--Sigmas.Position = UDim2.new(0.00865922309, 0, 0.0567473955, 0)
+	Jello.Position = UDim2.new(0.0617283992, 0, 0.65625, 0)
 	Jello.Size = UDim2.new(0, 59, 0, 28)
 	Jello.Font = Enum.Font.Roboto
 	Jello.Text = bottomtext
 	Jello.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Jello.TextSize = 18.000
-	Jello.TextTransparency = 0.200
+	Jello.TextTransparency = 1
 
 	Watermark = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = "Watermark",
 		Function = function(callback)
 			if callback then
-				Sigmas.TextTransparency = 0.500
-				Jello.TextTransparency = 0.200
+				Sigmas.TextTransparency = 0.935
+				Jello.TextTransparency = 0.795
 				RunLoops:BindToStepped("sigma",function()
 					Sigmas.Text = tt.Value == "" and "Cat" or tt.Value
 					Jello.Text = bb.Value == "" and "V5" or bb.Value
