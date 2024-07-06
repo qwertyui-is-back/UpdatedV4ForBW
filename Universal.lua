@@ -5645,6 +5645,7 @@ run(function()
 
 	Jello.Name = "Jello"
 	Jello.Parent = Sigmas
+	Jello.AnchorPoint = Vector2.new(0.100000001, 0.600000024)
 	Jello.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	Jello.BackgroundTransparency = 1.000
 	Jello.BorderSizePixel = 0
@@ -5673,14 +5674,14 @@ run(function()
 			end
 		end
 	})
-	tt = Watemrark.CreateTextBox({
+	tt = Watermark.CreateTextBox({
 		Name = "Top Text",
 		TempText = "Top Text of Watermark",
 		FocusLost = function(enter)
 			
 		end
 	})
-	bb = Watemrark.CreateTextBox({
+	bb = Watermark.CreateTextBox({
 		Name = "Bottom Text",
 		TempText = "Bottom Text of Watermark",
 		FocusLost = function(enter)
