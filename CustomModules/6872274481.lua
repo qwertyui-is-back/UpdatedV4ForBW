@@ -3067,6 +3067,7 @@ run(function()
 	local killaurasound = {Enabled = false}
 	local killauraswing = {Enabled = false}
 	local killaurasync = {Enabled = false}
+	local killaurahitdelay = {Enabled = false}
 	local killaurahandcheck = {Enabled = false}
 	local killauraanimation = {Enabled = false}
 	local killauraanimationtween = {Enabled = false}
@@ -3410,7 +3411,8 @@ run(function()
 											end
 										end
 									end
-									if (workspace:GetServerTimeNow() - bedwars.SwordController.lastAttack) < 0.02 then
+									local delayval = killaurahitdelay / 100
+									if (workspace:GetServerTimeNow() - bedwars.SwordController.lastAttack) < delayval then
 										break
 									end
 									local selfpos = selfrootpos + (killaurarange.Value > 14 and (selfrootpos - root.Position).magnitude > 14.4 and (CFrame.lookAt(selfrootpos, root.Position).lookVector * ((selfrootpos - root.Position).magnitude - 14)) or Vector3.zero)
@@ -3519,6 +3521,15 @@ run(function()
 			end
 		end,
 		Default = 18
+	})
+	killaurahitdelay = Killaura.CreateSlider({
+		Name = "Hit Delay",
+		Min = 0,
+		Max = 10,
+		Function = function(val)
+
+		end,
+		Default = 2
 	})
 	killauraangle = Killaura.CreateSlider({
 		Name = "Max angle",
@@ -9313,6 +9324,8 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 		end
 	})
 end)
+
+
 
 run(function()
 	local tws = game:GetService("TweenService")
