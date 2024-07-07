@@ -3411,7 +3411,7 @@ run(function()
 											end
 										end
 									end
-									local delayval = killaurahitdelay / 100
+									local delayval = killaurahitdelay.Value / 100
 									if (workspace:GetServerTimeNow() - bedwars.SwordController.lastAttack) < delayval then
 										break
 									end
