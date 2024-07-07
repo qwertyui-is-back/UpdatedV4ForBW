@@ -91,7 +91,7 @@ if shared.VapeExecuted then
 		ToggleNotifications = false,
 		Notifications = false,
 		ToggleTooltips = false,
-		ObjectsThatCanBeSaved = {["Gui ColorSliderColor"] = {Api = {Hue = 0.44, Sat = shared.sigma and 0 or 1, Value = 1}}},
+		ObjectsThatCanBeSaved = {["Gui ColorSliderColor"] = {Api = {Hue = 0.44, Sat = 1, Value = 1}}},
 		MobileButtons = {},
 		RainbowSliders = {}
 	}
@@ -3897,11 +3897,7 @@ if shared.VapeExecuted then
 			buttonapi["Children"] = children2
 			buttonapi["Name"] = argstablemain["Name"]
 			buttonapi["HasExtraText"] = type(argstablemain["ExtraText"]) == "function"
-			if not shared.sigma then
-				buttonapi["GetExtraText"] = (buttonapi["HasExtraText"] and argstablemain["ExtraText"] or function() return "" end)
-			else
-				buttonapi["GetExtraText"] = function() return "" end
-			end
+			buttonapi["GetExtraText"] = (buttonapi["HasExtraText"] and argstablemain["ExtraText"] or function() return "" end)
 			buttonapi.Connections = {}
 			local newsize = UDim2.new(0, 20, 0, 21)
 

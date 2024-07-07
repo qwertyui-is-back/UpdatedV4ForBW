@@ -9314,8 +9314,6 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 	})
 end)
 
-
-
 run(function()
 	local tws = game:GetService("TweenService")
 	local PingSpoof = {Enabled = false}
