@@ -9148,6 +9148,28 @@ run(function()
 	})
 end)
 
+run(function()
+	local JellyfishExploit = {Enabled = false}
+
+	JellyfishExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "JellyfishExploit",
+		Function = function(callback)
+			if callback then -- thank you whoever gave me this
+                task.spawn(function()
+                    repeat task.wait(0.2)
+                        local args = {
+                            [1] = "electrify_jellyfish"
+                        }
+
+                        game:GetService("ReplicatedStorage"):WaitForChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"):WaitForChild("useAbility"):FireServer(unpack(args))
+                    until (not JellyfishExploit.Enabled)
+                end)
+            end
+        end, 
+		HovorText = "Requires Marina kit to use"
+	})
+end)
+
 run(function() -- thank you SystemXVoid for letting me use this
 	local invis = {};
 	local invisbaseparts = {};
