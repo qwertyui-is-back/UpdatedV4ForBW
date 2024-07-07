@@ -1241,6 +1241,14 @@ runcode(function()
 						}
 						
 						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RewardCrate/SpawnRewardCrate"):FireServer(unpack(args))
+						
+						local args2 = {
+							[1] = {
+								["crateId"] = tostring(game.Workspace.CrateAltar_0:FindFirstChild("RewardCrate"):GetAttribute("crateId"))
+							}
+						}
+						
+						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RewardCrate/OpenRewardCrate"):FireServer(unpack(args2))
 						aut = 0
 					end
 				end)
