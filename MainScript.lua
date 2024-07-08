@@ -1804,6 +1804,9 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/NewMainScript.lua", true))()
 			end
 		]]
+		if shared.sigma then
+			teleportScript = 'shared.sigma = true\n'..teleportScript
+		end
 		if shared.VapeDeveloper then
 			teleportScript = 'shared.VapeDeveloper = true\n'..teleportScript
 		end
