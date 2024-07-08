@@ -874,7 +874,7 @@ VapeText.TextXAlignment = Enum.TextXAlignment.Left
 VapeText.TextYAlignment = Enum.TextYAlignment.Top
 VapeText.BorderSizePixel = 0
 VapeText.BackgroundColor3 = Color3.new()
-VapeText.Font = Enum.Font.SourceSans
+VapeText.Font = Enum.Font.Roboto
 VapeText.Text = ""
 VapeText.TextSize = 19
 local VapeTextExtra = Instance.new("TextLabel")
@@ -892,7 +892,7 @@ VapeTextExtra.TextTransparency = 0.5
 VapeTextExtra.TextXAlignment = Enum.TextXAlignment.Left
 VapeTextExtra.TextYAlignment = Enum.TextYAlignment.Top
 VapeTextExtra.TextColor3 = Color3.new()
-VapeTextExtra.Font = Enum.Font.SourceSans
+VapeTextExtra.Font = Enum.Font.Roboto
 VapeTextExtra.TextSize = 19
 local VapeCustomText = Instance.new("TextLabel")
 VapeCustomText.TextSize = 30
@@ -1245,8 +1245,13 @@ TextGUI.CreateDropdown({
 	Name = "Font",
 	List = TextGUIFonts,
 	Function = function(val)
-		VapeText.Font = Enum.Font[val]
-		VapeTextExtra.Font = Enum.Font[val]
+		if shared.sigma then
+			VapeText.Font = Enum.Font.Roboto
+			VapeTextExtra.Font = Enum.Font.Roboto
+		else
+			VapeText.Font = Enum.Font[val]
+			VapeTextExtra.Font = Enum.Font[val]
+		end
 		GuiLibrary.UpdateHudEvent:Fire()
 	end
 })
