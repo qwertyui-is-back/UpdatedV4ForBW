@@ -1082,6 +1082,10 @@ local function TextGUIUpdate()
 
 		GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value)
 	end
+	if shared.sigma then
+		VapeText.Font = Enum.Font.Roboto
+		VapeTextExtra.Font = Enum.Font.Roboto
+	end
 end
 
 TextGUI.GetCustomChildren().Parent:GetPropertyChangedSignal("Position"):Connect(TextGUIUpdate)
