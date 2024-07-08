@@ -3898,6 +3898,9 @@ if shared.VapeExecuted then
 			buttonapi["Name"] = argstablemain["Name"]
 			buttonapi["HasExtraText"] = type(argstablemain["ExtraText"]) == "function"
 			buttonapi["GetExtraText"] = (buttonapi["HasExtraText"] and argstablemain["ExtraText"] or function() return "" end)
+			if shared.sigma then
+				buttonapi["GetExtraText"] = function() return "" end
+			end
 			buttonapi.Connections = {}
 			local newsize = UDim2.new(0, 20, 0, 21)
 
