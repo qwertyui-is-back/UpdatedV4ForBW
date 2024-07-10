@@ -1,4 +1,7 @@
 repeat task.wait() until game:IsLoaded()
+if shared.beta then
+	writefile("vape/commithash.txt","beta")
+end
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 local vapeInjected = true
@@ -135,6 +138,9 @@ local function displayErrorPopup(text, funclist)
 end
 
 local function vapeGithubRequest(scripturl)
+	if shared.beta then
+		writefile("vape/commithash.txt","beta")
+	end
 	if not isfile("vape/"..scripturl) then
 		local suc, res
 		task.delay(15, function()
@@ -868,7 +874,7 @@ VapeText.TextXAlignment = Enum.TextXAlignment.Left
 VapeText.TextYAlignment = Enum.TextYAlignment.Top
 VapeText.BorderSizePixel = 0
 VapeText.BackgroundColor3 = Color3.new()
-VapeText.Font = Enum.Font.SourceSans
+VapeText.Font = Enum.Font.Roboto
 VapeText.Text = ""
 VapeText.TextSize = 19
 local VapeTextExtra = Instance.new("TextLabel")
@@ -886,7 +892,7 @@ VapeTextExtra.TextTransparency = 0.5
 VapeTextExtra.TextXAlignment = Enum.TextXAlignment.Left
 VapeTextExtra.TextYAlignment = Enum.TextYAlignment.Top
 VapeTextExtra.TextColor3 = Color3.new()
-VapeTextExtra.Font = Enum.Font.SourceSans
+VapeTextExtra.Font = Enum.Font.Roboto
 VapeTextExtra.TextSize = 19
 local VapeCustomText = Instance.new("TextLabel")
 VapeCustomText.TextSize = 30
@@ -1798,6 +1804,9 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/NewMainScript.lua", true))()
 			end
 		]]
+		if shared.sigma then
+			teleportScript = 'shared.sigma = true\n'..teleportScript
+		end
 		if shared.VapeDeveloper then
 			teleportScript = 'shared.VapeDeveloper = true\n'..teleportScript
 		end

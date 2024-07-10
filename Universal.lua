@@ -5614,6 +5614,80 @@ run(function()
 end)
 
 run(function()
+	local Watermark = {Enabled = false}
+	local tt
+	local bb
+	local toptext = "Cat"
+	local bottomtext = "V5"
+	local SigmasClient = Instance.new("ScreenGui")
+	local Sigmas = Instance.new("TextLabel")
+	local Jello = Instance.new("TextLabel")
+	--Properties:
+	SigmasClient.Name = "TitleOverlay"
+	SigmasClient.Parent = game.CoreGui
+	SigmasClient.ResetOnSpawn = false
+
+	Sigmas.Name = "Sigma"
+	Sigmas.Parent = SigmasClient
+	Sigmas.AnchorPoint = Vector2.new(0.100000001, 0.600000024)
+	Sigmas.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Sigmas.BackgroundTransparency = 1.000
+	Sigmas.BorderSizePixel = 0
+	Sigmas.Position = UDim2.new(0.00865922309, 0, 0.0567473955, 0)
+	Sigmas.Size = UDim2.new(0, 162, 0, 64)
+	Sigmas.Font = Enum.Font.Roboto
+	Sigmas.Text = toptext
+	Sigmas.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Sigmas.TextSize = 50.000
+	Sigmas.TextTransparency = Watermark.Enabled and 0 or 1
+	
+	Jello.Name = "Jello"
+	Jello.Parent = Sigmas
+	Jello.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Jello.BackgroundTransparency = 1.000
+	Jello.BorderSizePixel = 0
+	Jello.Position = UDim2.new(0.00865922309, 0, 0.475067473955, 0)
+	Jello.Size = UDim2.new(0, 162, 0, 64)
+	Jello.Font = Enum.Font.Roboto
+	Jello.Text = bottomtext
+	Jello.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Jello.TextSize = 24.85
+	Jello.TextTransparency = Watermark.Enabled and 0 or 1
+
+	Watermark = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "Watermark",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToStepped("sigma",function()
+					Sigmas.TextTransparency = 0
+					Jello.TextTransparency = 0
+					Sigmas.Text = tt.Value == "" and "Cat" or tt.Value
+					Jello.Text = bb.Value == "" and "V5" or bb.Value
+				end)
+			else
+				RunLoops:UnbindFromStepped("sigma")
+				Sigmas.TextTransparency = 1
+				Jello.TextTransparency = 1
+			end
+		end
+	})
+	tt = Watermark.CreateTextBox({
+		Name = "Top Text",
+		TempText = "Top Text of Watermark",
+		FocusLost = function(enter)
+			
+		end
+	})
+	bb = Watermark.CreateTextBox({
+		Name = "Bottom Text",
+		TempText = "Bottom Text of Watermark",
+		FocusLost = function(enter)
+			
+		end
+	})
+end)
+
+run(function()
 	local GamingChair = {Enabled = false}
 	local GamingChairColor = {Value = 1}
 	local chair

@@ -1221,6 +1221,43 @@ runcode(function()
 		["List"] = {"Old", "Winter", "Halloween", "Valentines"}
 	})
 end)
+runcode(function()
+	local AutoCrate = {Enabled = false}
+	local aut = 0
+	
+	AutoCrate = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "AutoCrate",
+		HovorText = "Automatically open crates if you have any.",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToStepped("crate",1,function()
+					aut = aut + 1
+					if aut >= 45 then
+						local args = {
+							[1] = {
+								["crateType"] = "level_up_crate",
+								["altarId"] = 0
+							}
+						}
+						
+						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RewardCrate/SpawnRewardCrate"):FireServer(unpack(args))
+						
+						local args2 = {
+							[1] = {
+								["crateId"] = tostring(game.Workspace.CrateAltar_0:FindFirstChild("RewardCrate"):GetAttribute("crateId"))
+							}
+						}
+						
+						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RewardCrate/OpenRewardCrate"):FireServer(unpack(args2))
+						aut = 0
+					end
+				end)
+			else
+				RunLoops:UnbindFromStepped("crate")
+			end
+		end
+	})
+end)
 
 runcode(function()
 	local tpstring = shared.vapeoverlay or nil

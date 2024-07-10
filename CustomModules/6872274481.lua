@@ -425,6 +425,7 @@ local function getSpeed()
 		local SpeedDamageBoost = lplr.Character:GetAttribute("SpeedBoost")
 		if SpeedDamageBoost and SpeedDamageBoost > 1 then
 			speed = speed * 1.6
+			speed = speed * 1.15
 		end
 		if store.grapple > tick() then
 			speed = speed * 3
@@ -2330,6 +2331,30 @@ run(function()
 	})
 end)
 
+local pulset = 0
+local pulsespeed = 23
+local speedneeded
+RunLoops:BindToStepped("Pulse",function()
+	pulset = pulset + 1
+	local multiply = 1.635
+	local ptime = 5 / getSpeed()
+	if speedneeded == nil then speedneeded = 23 end
+	if pulset <= 50 then
+		pulsespeed = speedneeded
+	elseif pulset <= 50 + ptime then
+		pulsespeed = speedneeded * multiply
+	elseif pulset >= 50 + ptime then
+		pulsespeed = speedneeded
+		pulset = 0
+	end
+end)
+
+local function getPulseValue(spd)
+	speedneeded = spd
+	local pls = pulsespeed
+	return pls
+end
+
 local autobankballoon = false
 run(function()
 	local Fly = {Enabled = false}
@@ -2527,8 +2552,10 @@ run(function()
 
 						local flyVelocity = entityLibrary.character.Humanoid.MoveDirection * (FlyMode.Value == "Normal" and flysp or 20)
 						entityLibrary.character.HumanoidRootPart.Velocity = flyVelocity + (Vector3.new(0, playerMass + (FlyUp and FlyVerticalSpeed.Value or 0) + (FlyDown and -FlyVerticalSpeed.Value or 0), 0))
-						if FlyMode.Value ~= "Normal" then
+						if FlyMode.Value ~= "Pulse" then
 							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((flysp * getSpeed()) - 20)) * delta
+						else
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((getPulseValue(flysp * getSpeed())) - 20)) * delta
 						end
 					end
 				end)
@@ -2560,8 +2587,13 @@ run(function()
 		end,
 		HoverText = "Makes you go zoom (longer Fly discovered by exelys and Cqded)",
 		ExtraText = function()
-			return "Heatseeker"
+			return FlyMode.Value
 		end
+	})
+	FlyMode = Fly.CreateDropdown({
+		Name = "Mode",
+		List = {"CFrame", "Pulse"},
+		Function = function() end
 	})
 	FlySpeed = Fly.CreateSlider({
 		Name = "Speed",
@@ -3057,6 +3089,7 @@ run(function()
 	local killaurasound = {Enabled = false}
 	local killauraswing = {Enabled = false}
 	local killaurasync = {Enabled = false}
+	local killaurahitdelay = {Enabled = false}
 	local killaurahandcheck = {Enabled = false}
 	local killauraanimation = {Enabled = false}
 	local killauraanimationtween = {Enabled = false}
@@ -3177,7 +3210,7 @@ run(function()
 		},
 		Leaked = {
 			{CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-16), math.rad(60), math.rad(-80)), Time = 0},
-			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(16), math.rad(59), math.rad(-90)), Time = 0.075},
+			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(16), math.rad(59), math.rad(-90)), Time = 0.156},
 			{CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-16), math.rad(60), math.rad(-80)), Time = 0.075}
 		},
 		Slide2 = {
@@ -3400,7 +3433,8 @@ run(function()
 											end
 										end
 									end
-									if (workspace:GetServerTimeNow() - bedwars.SwordController.lastAttack) < 0.02 then
+									local delayval = killaurahitdelay.Value / 100
+									if (workspace:GetServerTimeNow() - bedwars.SwordController.lastAttack) < delayval then
 										break
 									end
 									local selfpos = selfrootpos + (killaurarange.Value > 14 and (selfrootpos - root.Position).magnitude > 14.4 and (CFrame.lookAt(selfrootpos, root.Position).lookVector * ((selfrootpos - root.Position).magnitude - 14)) or Vector3.zero)
@@ -3509,6 +3543,15 @@ run(function()
 			end
 		end,
 		Default = 18
+	})
+	killaurahitdelay = Killaura.CreateSlider({
+		Name = "Hit Delay",
+		Min = 0,
+		Max = 10,
+		Function = function(val)
+
+		end,
+		Default = 2
 	})
 	killauraangle = Killaura.CreateSlider({
 		Name = "Max angle",
@@ -4491,7 +4534,7 @@ run(function()
 						else
 							for i, v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
 								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-									v:AdjustSpeed((SpeedValue.Value * getSpeed()) / 15)
+									v:AdjustSpeed((SpeedValue.Value * getSpeed()) / 14.35)
 								end
 							end
 						end
@@ -4499,8 +4542,14 @@ run(function()
 						local speedValue = SpeedValue.Value * getSpeed()
 						local speedVelocity = entityLibrary.character.Humanoid.MoveDirection * (SpeedMode.Value == "Normal" and SpeedValue.Value or 20)
 						entityLibrary.character.HumanoidRootPart.Velocity = antivoidvelo or Vector3.new(speedVelocity.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, speedVelocity.Z)
-						if SpeedMode.Value ~= "Normal" then
+						if SpeedMode.Value ~= "Pulse" then
 							local speedCFrame = entityLibrary.character.Humanoid.MoveDirection * (speedValue - 20) * delta
+							raycastparameters.FilterDescendantsInstances = {lplr.Character}
+							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, speedCFrame, raycastparameters)
+							if ray then speedCFrame = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + speedCFrame
+						else
+							local speedCFrame = entityLibrary.character.Humanoid.MoveDirection * (getPulseValue(speedValue) - 20) * delta
 							raycastparameters.FilterDescendantsInstances = {lplr.Character}
 							local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, speedCFrame, raycastparameters)
 							if ray then speedCFrame = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
@@ -4527,8 +4576,13 @@ run(function()
 		end,
 		HoverText = "Increases your movement.",
 		ExtraText = function()
-			return "Heatseeker"
+			return SpeedMode.Value
 		end
+	})
+	SpeedMode = Speed.CreateDropdown({
+		Name = "Mode",
+		List = {"CFrame", "Pulse", "Watchdog"},
+		Function = function() end
 	})
 	SpeedValue = Speed.CreateSlider({
 		Name = "Speed",
@@ -7012,7 +7066,7 @@ run(function()
 				local shopitem = getShopItem(swords[i])
 				if shopitem and i == swordindex then
 					local currency = getItem(shopitem.currency, inv.items)
-					if currency and currency.amount >= shopitem.price and (shopitem.category ~= "Armory" or upgrades.armory) then
+					if not getItem("rageblade") and currency and currency.amount >= shopitem.price and (shopitem.category ~= "Armory" or upgrades.armory) then
 						highestbuyable = shopitem
 						bedwars.ClientStoreHandler:dispatch({
 							type = "BedwarsAddItemPurchased",
@@ -7021,7 +7075,7 @@ run(function()
 					end
 				end
 			end
-			if highestbuyable and (highestbuyable.ignoredByKit == nil or table.find(highestbuyable.ignoredByKit, store.equippedKit) == nil) then
+			if not getItem("rageblade") and highestbuyable and (highestbuyable.ignoredByKit == nil or table.find(highestbuyable.ignoredByKit, store.equippedKit) == nil) then
 				buyItem(highestbuyable)
 			end
 		end
@@ -9123,6 +9177,91 @@ run(function()
 	})
 end)
 
+run(function()
+	local JellyfishExploit = {Enabled = false}
+
+	JellyfishExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "JellyfishExploit",
+		Function = function(callback)
+			if callback then -- thank you whoever gave me this
+                task.spawn(function()
+                    repeat task.wait(0.2)
+                        local args = {
+                            [1] = "electrify_jellyfish"
+                        }
+
+                        game:GetService("ReplicatedStorage"):WaitForChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"):WaitForChild("useAbility"):FireServer(unpack(args))
+                    until (not JellyfishExploit.Enabled)
+                end)
+            end
+        end, 
+		HovorText = "Requires Marina kit to use"
+	})
+end)
+
+run(function() -- thank you SystemXVoid for letting me use this
+	local invis = {};
+	local invisbaseparts = {};
+	local invisroot = {};
+	local invisrootcolor = {};
+	local invisanim = Instance.new('Animation');
+	local invisrenderstep;
+	local invistask;
+	local invshumanim;
+	local invisFunction = function()
+		pcall(task.wait(1))
+		pcall(task.cancel, invistask);
+		table.clear(invisbaseparts);
+		pcall(function() invisrenderstep:Disconnect() end);
+		repeat task.wait() until entityLibrary.isAlive;
+		for i,v in lplr.Character:GetDescendants() do 
+			if v.ClassName:lower():find('part') and v.CanCollide and v ~= lplr.Character.PrimaryPart then 
+				v.CanCollide = false;
+				table.insert(invisbaseparts, v);
+			end 
+		end
+		invisrenderstep = runService.Stepped:Connect(function()
+			for i,v in invisbaseparts do 
+				v.CanCollide = false;
+			end
+		end);
+		table.insert(invis.Connections, invisrenderstep);
+		invisanim.AnimationId = 'rbxassetid://11335949902';
+		local anim = lplr.Character.Humanoid.Animator:LoadAnimation(invisanim);
+		invishumanim = anim;
+		repeat 
+			task.wait()
+			if GuiLibrary.ObjectsThatCanBeSaved.AnimationPlayerOptionsButton.Api.Enabled then 
+				GuiLibrary.ObjectsThatCanBeSaved.AnimationPlayerOptionsButton.Api.ToggleButton();
+			end
+			if entityLibrary.isAlive == false or not isnetworkowner(lplr.Character.PrimaryPart) or not invis.Enabled then 
+				pcall(function() 
+					anim:AdjustSpeed(0);
+					anim:Stop() 
+				end);
+				continue
+			end
+			lplr.Character.PrimaryPart.Transparency = 0.6;
+			anim:Play(0.1, 9e9, 0.1);
+		until (not invis.Enabled)
+	end;
+	invis = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = 'Invisibility',
+		HoverText = 'Plays an animation which makes it harder\nfor targets to see you.',
+		Function = function(calling)
+			if calling then 
+				invistask = task.spawn(invisFunction);
+				table.insert(invis.Connections, lplr.CharacterAdded:Connect(invisFunction))
+			else 
+				pcall(function()
+					invishumanim:AdjustSpeed(0);
+					invishumanim:Stop();
+				end);
+				pcall(task.cancel, invistask)
+			end
+		end
+	})
+end) -- thank you SystemXVoid for letting me use this
 
 run(function() -- thank you SystemXVoid for letting me use this
     local RichExploit = {};
@@ -9207,6 +9346,8 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 		end
 	})
 end)
+
+
 
 run(function()
 	local tws = game:GetService("TweenService")
@@ -9565,6 +9706,171 @@ run(function()
 			hum:ChangeState("Jumping")
 		end
 	end)         
+end)
+run(function()
+    local coolpack = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        Name = "TexturePack",
+        HoverText = "nebula sent me this, idk if its skidded but it looks cool",
+        Function = function(callback)
+            if callback then
+				local Players = game:GetService("Players")
+				local ReplicatedStorage = game:GetService("ReplicatedStorage")
+				local Workspace = game:GetService("Workspace")
+				local objs = game:GetObjects("rbxassetid://14654171957")
+				local import = objs[1]
+				import.Parent = ReplicatedStorage
+				local index = {
+					{
+						name = "wood_sword",
+						offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+						model = import:WaitForChild("Wood_Sword"),
+					},	
+					{
+						name = "stone_sword",
+						offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+						model = import:WaitForChild("Stone_Sword"),
+					},
+					{
+						name = "iron_sword",
+						offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+						model = import:WaitForChild("Iron_Sword"),
+					},
+					{
+						name = "diamond_sword",
+						offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+						model = import:WaitForChild("Diamond_Sword"),
+					},
+					{
+						name = "rageblade",
+						offset = CFrame.Angles(math.rad(0), math.rad(89), math.rad(90)),
+						model = import:WaitForChild("Rageblade"),
+					},
+					{
+						name = "emerald_sword",
+						offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+						model = import:WaitForChild("Emerald_Sword"),
+					},
+					{
+						name = "wood_scythe",
+						offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+						model = import:WaitForChild("Wood_Scythe"),
+					},
+					{
+						name = "stone_scythe",
+						offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+						model = import:WaitForChild("Stone_Scythe"),
+					},
+					{
+						name = "iron_scythe",
+						offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+						model = import:WaitForChild("Iron_Scythe"),
+					},
+					{
+						name = "diamond_scythe",
+						offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+						model = import:WaitForChild("Diamond_Scythe"),
+					},
+					{
+						name = "wood_pickaxe",
+						offset = CFrame.Angles(math.rad(0), math.rad(-10), math.rad(-95)),
+						model = import:WaitForChild("Wood_Pickaxe"),
+					},	
+					{
+						name = "stone_pickaxe",
+						offset = CFrame.Angles(math.rad(0), math.rad(-10), math.rad(-95)),
+						model = import:WaitForChild("Stone_Pickaxe"),
+					},	
+					{
+						name = "iron_pickaxe",
+						offset = CFrame.Angles(math.rad(0), math.rad(-10), math.rad(-95)),
+						model = import:WaitForChild("Iron_Pickaxe"),
+					},	
+					{
+						name = "diamond_pickaxe",
+						offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-95)),
+						model = import:WaitForChild("Diamond_Pickaxe"),
+					},
+					{
+						name = "diamond",
+						offset = CFrame.Angles(math.rad(0), math.rad(-90), math.rad(90)),
+						model = import:WaitForChild("Diamond"),
+					},
+					{
+						name = "iron",
+						offset = CFrame.Angles(math.rad(0), math.rad(-90), math.rad(90)),
+						model = import:WaitForChild("Iron"),
+					},
+					{
+						name = "emerald",
+						offset = CFrame.Angles(math.rad(0), math.rad(-90), math.rad(90)),
+						model = import:WaitForChild("Emerald"),
+					},
+				}
+				local func = Workspace.Camera.Viewmodel.ChildAdded:Connect(function(tool)	
+					if not tool:IsA("Accessory") then return end	
+					for _, v in ipairs(index) do	
+						if v.name == tool.Name then		
+							for _, part in ipairs(tool:GetDescendants()) do
+								if part:IsA("BasePart") or part:IsA("MeshPart") or part:IsA("UnionOperation") then				
+									part.Transparency = 1
+								end			
+							end		
+							local model = v.model:Clone()
+							model.CFrame = tool:WaitForChild("Handle").CFrame * v.offset
+							model.CFrame *= CFrame.Angles(math.rad(0), math.rad(-50), math.rad(0))
+							model.Parent = tool			
+							local weld = Instance.new("WeldConstraint", model)
+							weld.Part0 = model
+							weld.Part1 = tool:WaitForChild("Handle")			
+							local tool2 = Players.LocalPlayer.Character:WaitForChild(tool.Name)			
+							for _, part in ipairs(tool2:GetDescendants()) do
+								if part:IsA("BasePart") or part:IsA("MeshPart") or part:IsA("UnionOperation") then				
+									part.Transparency = 1				
+								end			
+							end			
+							local model2 = v.model:Clone()
+							model2.Anchored = false
+							model2.CFrame = tool2:WaitForChild("Handle").CFrame * v.offset
+							model2.CFrame *= CFrame.Angles(math.rad(0), math.rad(-50), math.rad(0))
+							if v.name:match("rageblade") then
+								model2.CFrame *= CFrame.new(0.7, 0, -1)                           
+							elseif v.name:match("sword") or v.name:match("blade") then
+								model2.CFrame *= CFrame.new(.08, 0, -1.1) - Vector3.new(0, 0, -1.1)
+							elseif v.name:match("axe") and not v.name:match("pickaxe") and v.name:match("diamond") then
+								model2.CFrame *= CFrame.new(.08, 0, -1.1) - Vector3.new(0, 0, -1.1)
+							elseif v.name:match("axe") and not v.name:match("pickaxe") and not v.name:match("diamond") then
+								model2.CFrame *= CFrame.new(-.2, 0, -2.4) + Vector3.new(0, 0, 2.12)
+							elseif v.name:match("scythe") then
+								model2.CFrame *= CFrame.new(-1.15, 0.2, -2.1)
+							elseif v.name:match("iron") then
+								model2.CFrame *= CFrame.new(0, -.24, 0)
+							elseif v.name:match("gold") then
+								model2.CFrame *= CFrame.new(0, .03, 0)
+							elseif v.name:match("diamond") then
+								model2.CFrame *= CFrame.new(0, .027, 0)
+							elseif v.name:match("emerald") then
+								model2.CFrame *= CFrame.new(0, .001, 0)
+							elseif v.name:match("telepearl") then
+								model2.CFrame *= CFrame.new(.1, 0, .1)
+							elseif v.name:match("bow") and not v.name:match("crossbow") then
+								model2.CFrame *= CFrame.new(-.29, .1, -.2)
+							elseif v.name:match("wood_crossbow") and not v.name:match("tactical_crossbow") then
+								model2.CFrame *= CFrame.new(-.6, 0, 0)
+							elseif v.name:match("tactical_crossbow") and not v.name:match("wood_crossbow") then
+								model2.CFrame *= CFrame.new(-.5, 0, -1.2)
+							else
+								model2.CFrame *= CFrame.new(.2, 0, -.2)
+							end
+							model2.Parent = tool2
+							local weld2 = Instance.new("WeldConstraint", model)
+							weld2.Part0 = model2
+							weld2.Part1 = tool2:WaitForChild("Handle")
+						end
+					end
+				end)          
+			end
+        end
+	})
 end)
 
 run(function()

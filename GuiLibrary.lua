@@ -1,5 +1,5 @@
 if shared.VapeExecuted then
-	local VERSION = "v1.0.0 (Updated Vape V4)"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
+	local VERSION = "1.0.1 (Updated Vape V4)"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
 	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 	local vapeAssetTable = {
 		["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
@@ -3898,6 +3898,9 @@ if shared.VapeExecuted then
 			buttonapi["Name"] = argstablemain["Name"]
 			buttonapi["HasExtraText"] = type(argstablemain["ExtraText"]) == "function"
 			buttonapi["GetExtraText"] = (buttonapi["HasExtraText"] and argstablemain["ExtraText"] or function() return "" end)
+			if shared.sigma then
+				buttonapi["GetExtraText"] = function() return "" end
+			end
 			buttonapi.Connections = {}
 			local newsize = UDim2.new(0, 20, 0, 21)
 
