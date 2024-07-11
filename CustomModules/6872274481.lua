@@ -9374,6 +9374,7 @@ run(function()
 		oldY = newroot.CFrame.Y
     end
     local destructclone = function()
+		newroot.CFrame = oldroot.CFrame
         lplr.Character.Parent = game
         oldroot.Parent = lplr.Character
         newroot.Parent = workspace
