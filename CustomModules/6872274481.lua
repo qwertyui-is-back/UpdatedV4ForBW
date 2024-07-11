@@ -9360,7 +9360,8 @@ run(function()
 	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
-        repeat task.wait() until entityLibrary.isAlive
+		if store.matchState < 1 then warningNotification("Cat "..catver, "Please wait until you are out of lobby to use PingSpoof!") end
+        repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
 		hip = lplr.Character.Humanoid.HipHeight
         lplr.Character.Parent = game
         oldroot = lplr.Character.HumanoidRootPart
@@ -9439,7 +9440,10 @@ run(function()
 				-- wait until clone is made
 				repeat task.wait() until isCloned
 				-- respawn
-				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone))
+				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(function()
+					task.wait(1.5)
+					createclone()
+				end))
 				bticks = 0
 				-- part for if Show Part is used
 				clonepos = Instance.new("Part", lplr.Character)
