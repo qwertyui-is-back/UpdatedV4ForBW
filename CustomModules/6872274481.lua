@@ -9344,7 +9344,7 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 	})
 end)
 
---[[
+
 run(function() -- it didnt go as planned
 	local tws = game:GetService("TweenService")
 	local PingSpoofDelay = {Value = 50}
@@ -9422,7 +9422,7 @@ run(function() -- it didnt go as planned
 		end
 	end
 
-	local setSleeping = function(boolean) -- MAKE SURE TO FUCKING PCALL IT RETARD QWERTY (note to self)
+	local function setSleeping(boolean) -- MAKE SURE TO FUCKING PCALL IT RETARD QWERTY (note to self)
 		boolean = boolean or false
 		for i,v in pairs(lplr.Character:GetChildren()) do
 			if gethiddenproperty(v, "NetworkIsSleeping") then
@@ -9432,7 +9432,7 @@ run(function() -- it didnt go as planned
 	end
 
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "PingSpoof",
+		Name = "PingSpoof V2",
 		HovorText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
 		ExtraText = function()
 			return PingSpoofDelay.Value
@@ -9487,6 +9487,7 @@ run(function() -- it didnt go as planned
 				end
 				pcall(destructclone)
 			end
+		end
 	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
 		Name = "Delay",
@@ -9504,8 +9505,8 @@ run(function() -- it didnt go as planned
 		end
 	})
 end)
-]]
-run(function()
+
+--[[run(function()
 	local tws = game:GetService("TweenService")
 	local PingSpoofDelay = {Value = 50}
 	local PingSpoofPart = {Enabled = true}
@@ -9674,7 +9675,7 @@ run(function()
 			end
 		end
 	})
-end)
+end)]]
 
 run(function()
 	local HannahExploit = {Enabled = false}
