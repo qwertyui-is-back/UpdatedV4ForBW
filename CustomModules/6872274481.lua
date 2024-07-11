@@ -9341,6 +9341,7 @@ run(function()
 	
 	local oldroot
 	local newroot
+	local oldY
 	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
@@ -9356,6 +9357,7 @@ run(function()
         oldroot.Transparency = 1
         entityLibrary.character.HumanoidRootPart = newroot
 		isCloned = true
+		oldY = newroot.CFrame.Y
     end
     local destructclone = function()
         lplr.Character.Parent = game
@@ -9399,7 +9401,9 @@ run(function()
 					lagback()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
+						oldroot.CFrame = oldroot.CFrame * CFrame.new(0, oldY, 0)
 						if bticks >= (PingSpoofDelay.Value / 3) then
+							oldY = newroot.CFrame.Y
 							pcall(function()
 								for i,v in pairs(lplr.Character:GetChildren()) do
 									if gethiddenproperty(v, "NetworkIsSleeping") then
