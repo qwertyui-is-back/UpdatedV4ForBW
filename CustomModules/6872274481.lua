@@ -9363,18 +9363,17 @@ run(function() -- it didnt go as planned
 	local oldY
 	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
-	local function createclone()
+	local createclone = function()
 		repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
-		hip = lplr.Character.Humanoid.HipHeight
-        lplr.Character.Parent = game
-        oldroot = lplr.Character.HumanoidRootPart
-        newroot = oldroot:Clone()
-        newroot.Parent = lplr.Character
-        lplr.Character.PrimaryPart = newroot
-        oldroot.Parent = workspace
-        lplr.Character.Parent = workspace
-        oldroot.Transparency = 1
-        entityLibrary.character.HumanoidRootPart = newroot
+		lplr.Character.Parent = game
+		oldroot = lplr.Character.HumanoidRootPart
+		newroot = oldroot:Clone()
+		newroot.Parent = lplr.Character
+		lplr.Character.PrimaryPart = newroot
+		oldroot.Parent = workspace
+		lplr.Character.Parent = workspace
+		oldroot.Transparency = 1
+		entityLibrary.character.HumanoidRootPart = newroot
 		psor = oldroot
 		isCloned = true
 		oldY = newroot.CFrame.Y
@@ -9382,9 +9381,13 @@ run(function() -- it didnt go as planned
 			lplr.Character.Humanoid.HipHeight = hip
 		end
 		hip = lplr.Character.Humanoid.HipHeight
-    end
-
-    local function destructclone()
+		psic = true
+	end
+	local createclone2 = function()
+		task.wait(1.5)
+		pcall(createclone)
+	end
+	local destructclone = function()
 		lplr.Character.Parent = game
 		oldroot.Parent = lplr.Character
 		lplr.Character.PrimaryPart = oldroot
@@ -9404,12 +9407,15 @@ run(function() -- it didnt go as planned
 				v:Destroy()
 			end
 		end
-        entityLibrary.character.HumanoidRootPart = oldroot
-        newroot:Remove()
+		entityLibrary.character.HumanoidRootPart = oldroot
+		newroot:Remove()
 		newroot = nil
 		isCloned = false
-		lplr.Character.Humanoid.HipHeight = hip or 2
-    end
+		task.wait(0.05)
+		entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418
+		repeat task.wait() entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418 until entityLibrary.character.Humanoid.HipHeight > 1
+		psic = false
+	end
 
 	local function lagback()
 		if not isnetworkowner(oldroot or entityLibrary.character.HumanoidRootPart) and isCloned then
