@@ -9448,7 +9448,6 @@ run(function()
 							speedCFrame[3] = clone.CFrame.Z
 							if tpt == 7 then
 								oldcloneroot.CFrame = clome.CFrame
-								oldcloneroot.Rotation = clone.Rotation
 								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 								oldcloneroot.Anchored = false
 								tpt = 0
