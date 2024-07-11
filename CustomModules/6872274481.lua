@@ -2807,6 +2807,7 @@ end)
 local PingSpoof = {Enabled = false}
 local InfiniteFly = {Enabled = false}
 local psor
+local psic = false
 run(function()
 	local InfiniteFlyMode = {Value = "CFrame"}
 	local InfiniteFlySpeed = {Value = 23}
@@ -2871,6 +2872,7 @@ run(function()
 		Function = function(callback)
 			if callback then
 				if PingSpoof.Enabled then PingSpoof.ToggleButton(false) didps = true end
+				repeat task.wait() until not psic
 				if not entityLibrary.isAlive then
 					disabledproper = true
 				end
@@ -9537,6 +9539,7 @@ run(function()
 			lplr.Character.Humanoid.HipHeight = hip
 		end
 		hip = lplr.Character.Humanoid.HipHeight
+		psic = true
 	end
 	local createclone2 = function()
 		task.wait(1.5)
@@ -9569,6 +9572,7 @@ run(function()
 		task.wait(0.05)
 		entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418
 		repeat task.wait() entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418 until entityLibrary.character.Humanoid.HipHeight > 1
+		psic = false
 	end
 
 	local lagback = function()
@@ -9645,6 +9649,7 @@ run(function()
 				pcall(destructclone)
 				task.wait(0.05)
 				entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418
+				psic = false
 			end
 		end,
 		HoverText = "Helps PingSpoof the anticheat",
