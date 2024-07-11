@@ -9359,7 +9359,7 @@ run(function()
 	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
-        repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
+        repeat task.wait() until entityLibrary.isAlive
         task.wait(1)
         lplr.Character.Parent = game
         oldroot = lplr.Character.HumanoidRootPart
