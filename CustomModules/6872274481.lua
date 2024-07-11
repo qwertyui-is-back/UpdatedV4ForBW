@@ -9364,7 +9364,7 @@ run(function() -- it didnt go as planned
 	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
-		if store.matchState < 1 then warningNotification("Cat "..catver, "Please wait until you are out of lobby to use PingSpoof!") end
+		if store.matchState < 1 then warningNotification("Cat "..catver, "Please wait until you are out of lobby to use PingSpoof!",5) end
         repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
 		hip = lplr.Character.Humanoid.HipHeight
         lplr.Character.Parent = game
