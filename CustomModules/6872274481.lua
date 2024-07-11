@@ -9338,11 +9338,41 @@ run(function()
 	local function roundup(num)
 		return math.ceil(num)
 	end
+	local oldroot
+	local newroot
+	-- Thanks to SystemXVoid for sending me these!
+	local createclone = function()
+        repeat task.wait() until isAlive(lplr, true) and store.matchState ~= 0
+        task.wait(0.1)
+        if not antihit.Enabled then return end
+        lplr.Character.Parent = game
+        oldroot = lplr.Character.HumanoidRootPart
+        newroot = oldroot:Clone()
+        newroot.Parent = lplr.Character
+        lplr.Character.PrimaryPart = newroot
+        oldroot.Parent = workspace
+        lplr.Character.Parent = workspace
+        oldroot.Transparency = 1
+        entityLibrary.character.HumanoidRootPart = newroot
+    end
+    local destructclone = function()
+        lplr.Character.Parent = game
+        oldroot.Parent = lplr.Character
+        newroot.Parent = workspace
+        lplr.Character.PrimaryPart = oldroot
+        lplr.Character.Parent = workspace
+        entityLibrary.character.HumanoidRootPart = oldroot
+        newroot:Remove()
+        newroot = {}
+        oldroot = {}
+    end
 
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof",
 		Function = function(callback)
 			if callback then 
+				createclone()
+				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(creatclone))
 				bticks = 0
 				clonepos = Instance.new("Part",workspace)
 				clonepos.Position = lplr.Character.HumanoidRootPart.Position
@@ -9366,6 +9396,11 @@ run(function()
 							bticks = 0
 							Blinking = false
 							show = true
+							local twsp = (PingSpoofDelay.Value / 1000)
+							local tweenInfo = TweenInfo.new(twsp)
+	
+							local tween = tws:Create(oldroot, tweenInfo, {CFrame = newroot.CFrame})
+							tween:Play()
 						else
 							pcall(function()
 								for i,v in pairs(lplr.Character:GetChildren()) do
@@ -9381,12 +9416,9 @@ run(function()
 							show = true
 						end
 					end
-					if clonepos and show then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
-						local twsp = (PingSpoofDelay.Value / 1000)
-						local tweenInfo = TweenInfo.new(twsp)
-
-						local tween = tws:Create(clonepos, tweenInfo, {Position = lplr.Character.HumanoidRootPart.Position})
-						tween:Play()
+					oldroot.Velocity = Vector3.zero
+					if clonepos then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
+						clonepos.CFrame = oldroot.CFrame
 					end
 				end)
 			else 
@@ -9395,6 +9427,10 @@ run(function()
 					clonepos:Destroy()
 					clonepos = nil
 				end
+				for i,v in pairs(PingSpoof.Connections:GetChildren()) do
+					v:Disconnect()
+				end
+				destructclone()
 			end
 		end,
 		HoverText = "Helps PingSpoof the anticheat",
