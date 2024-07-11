@@ -9401,6 +9401,7 @@ run(function()
 		Function = function(callback)
 			if callback then 
 				createclone()
+				repeat task.wait() until isCloned
 				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone))
 				bticks = 0
 				clonepos = Instance.new("Part",workspace)
