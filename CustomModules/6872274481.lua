@@ -9465,7 +9465,7 @@ run(function() -- it didnt go as planned
 						lagback()
 						oldroot.Velocity = Vector3.zero
 						if entityLibrary.isAlive then
-							if bticks >= (PingSpoofDelay.Value / (3 + (getSpeed() * 2))) then
+							if bticks >= (PingSpoofDelay.Value / 3) then
 								--pcall(setSleeping(false))
 								bticks = 0
 								oldroot.CFrame = newroot.CFrame
