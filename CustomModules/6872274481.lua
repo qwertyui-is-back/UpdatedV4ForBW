@@ -9416,7 +9416,7 @@ run(function()
 					lagback()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
-						if bticks >= (PingSpoofDelay.Value / 3) then
+						if bticks >= (PingSpoofDelay.Value / 3 + (getSpeed * 2)) then
 							pcall(function()
 								for i,v in pairs(lplr.Character:GetChildren()) do
 									if gethiddenproperty(v, "NetworkIsSleeping") then
