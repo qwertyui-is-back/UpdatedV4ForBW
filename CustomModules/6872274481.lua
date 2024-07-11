@@ -9432,7 +9432,7 @@ run(function()
 		HovorText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
 		ExtraText = function()
 			return PingSpoofDelay.Value
-		end
+		end,
 		Function = function(callback)
 			if callback then
 				-- begin clone
