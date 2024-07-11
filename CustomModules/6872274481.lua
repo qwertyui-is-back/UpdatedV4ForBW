@@ -9335,7 +9335,7 @@ run(function()
 	local clone
 	local bodyvelo
 	local tpt = 0
-	local tpa = 15
+	local tpa = 7
 	local FlyOverlap = OverlapParams.new()
 	FlyOverlap.MaxParts = 9e9
 	FlyOverlap.FilterDescendantsInstances = {}
