@@ -2821,6 +2821,7 @@ run(function()
 	local cloned
 	local clone
 	local bodyvelo
+	local didps = false
 	local FlyOverlap = OverlapParams.new()
 	FlyOverlap.MaxParts = 9e9
 	FlyOverlap.FilterDescendantsInstances = {}
@@ -2869,6 +2870,7 @@ run(function()
 		Name = "InfiniteFly",
 		Function = function(callback)
 			if callback then
+				if PingSpoof.Enabled then PingSpoof.ToggleButton(false) didps = true end
 				if not entityLibrary.isAlive then
 					disabledproper = true
 				end
@@ -3030,6 +3032,7 @@ run(function()
 				end
 				InfiniteFlyUp = false
 				InfiniteFlyDown = false
+				if not PingSpoof.Enabled and didps then PingSpoof.ToggleButton(false) didps = false end
 			end
 		end,
 		HoverText = "Makes you go zoom",
