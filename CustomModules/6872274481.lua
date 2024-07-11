@@ -9426,9 +9426,6 @@ run(function()
 					clonepos:Destroy()
 					clonepos = nil
 				end
-				for i,v in pairs(PingSpoof.Connections:GetChildren()) do
-					v:Disconnect()
-				end
 				destructclone()
 			end
 		end,
