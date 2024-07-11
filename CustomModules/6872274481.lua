@@ -9427,15 +9427,6 @@ run(function() -- it didnt go as planned
 		end
 	end
 
-	--[[local function setSleeping(boolean) -- MAKE SURE TO FUCKING PCALL IT RETARD QWERTY (note to self)
-		boolean = boolean or false
-		for i,v in pairs(lplr.Character:GetChildren()) do
-			if gethiddenproperty(v, "NetworkIsSleeping") then
-				sethiddenproperty(v, "NetworkIsSleeping", boolean)
-			end
-		end
-	end]]
-
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof V2",
 		HoverText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
