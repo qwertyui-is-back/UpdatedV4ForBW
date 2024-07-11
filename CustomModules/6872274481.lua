@@ -2873,6 +2873,7 @@ run(function()
 			if callback then
 				if PingSpoof.Enabled then PingSpoof.ToggleButton(false) didps = true end
 				repeat task.wait() until not psic
+				if didps then warningNotification("Cat "..catver, "Wait 1 second before moving! (This is to help prevent lagbacks)") task.wait(1) end
 				if not entityLibrary.isAlive then
 					disabledproper = true
 				end
