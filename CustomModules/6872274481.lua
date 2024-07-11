@@ -9382,8 +9382,6 @@ run(function()
         lplr.Character.Parent = workspace
         entityLibrary.character.HumanoidRootPart = oldroot
         newroot:Remove()
-        newroot = {}
-        oldroot = {}
 		isCloned = false
     end
 
