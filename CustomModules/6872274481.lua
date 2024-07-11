@@ -9643,6 +9643,8 @@ run(function()
 					clonepos = nil
 				end
 				pcall(destructclone)
+				task.wait(0.05)
+				entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418
 			end
 		end,
 		HoverText = "Helps PingSpoof the anticheat",
