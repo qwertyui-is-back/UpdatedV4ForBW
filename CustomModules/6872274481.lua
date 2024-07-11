@@ -9475,6 +9475,7 @@ run(function()
 					oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, -1, clone.Velocity.Z)
 					RunLoops:BindToHeartbeat("AnticheatBypassOff", function(dt)
 						if oldcloneroot then
+							oldcloneroot.Anchored = false
 							oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, -1, clone.Velocity.Z)
 							local bruh = {clone.CFrame:GetComponents()}
 							bruh[2] = oldcloneroot.CFrame.Y
