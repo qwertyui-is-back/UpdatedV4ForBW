@@ -9360,7 +9360,7 @@ run(function()
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
         repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
-        task.wait(0.1)
+        task.wait(1)
         lplr.Character.Parent = game
         oldroot = lplr.Character.HumanoidRootPart
         newroot = oldroot:Clone()
