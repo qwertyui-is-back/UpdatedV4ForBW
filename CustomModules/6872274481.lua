@@ -9396,7 +9396,7 @@ run(function()
 			end
 		end
         entityLibrary.character.HumanoidRootPart = oldroot
-		lplr.Character.Humanoid.HipHeight = hip or 2
+		lplr.Character.Humanoid.HipHeight = 2
         newroot:Remove()
 		newroot = nil
 		isCloned = false
