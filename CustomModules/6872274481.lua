@@ -9364,8 +9364,7 @@ run(function() -- it didnt go as planned
 	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
-		if store.matchState < 1 then warningNotification("Cat "..catver, "Please wait until you are out of lobby to use PingSpoof!",5) end
-        repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
+		repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
 		hip = lplr.Character.Humanoid.HipHeight
         lplr.Character.Parent = game
         oldroot = lplr.Character.HumanoidRootPart
@@ -9422,14 +9421,14 @@ run(function() -- it didnt go as planned
 		end
 	end
 
-	local function setSleeping(boolean) -- MAKE SURE TO FUCKING PCALL IT RETARD QWERTY (note to self)
+	--[[local function setSleeping(boolean) -- MAKE SURE TO FUCKING PCALL IT RETARD QWERTY (note to self)
 		boolean = boolean or false
 		for i,v in pairs(lplr.Character:GetChildren()) do
 			if gethiddenproperty(v, "NetworkIsSleeping") then
 				sethiddenproperty(v, "NetworkIsSleeping", boolean)
 			end
 		end
-	end
+	end]]
 
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof V2",
@@ -9466,13 +9465,13 @@ run(function() -- it didnt go as planned
 						oldroot.Velocity = Vector3.zero
 						if entityLibrary.isAlive then
 							if bticks >= (PingSpoofDelay.Value / (3 + (getSpeed() * 2))) then
-								pcall(setSleeping(false))
+								--pcall(setSleeping(false))
 								bticks = 0
 								oldroot.CFrame = newroot.CFrame
 								local tween = tws:Create(cp, TweenInfo.new((PingSpoofDelay.Value / 300)), {CFrame = newroot.CFrame})
 								tween:Play()
 							else
-								pcall(setSleeping(true))
+								--pcall(setSleeping(true))
 							end
 							if clonepos then
 								pcall(function() clonepos.CFrame = oldroot.CFrame end)
