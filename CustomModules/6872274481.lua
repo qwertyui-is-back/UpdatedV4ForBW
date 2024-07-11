@@ -9444,10 +9444,7 @@ run(function() -- it didnt go as planned
 				-- begin clone
 				createclone()
 				-- respawn
-				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(function()
-					task.wait(1.5)
-					createclone()
-				end))
+				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone2))
 				bticks = 0
 				-- part for if Show Part is used
 				clonepos = Instance.new("Part", lplr.Character)
