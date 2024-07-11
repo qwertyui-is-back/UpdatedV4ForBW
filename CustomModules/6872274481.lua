@@ -9382,8 +9382,8 @@ run(function()
 		oldroot.CanCollide = true
 		for i,v in pairs(lplr.Character:GetDescendants()) do
 			if v:IsA("Weld") or v:IsA("Motor6D") then
-				if v.Part0 == clone then v.Part0 = oldroot end
-				if v.Part1 == clone then v.Part1 = oldroot end
+				if v.Part0 == newroot then v.Part0 = oldroot end
+				if v.Part1 == newroot then v.Part1 = oldroot end
 			end
 			if v:IsA("BodyVelocity") then
 				v:Destroy()
