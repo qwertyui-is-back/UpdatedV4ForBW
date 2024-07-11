@@ -9424,10 +9424,11 @@ run(function()
 							Blinking = false
 							show = true
 							if not InfiniteFly.Enabled then
+								oldroot.CFrame = newroot.CFrame
 								local twsp = (PingSpoofDelay.Value / 300)
 								local tweenInfo = TweenInfo.new(twsp)
 		
-								local tween = tws:Create(oldroot, tweenInfo, {CFrame = newroot.CFrame})
+								local tween = tws:Create(clonepos, tweenInfo, {CFrame = newroot.CFrame})
 								tween:Play()
 							end
 						else
@@ -9448,6 +9449,7 @@ run(function()
 					oldroot.Velocity = Vector3.zero
 					if clonepos then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
 						pcall(function()
+							if InfiniteFly.Enabled then return end
 							clonepos.CFrame = oldroot.CFrame
 						end)
 					end
