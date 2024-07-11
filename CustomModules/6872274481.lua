@@ -9446,13 +9446,14 @@ run(function()
 							speedCFrame[1] = clone.CFrame.X
 							speedCFrame[2] = clone.CFrame.Y
 							speedCFrame[3] = clone.CFrame.Z
-							oldcloneroot.CFrame = oldcloneroot.CFrame * CFrame.new(0,oldcloneroot.CFrame.Y,0)
 							if tpt == 7 then
-								oldcloneroot.CFrame = clome.CFrame
+								oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
+								oldcloneroot.Rotation = clone.Rotation
 								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 								oldcloneroot.Anchored = false
 								tpt = 0
 							end
+							oldcloneroot.CFrame = oldcloneroot.CFrame * CFrame.new(0,oldcloneroot.CFrame.Y,0)
 						else
 							acb.ToggleButton(false)
 						end
