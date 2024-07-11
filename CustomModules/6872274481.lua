@@ -9441,47 +9441,6 @@ run(function() -- it didnt go as planned
 		HoverText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
 		Function = function(callback)
 			if callback then
-				-- begin clone
-				createclone()
-				-- respawn
-				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone2))
-				bticks = 0
-				-- part for if Show Part is used
-				clonepos = Instance.new("Part", lplr.Character)
-				local cp = clonepos
-				cp.CFrame = lplr.Character.HumanoidRootPart.CFrame
-				cp.Anchored = true
-				cp.Size = Vector3.new(3.9,5,3.9)
-				cp.Transparency = PingSpoofPart.Enabled and 0.5 or 1
-				cp.Name = "PingSpoof Show Part"
-				-- actual code to spoof ping
-				RunLoops:BindToHeartbeat("PingSpoof", function()
-					if entityLibrary.isAlive then
-						bticks += 1
-						cp.Transparency = PingSpoofPart.Enabled and 0.5 or 1
-						lagback()
-						oldroot.Velocity = Vector3.zero
-						if entityLibrary.isAlive then
-							if bticks >= (PingSpoofDelay.Value / 3) then
-								--pcall(setSleeping(false))
-								bticks = 0
-								oldroot.CFrame = newroot.CFrame
-							else
-								--pcall(setSleeping(true))
-							end
-							if clonepos then
-								pcall(function() clonepos.CFrame = oldroot.CFrame end)
-							end
-						end
-					end
-				end)
-			else
-				RunLoops:UnbindFromHeartbeat("PingSpoof")
-				if clonepos then
-					clonepos:Destroy()
-					clonepos = nil
-				end
-				pcall(destructclone)
 			end
 		end,
 		ExtraText = function()
