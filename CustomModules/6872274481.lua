@@ -9469,8 +9469,6 @@ run(function() -- it didnt go as planned
 								--pcall(setSleeping(false))
 								bticks = 0
 								oldroot.CFrame = newroot.CFrame
-								local tween = tws:Create(cp, TweenInfo.new((PingSpoofDelay.Value / 300)), {CFrame = newroot.CFrame})
-								tween:Play()
 							else
 								--pcall(setSleeping(true))
 							end
