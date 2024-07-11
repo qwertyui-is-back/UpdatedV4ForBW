@@ -9338,8 +9338,10 @@ run(function()
 	local function roundup(num)
 		return math.ceil(num)
 	end
+	
 	local oldroot
 	local newroot
+	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
         repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
@@ -9353,6 +9355,7 @@ run(function()
         lplr.Character.Parent = workspace
         oldroot.Transparency = 1
         entityLibrary.character.HumanoidRootPart = newroot
+		isCloned = true
     end
     local destructclone = function()
         lplr.Character.Parent = game
@@ -9364,7 +9367,18 @@ run(function()
         newroot:Remove()
         newroot = {}
         oldroot = {}
+		isCloned = false
     end
+
+	local lagback = function()
+		if not isnetworkowner(oldroot or entityLibrary.character.HumanoidRootPart) and isCloned then
+			pcall(destructclone)
+		end
+		repeat task.wait() until isnetworkowner(entityLibrary.character.HumanoidRootPart)
+		if not isCloned then
+			createclone()
+		end
+	end
 
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof",
@@ -9382,6 +9396,7 @@ run(function()
 				clonepos.Name = "SkibidiPing"
 				RunLoops:BindToHeartbeat("PingSpoof",function()
 					clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
+					lagback()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
 						if bticks >= (PingSpoofDelay.Value) then
@@ -9417,7 +9432,7 @@ run(function()
 					end
 					oldroot.Velocity = Vector3.zero
 					if clonepos then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
-						clonepos.CFrame = oldroot.CFrame
+						clonepos.CFrame = oldroot.CFrame or CFrame.new(0,500,0)
 					end
 				end)
 			else 
