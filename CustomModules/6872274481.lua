@@ -9453,7 +9453,6 @@ run(function()
 								oldcloneroot.Anchored = false
 								tpt = 0
 							end
-							oldcloneroot.CFrame = oldcloneroot.CFrame * CFrame.new(0,oldcloneroot.CFrame.Y,0)
 						else
 							acb.ToggleButton(false)
 						end
