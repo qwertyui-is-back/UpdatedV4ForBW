@@ -9412,7 +9412,7 @@ run(function()
 							bticks = 0
 							Blinking = false
 							show = true
-							local twsp = (PingSpoofDelay.Value / 1000)
+							local twsp = (PingSpoofDelay.Value / 300)
 							local tweenInfo = TweenInfo.new(twsp)
 	
 							local tween = tws:Create(oldroot, tweenInfo, {CFrame = newroot.CFrame})
