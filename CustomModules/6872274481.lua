@@ -9340,6 +9340,7 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 	})
 end)
 
+
 run(function()
 	local tws = game:GetService("TweenService")
 	local PingSpoofDelay = {Value = 50}
@@ -9378,6 +9379,7 @@ run(function()
 		end
 		hip = lplr.Character.Humanoid.HipHeight
     end
+
     local destructclone = function()
 		lplr.Character.Parent = game
 		oldroot.Parent = lplr.Character
@@ -9415,69 +9417,61 @@ run(function()
 		end
 	end
 
+	local setSleeping = function(boolean) -- MAKE SURE TO FUCKING PCALL IT RETARD QWERTY (note to self)
+		boolean = boolean or false
+		for i,v in pairs(lplr.Character:GetChildren()) do
+			if gethiddenproperty(v, "NetworkIsSleeping") then
+				sethiddenproperty(v, "NetworkIsSleeping", boolean)
+			end
+		end
+	end
+
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof",
+		HovorText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
+		ExtraText = function()
+			return PingSpoofDelay.Value
+		end
 		Function = function(callback)
-			if callback then 
+			if callback then
+				-- begin clone
 				createclone()
+				-- wait until clone is made
 				repeat task.wait() until isCloned
+				-- respawn
 				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone))
 				bticks = 0
-				clonepos = Instance.new("Part",workspace)
-				clonepos.Position = lplr.Character.HumanoidRootPart.Position
-				clonepos.CanCollide = false
-				clonepos.Anchored = true
-				clonepos.Size = Vector3.new(3.9,5,3.9)
-				clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
-				clonepos.Name = "SkibidiPing"
-				RunLoops:BindToHeartbeat("PingSpoof",function()
-					clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
-					lagback()
-					bticks = bticks + 1
+				-- part for if Show Part is used
+				clonepos = Instance.new("Part", lplr.Character)
+				local cp = clonepos
+				cp.CFrame = lplr.Character.HumanoidRootPart.CFrame
+				cp.Anchored = true
+				cp.Size = Vector3.new(3.9,5,3.9)
+				cp.Transparency = PingSpoofPart.Enabled and 0.5 or 1
+				cp.Name = "PingSpoof Show Part"
+				-- actual code to spoof ping
+				RunLoops:BindToHeartbeat("PingSpoof", function()
 					if entityLibrary.isAlive then
-						if bticks >= (PingSpoofDelay.Value / 3 + (getSpeed() * 2)) then
-							pcall(function()
-								for i,v in pairs(lplr.Character:GetChildren()) do
-									if gethiddenproperty(v, "NetworkIsSleeping") then
-										sethiddenproperty(v, "NetworkIsSleeping", false)
-									end
-								end
-							end)
-							bticks = 0
-							Blinking = false
-							show = true
-							if not InfiniteFly.Enabled then
+						bticks += 1
+						cp.Transparency = PingSpoofPart.Enabled and 0.5 or 1
+						lagback()
+						oldroot.Velocity = Vector3.zero
+						if entityLibrary.isAlive then
+							if bticks >= (PingSpoofDelay.Value / (3 + (getSpeed() * 2))) then
+								pcall(setSleeping(false))
+								bticks = 0
 								oldroot.CFrame = newroot.CFrame
-								local twsp = (PingSpoofDelay.Value / 300)
-								local tweenInfo = TweenInfo.new(twsp)
-		
-								local tween = tws:Create(clonepos, tweenInfo, {CFrame = newroot.CFrame})
+								local tween = tws:Create(cp, TweenInfo.new((PingSpoofDelay.Value / 300)), {CFrame = newroot.CFrame})
 								tween:Play()
+							else
+								pcall(setSleeping(true))
 							end
-						else
-							pcall(function()
-								for i,v in pairs(lplr.Character:GetChildren()) do
-									if gethiddenproperty(v, "NetworkIsSleeping") then
-										sethiddenproperty(v, "NetworkIsSleeping", true)
-									end
-								end
-							end)
-							Blinking = true
-							show = false
+						if clonepos then
+							pcall(function() clonepos.CFrame = oldroot.CFrame end)
 						end
-						if bticks >= (roundup(PingSpoofDelay.Value / 50)) then
-							show = true
-						end
-					end
-					oldroot.Velocity = Vector3.zero
-					if clonepos then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
-						pcall(function()
-							if InfiniteFly.Enabled then return end
-							clonepos.CFrame = oldroot.CFrame
-						end)
 					end
 				end)
-			else 
+			else
 				RunLoops:UnbindFromHeartbeat("PingSpoof")
 				if clonepos then
 					clonepos:Destroy()
@@ -9485,11 +9479,6 @@ run(function()
 				end
 				pcall(destructclone)
 			end
-		end,
-		HoverText = "Helps PingSpoof the anticheat",
-		ExtraText = function()
-			return PingSpoofDelay.Value
-		end
 	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
 		Name = "Delay",
@@ -9502,11 +9491,182 @@ run(function()
 		Name = "Show Part",
 		Function = function(callback)
 			if clonepos then
-				clonepos.Transparency = callback and 0.65 or 1
+				clonepos.Transparency = callback and 0.5 or 1
 			end
 		end
 	})
 end)
+--[[
+Old PingSpoof Code
+			run(function()
+				local tws = game:GetService("TweenService")
+				local PingSpoofDelay = {Value = 50}
+				local PingSpoofPart = {Enabled = true}
+				local clonepos
+				local bticks = 0
+				local Blinking = false
+				local show = false
+
+				local function roundup(num)
+					return math.ceil(num)
+				end
+				
+				local oldroot
+				local newroot
+				local oldY
+				local isCloned = false
+				-- Thanks to SystemXVoid for sending me these!
+				local createclone = function()
+					repeat task.wait() until entityLibrary.isAlive
+					hip = lplr.Character.Humanoid.HipHeight
+					lplr.Character.Parent = game
+					oldroot = lplr.Character.HumanoidRootPart
+					newroot = oldroot:Clone()
+					newroot.Parent = lplr.Character
+					lplr.Character.PrimaryPart = newroot
+					oldroot.Parent = workspace
+					lplr.Character.Parent = workspace
+					oldroot.Transparency = 1
+					entityLibrary.character.HumanoidRootPart = newroot
+					psor = oldroot
+					isCloned = true
+					oldY = newroot.CFrame.Y
+					if hip then
+						lplr.Character.Humanoid.HipHeight = hip
+					end
+					hip = lplr.Character.Humanoid.HipHeight
+				end
+				local destructclone = function()
+					lplr.Character.Parent = game
+					oldroot.Parent = lplr.Character
+					lplr.Character.PrimaryPart = oldroot
+					lplr.Character.Parent = workspace
+					oldroot.CanCollide = true
+					for i,v in pairs(lplr.Character:GetDescendants()) do
+						if v:IsA("Weld") or v:IsA("Motor6D") then
+							if v.Part0 == newroot then v.Part0 = oldroot end
+							if v.Part1 == newroot then v.Part1 = oldroot end
+						end
+						if v:IsA("BodyVelocity") then
+							v:Destroy()
+						end
+					end
+					for i,v in pairs(oldcloneroot:GetChildren()) do
+						if v:IsA("BodyVelocity") then
+							v:Destroy()
+						end
+					end
+					entityLibrary.character.HumanoidRootPart = oldroot
+					newroot:Remove()
+					newroot = nil
+					isCloned = false
+					lplr.Character.Humanoid.HipHeight = hip or 2
+				end
+
+				local lagback = function()
+					if not isnetworkowner(oldroot or entityLibrary.character.HumanoidRootPart) and isCloned then
+						pcall(destructclone)
+					end
+					repeat task.wait() until isnetworkowner(entityLibrary.character.HumanoidRootPart)
+					if not isCloned then
+						createclone()
+					end
+				end
+
+				PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+					Name = "PingSpoof",
+					Function = function(callback)
+						if callback then 
+							createclone()
+							repeat task.wait() until isCloned
+							table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone))
+							bticks = 0
+							clonepos = Instance.new("Part",workspace)
+							clonepos.Position = lplr.Character.HumanoidRootPart.Position
+							clonepos.CanCollide = false
+							clonepos.Anchored = true
+							clonepos.Size = Vector3.new(3.9,5,3.9)
+							clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
+							clonepos.Name = "SkibidiPing"
+							RunLoops:BindToHeartbeat("PingSpoof",function()
+								clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
+								lagback()
+								bticks = bticks + 1
+								if entityLibrary.isAlive then
+									if bticks >= (PingSpoofDelay.Value / 3 + (getSpeed() * 2)) then
+										pcall(function()
+											for i,v in pairs(lplr.Character:GetChildren()) do
+												if gethiddenproperty(v, "NetworkIsSleeping") then
+													sethiddenproperty(v, "NetworkIsSleeping", false)
+												end
+											end
+										end)
+										bticks = 0
+										Blinking = false
+										show = true
+										if not InfiniteFly.Enabled then
+											oldroot.CFrame = newroot.CFrame
+											local twsp = (PingSpoofDelay.Value / 300)
+											local tweenInfo = TweenInfo.new(twsp)
+					
+											local tween = tws:Create(clonepos, tweenInfo, {CFrame = newroot.CFrame})
+											tween:Play()
+										end
+									else
+										pcall(function()
+											for i,v in pairs(lplr.Character:GetChildren()) do
+												if gethiddenproperty(v, "NetworkIsSleeping") then
+													sethiddenproperty(v, "NetworkIsSleeping", true)
+												end
+											end
+										end)
+										Blinking = true
+										show = false
+									end
+									if bticks >= (roundup(PingSpoofDelay.Value / 50)) then
+										show = true
+									end
+								end
+								oldroot.Velocity = Vector3.zero
+								if clonepos then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
+									pcall(function()
+										if InfiniteFly.Enabled then return end
+										clonepos.CFrame = oldroot.CFrame
+									end)
+								end
+							end)
+						else 
+							RunLoops:UnbindFromHeartbeat("PingSpoof")
+							if clonepos then
+								clonepos:Destroy()
+								clonepos = nil
+							end
+							pcall(destructclone)
+						end
+					end,
+					HoverText = "Helps PingSpoof the anticheat",
+					ExtraText = function()
+						return PingSpoofDelay.Value
+					end
+				})
+				PingSpoofDelay = PingSpoof.CreateSlider({
+					Name = "Delay",
+					Min = 0,
+					Max = 300,
+					Default = 50,
+					Function = function() end
+				})
+				PingSpoofPart = PingSpoof.CreateToggle({
+					Name = "Show Part",
+					Function = function(callback)
+						if clonepos then
+							clonepos.Transparency = callback and 0.65 or 1
+						end
+					end
+				})
+			end)
+Old PingSpoof Code
+]]--
 
 run(function()
 	local HannahExploit = {Enabled = false}
