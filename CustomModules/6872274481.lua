@@ -9401,9 +9401,7 @@ run(function()
 					lagback()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
-						oldroot.CFrame = oldroot.CFrame * CFrame.new(0, oldY, 0)
 						if bticks >= (PingSpoofDelay.Value / 3) then
-							oldY = newroot.CFrame.Y
 							pcall(function()
 								for i,v in pairs(lplr.Character:GetChildren()) do
 									if gethiddenproperty(v, "NetworkIsSleeping") then
