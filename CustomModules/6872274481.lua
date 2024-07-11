@@ -9363,7 +9363,7 @@ run(function() -- it didnt go as planned
 	local oldY
 	local isCloned = false
 	-- Thanks to SystemXVoid for sending me these!
-	local createclone = function()
+	local function createclone()
 		repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
 		hip = lplr.Character.Humanoid.HipHeight
         lplr.Character.Parent = game
@@ -9384,7 +9384,7 @@ run(function() -- it didnt go as planned
 		hip = lplr.Character.Humanoid.HipHeight
     end
 
-    local destructclone = function()
+    local function destructclone()
 		lplr.Character.Parent = game
 		oldroot.Parent = lplr.Character
 		lplr.Character.PrimaryPart = oldroot
@@ -9411,7 +9411,7 @@ run(function() -- it didnt go as planned
 		lplr.Character.Humanoid.HipHeight = hip or 2
     end
 
-	local lagback = function()
+	local function lagback()
 		if not isnetworkowner(oldroot or entityLibrary.character.HumanoidRootPart) and isCloned then
 			pcall(destructclone)
 		end
@@ -9432,16 +9432,11 @@ run(function() -- it didnt go as planned
 
 	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof V2",
-		HovorText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
-		ExtraText = function()
-			return PingSpoofDelay.Value
-		end,
+		HoverText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
 		Function = function(callback)
 			if callback then
 				-- begin clone
 				createclone()
-				-- wait until clone is made
-				repeat task.wait() until isCloned
 				-- respawn
 				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(function()
 					task.wait(1.5)
@@ -9487,6 +9482,9 @@ run(function() -- it didnt go as planned
 				end
 				pcall(destructclone)
 			end
+		end,
+		ExtraText = function()
+			return PingSpoofDelay.Value
 		end
 	})
 	PingSpoofDelay = PingSpoof.CreateSlider({
