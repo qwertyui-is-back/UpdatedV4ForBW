@@ -9521,7 +9521,6 @@ run(function()
 	-- Thanks to SystemXVoid for sending me these!
 	local createclone = function()
 		repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
-		hip = lplr.Character.Humanoid.HipHeight
 		lplr.Character.Parent = game
 		oldroot = lplr.Character.HumanoidRootPart
 		newroot = oldroot:Clone()
@@ -9567,7 +9566,8 @@ run(function()
 		newroot:Remove()
 		newroot = nil
 		isCloned = false
-		lplr.Character.Humanoid.HipHeight = hip or 2
+		task.wait(0.05)
+		lplr.Character.Humanoid.HipHeight = 1.99999995231628418
 	end
 
 	local lagback = function()
