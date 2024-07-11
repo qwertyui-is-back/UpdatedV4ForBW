@@ -2804,8 +2804,10 @@ run(function()
 	})
 end)
 
+local PingSpoof = {Enabled = false}
+local InfiniteFly = {Enabled = false}
+local psor
 run(function()
-	local InfiniteFly = {Enabled = false}
 	local InfiniteFlyMode = {Value = "CFrame"}
 	local InfiniteFlySpeed = {Value = 23}
 	local InfiniteFlyVerticalSpeed = {Value = 40}
@@ -2827,37 +2829,39 @@ run(function()
 	local function disablefunc()
 		if bodyvelo then bodyvelo:Destroy() end
 		RunLoops:UnbindFromHeartbeat("InfiniteFlyOff")
-		disabledproper = true
-		if not oldcloneroot or not oldcloneroot.Parent then return end
-		lplr.Character.Parent = game
-		oldcloneroot.Parent = lplr.Character
-		lplr.Character.PrimaryPart = oldcloneroot
-		lplr.Character.Parent = workspace
-		oldcloneroot.CanCollide = true
-		for i,v in pairs(lplr.Character:GetDescendants()) do
-			if v:IsA("Weld") or v:IsA("Motor6D") then
-				if v.Part0 == clone then v.Part0 = oldcloneroot end
-				if v.Part1 == clone then v.Part1 = oldcloneroot end
+			if not PingSpoof.Enabled then
+			disabledproper = true
+			if not oldcloneroot or not oldcloneroot.Parent then return end
+			lplr.Character.Parent = game
+			oldcloneroot.Parent = lplr.Character
+			lplr.Character.PrimaryPart = oldcloneroot
+			lplr.Character.Parent = workspace
+			oldcloneroot.CanCollide = true
+			for i,v in pairs(lplr.Character:GetDescendants()) do
+				if v:IsA("Weld") or v:IsA("Motor6D") then
+					if v.Part0 == clone then v.Part0 = oldcloneroot end
+					if v.Part1 == clone then v.Part1 = oldcloneroot end
+				end
+				if v:IsA("BodyVelocity") then
+					v:Destroy()
+				end
 			end
-			if v:IsA("BodyVelocity") then
-				v:Destroy()
+			for i,v in pairs(oldcloneroot:GetChildren()) do
+				if v:IsA("BodyVelocity") then
+					v:Destroy()
+				end
 			end
-		end
-		for i,v in pairs(oldcloneroot:GetChildren()) do
-			if v:IsA("BodyVelocity") then
-				v:Destroy()
+			local oldclonepos = clone.Position.Y
+			if clone then
+				clone:Destroy()
+				clone = nil
 			end
+			lplr.Character.Humanoid.HipHeight = hip or 2
+			local origcf = {oldcloneroot.CFrame:GetComponents()}
+			origcf[2] = oldclonepos
+			oldcloneroot.CFrame = CFrame.new(unpack(origcf))
+			oldcloneroot = nil
 		end
-		local oldclonepos = clone.Position.Y
-		if clone then
-			clone:Destroy()
-			clone = nil
-		end
-		lplr.Character.Humanoid.HipHeight = hip or 2
-		local origcf = {oldcloneroot.CFrame:GetComponents()}
-		origcf[2] = oldclonepos
-		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
-		oldcloneroot = nil
 		warningNotification("InfiniteFly", "Landed!", 3)
 	end
 
@@ -2902,39 +2906,43 @@ run(function()
 				end
 				clonesuccess = false
 				if entityLibrary.isAlive and entityLibrary.character.Humanoid.Health > 0 and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
-					cloned = lplr.Character
-					oldcloneroot = entityLibrary.character.HumanoidRootPart
-					if not lplr.Character.Parent then
-						InfiniteFly.ToggleButton(false)
-						return
-					end
-					lplr.Character.Parent = game
-					clone = oldcloneroot:Clone()
-					clone.Parent = lplr.Character
-					oldcloneroot.Parent = gameCamera
-					bedwars.QueryUtil:setQueryIgnored(oldcloneroot, true)
-					clone.CFrame = oldcloneroot.CFrame
-					lplr.Character.PrimaryPart = clone
-					lplr.Character.Parent = workspace
-					for i,v in pairs(lplr.Character:GetDescendants()) do
-						if v:IsA("Weld") or v:IsA("Motor6D") then
-							if v.Part0 == oldcloneroot then v.Part0 = clone end
-							if v.Part1 == oldcloneroot then v.Part1 = clone end
+					if not PingSpoof.Enabled then
+						cloned = lplr.Character
+						oldcloneroot = entityLibrary.character.HumanoidRootPart
+						if not lplr.Character.Parent then
+							InfiniteFly.ToggleButton(false)
+							return
 						end
-						if v:IsA("BodyVelocity") then
-							v:Destroy()
+						lplr.Character.Parent = game
+						clone = oldcloneroot:Clone()
+						clone.Parent = lplr.Character
+						oldcloneroot.Parent = gameCamera
+						bedwars.QueryUtil:setQueryIgnored(oldcloneroot, true)
+						clone.CFrame = oldcloneroot.CFrame
+						lplr.Character.PrimaryPart = clone
+						lplr.Character.Parent = workspace
+						for i,v in pairs(lplr.Character:GetDescendants()) do
+							if v:IsA("Weld") or v:IsA("Motor6D") then
+								if v.Part0 == oldcloneroot then v.Part0 = clone end
+								if v.Part1 == oldcloneroot then v.Part1 = clone end
+							end
+							if v:IsA("BodyVelocity") then
+								v:Destroy()
+							end
 						end
-					end
-					for i,v in pairs(oldcloneroot:GetChildren()) do
-						if v:IsA("BodyVelocity") then
-							v:Destroy()
+						for i,v in pairs(oldcloneroot:GetChildren()) do
+							if v:IsA("BodyVelocity") then
+								v:Destroy()
+							end
 						end
+						if hip then
+							lplr.Character.Humanoid.HipHeight = hip
+						end
+						hip = lplr.Character.Humanoid.HipHeight
+						clonesuccess = true
+					else
+						clonesuccess = true
 					end
-					if hip then
-						lplr.Character.Humanoid.HipHeight = hip
-					end
-					hip = lplr.Character.Humanoid.HipHeight
-					clonesuccess = true
 				end
 				if not clonesuccess then
 					warningNotification("InfiniteFly", "Character missing", 3)
@@ -2964,6 +2972,9 @@ run(function()
 								goneup = true
 							end
 							speedCFrame[3] = clone.CFrame.Z
+							if PingSpoof.Enabled then
+								oldcloneroot = psor
+							end
 							oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
 							oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 						else
@@ -9327,7 +9338,6 @@ end)
 
 run(function()
 	local tws = game:GetService("TweenService")
-	local PingSpoof = {Enabled = false}
 	local PingSpoofDelay = {Value = 50}
 	local PingSpoofPart = {Enabled = true}
 	local clonepos
@@ -9356,6 +9366,7 @@ run(function()
         lplr.Character.Parent = workspace
         oldroot.Transparency = 1
         entityLibrary.character.HumanoidRootPart = newroot
+		psor = oldroot
 		isCloned = true
 		oldY = newroot.CFrame.Y
     end
@@ -9412,11 +9423,13 @@ run(function()
 							bticks = 0
 							Blinking = false
 							show = true
-							local twsp = (PingSpoofDelay.Value / 300)
-							local tweenInfo = TweenInfo.new(twsp)
-	
-							local tween = tws:Create(oldroot, tweenInfo, {CFrame = newroot.CFrame})
-							tween:Play()
+							if not InfiniteFly.Enabled then
+								local twsp = (PingSpoofDelay.Value / 300)
+								local tweenInfo = TweenInfo.new(twsp)
+		
+								local tween = tws:Create(oldroot, tweenInfo, {CFrame = newroot.CFrame})
+								tween:Play()
+							end
 						else
 							pcall(function()
 								for i,v in pairs(lplr.Character:GetChildren()) do
