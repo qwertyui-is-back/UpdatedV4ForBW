@@ -9446,9 +9446,9 @@ run(function()
 							speedCFrame[1] = clone.CFrame.X
 							speedCFrame[2] = clone.CFrame.Y
 							speedCFrame[3] = clone.CFrame.Z
+							oldcloneroot.Velocity = Vector3.new(0, 0, 0)
 							if tpt == 14 then
 								oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
-								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 								oldcloneroot.Anchored = false
 								tpt = 0
 							end
