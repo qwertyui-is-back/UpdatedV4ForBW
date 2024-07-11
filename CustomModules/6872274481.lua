@@ -9445,7 +9445,7 @@ run(function()
 					clonepos:Destroy()
 					clonepos = nil
 				end
-				destructclone()
+				pcall(destructclone)
 			end
 		end,
 		HoverText = "Helps PingSpoof the anticheat",
