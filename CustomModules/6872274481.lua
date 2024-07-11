@@ -9474,8 +9474,9 @@ run(function() -- it didnt go as planned
 							else
 								pcall(setSleeping(true))
 							end
-						if clonepos then
-							pcall(function() clonepos.CFrame = oldroot.CFrame end)
+							if clonepos then
+								pcall(function() clonepos.CFrame = oldroot.CFrame end)
+							end
 						end
 					end
 				end)
