@@ -9373,6 +9373,10 @@ run(function()
 		psor = oldroot
 		isCloned = true
 		oldY = newroot.CFrame.Y
+		if hip then
+			lplr.Character.Humanoid.HipHeight = hip
+		end
+		hip = lplr.Character.Humanoid.HipHeight
     end
     local destructclone = function()
 		lplr.Character.Parent = game
