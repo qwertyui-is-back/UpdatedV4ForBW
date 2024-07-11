@@ -9446,7 +9446,7 @@ run(function()
 							speedCFrame[1] = clone.CFrame.X
 							speedCFrame[2] = clone.CFrame.Y
 							speedCFrame[3] = clone.CFrame.Z
-							if tpt == tpa then
+							if tpt == 7 then
 								oldcloneroot.CFrame = clome.CFrame
 								oldcloneroot.Rotation = clone.Rotation
 								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
