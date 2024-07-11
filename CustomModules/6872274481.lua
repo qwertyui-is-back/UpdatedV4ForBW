@@ -9567,7 +9567,7 @@ run(function()
 		newroot = nil
 		isCloned = false
 		task.wait(0.05)
-		lplr.Character.Humanoid.HipHeight = 1.99999995231628418
+		repeat task.wait() lplr.Character.Humanoid.HipHeight = 1.99999995231628418 until lplr.Character.Humanoid.HipHeight > 1
 	end
 
 	local lagback = function()
