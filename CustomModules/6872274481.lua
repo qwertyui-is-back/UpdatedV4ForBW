@@ -9440,16 +9440,16 @@ run(function()
 						tpt = tpt + 1
 						if isnetworkowner(oldcloneroot) then
 							local playerMass = (entityLibrary.character.HumanoidRootPart:GetMass() - 1.4) * (delta * 100)
-							oldcloneroot.Anchored = true
+							--oldcloneroot.Anchored = true
 
-							local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
-							speedCFrame[1] = clone.CFrame.X
-							speedCFrame[2] = clone.CFrame.Y
-							speedCFrame[3] = clone.CFrame.Z
 							oldcloneroot.Velocity = Vector3.new(0, 0, 0)
 							if tpt == 14 then
+								local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
+								speedCFrame[1] = clone.CFrame.X
+								speedCFrame[2] = clone.CFrame.Y
+								speedCFrame[3] = clone.CFrame.Z
 								oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
-								oldcloneroot.Anchored = false
+								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 								tpt = 0
 							end
 						else
@@ -9504,8 +9504,6 @@ run(function()
 						disablefunc()
 					end
 				end
-				InfiniteFlyUp = false
-				InfiniteFlyDown = false
 			end
 		end,
 		HoverText = "Makes you go zoom",
