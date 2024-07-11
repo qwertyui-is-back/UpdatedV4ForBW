@@ -9539,6 +9539,10 @@ run(function()
 		end
 		hip = lplr.Character.Humanoid.HipHeight
 	end
+	local createclone2 = function()
+		task.wait(1.5)
+		pcall(createclone)
+	end
 	local destructclone = function()
 		lplr.Character.Parent = game
 		oldroot.Parent = lplr.Character
@@ -9572,7 +9576,7 @@ run(function()
 		end
 		repeat task.wait() until isnetworkowner(entityLibrary.character.HumanoidRootPart)
 		if not isCloned then
-			createclone()
+			pcall(createclone)
 		end
 	end
 
@@ -9580,9 +9584,9 @@ run(function()
 		Name = "PingSpoof",
 		Function = function(callback)
 			if callback then 
-				createclone()
+				pcall(createclone)
 				repeat task.wait() until isCloned
-				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone))
+				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone2))
 				bticks = 0
 				clonepos = Instance.new("Part",workspace)
 				clonepos.Position = lplr.Character.HumanoidRootPart.Position
@@ -9605,8 +9609,6 @@ run(function()
 								end
 							end)
 							bticks = 0
-							Blinking = false
-							show = true
 							if not InfiniteFly.Enabled then
 								oldroot.CFrame = newroot.CFrame
 								local twsp = (PingSpoofDelay.Value / 300)
@@ -9623,11 +9625,6 @@ run(function()
 									end
 								end
 							end)
-							Blinking = true
-							show = false
-						end
-						if bticks >= (roundup(PingSpoofDelay.Value / 50)) then
-							show = true
 						end
 					end
 					oldroot.Velocity = Vector3.zero
