@@ -9387,7 +9387,7 @@ run(function()
 		Function = function(callback)
 			if callback then 
 				createclone()
-				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(creatclone))
+				table.insert(PingSpoof.Connections, lplr.CharacterAdded:Connect(createclone))
 				bticks = 0
 				clonepos = Instance.new("Part",workspace)
 				clonepos.Position = lplr.Character.HumanoidRootPart.Position
