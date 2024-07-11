@@ -9434,7 +9434,9 @@ run(function()
 					end
 					oldroot.Velocity = Vector3.zero
 					if clonepos then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
-						clonepos.CFrame = oldroot.CFrame or CFrame.new(0,0,0)
+						pcall(function()
+							clonepos.CFrame = oldroot.CFrame
+						end)
 					end
 				end)
 			else 
