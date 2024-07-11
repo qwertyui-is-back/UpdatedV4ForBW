@@ -9449,6 +9449,7 @@ run(function()
 							if tpt == tpa then
 								oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
 								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
+								oldcloneroot.Anchored = false
 								tpt = 0
 							end
 						else
