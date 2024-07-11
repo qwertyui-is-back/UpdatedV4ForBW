@@ -3032,6 +3032,7 @@ run(function()
 				end
 				InfiniteFlyUp = false
 				InfiniteFlyDown = false
+				task.wait(1.1)
 				if not PingSpoof.Enabled and didps then PingSpoof.ToggleButton(false) didps = false end
 			end
 		end,
