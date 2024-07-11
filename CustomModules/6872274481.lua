@@ -9440,14 +9440,14 @@ run(function()
 						tpt = tpt + 1
 						if isnetworkowner(oldcloneroot) then
 							local playerMass = (entityLibrary.character.HumanoidRootPart:GetMass() - 1.4) * (delta * 100)
-							oldcloneroot.Anchored = true
+							--oldcloneroot.Anchored = true
 
 							local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
 							speedCFrame[1] = clone.CFrame.X
 							speedCFrame[2] = clone.CFrame.Y
 							speedCFrame[3] = clone.CFrame.Z
 							if tpt == tpa then
-								oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
+								oldcloneroot.CFrame = CFrame.new(clome.CFrame)
 								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 								oldcloneroot.Anchored = false
 								tpt = 0
