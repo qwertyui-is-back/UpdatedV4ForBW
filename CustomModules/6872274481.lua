@@ -9326,194 +9326,6 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 end)
 
 run(function()
-	local acb = {Enabled = false}
-	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
-	local clonesuccess = false
-	local disabledproper = true
-	local oldcloneroot
-	local cloned
-	local clone
-	local bodyvelo
-	local tpt = 0
-	local tpa = 7
-	local FlyOverlap = OverlapParams.new()
-	FlyOverlap.MaxParts = 9e9
-	FlyOverlap.FilterDescendantsInstances = {}
-	FlyOverlap.RespectCanCollide = true
-
-	local function disablefunc()
-		if bodyvelo then bodyvelo:Destroy() end
-		RunLoops:UnbindFromHeartbeat("AnticheatBypassOff")
-		disabledproper = true
-		if not oldcloneroot or not oldcloneroot.Parent then return end
-		lplr.Character.Parent = game
-		oldcloneroot.Parent = lplr.Character
-		lplr.Character.PrimaryPart = oldcloneroot
-		lplr.Character.Parent = workspace
-		oldcloneroot.CanCollide = true
-		for i,v in pairs(lplr.Character:GetDescendants()) do
-			if v:IsA("Weld") or v:IsA("Motor6D") then
-				if v.Part0 == clone then v.Part0 = oldcloneroot end
-				if v.Part1 == clone then v.Part1 = oldcloneroot end
-			end
-			if v:IsA("BodyVelocity") then
-				v:Destroy()
-			end
-		end
-		for i,v in pairs(oldcloneroot:GetChildren()) do
-			if v:IsA("BodyVelocity") then
-				v:Destroy()
-			end
-		end
-		local oldclonepos = clone.Position.Y
-		if clone then
-			clone:Destroy()
-			clone = nil
-		end
-		lplr.Character.Humanoid.HipHeight = hip or 2
-		local origcf = {oldcloneroot.CFrame:GetComponents()}
-		origcf[2] = oldclonepos
-		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
-		oldcloneroot = nil
-		warningNotification("InfiniteFly", "Landed!", 3)
-	end
-
-	acb = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = "AnticheatBypass",
-		Function = function(callback)
-			if callback then
-				if not entityLibrary.isAlive then
-					disabledproper = true
-				end
-				if not disabledproper then
-					warningNotification("InfiniteFly", "Wait for the last fly to finish", 3)
-					InfiniteFly.ToggleButton(false)
-					return
-				end
-				clonesuccess = false
-				if entityLibrary.isAlive and entityLibrary.character.Humanoid.Health > 0 and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
-					cloned = lplr.Character
-					oldcloneroot = entityLibrary.character.HumanoidRootPart
-					if not lplr.Character.Parent then
-						acb.ToggleButton(false)
-						return
-					end
-					lplr.Character.Parent = game
-					clone = oldcloneroot:Clone()
-					clone.Parent = lplr.Character
-					oldcloneroot.Parent = gameCamera
-					bedwars.QueryUtil:setQueryIgnored(oldcloneroot, true)
-					clone.CFrame = oldcloneroot.CFrame
-					lplr.Character.PrimaryPart = clone
-					lplr.Character.Parent = workspace
-					for i,v in pairs(lplr.Character:GetDescendants()) do
-						if v:IsA("Weld") or v:IsA("Motor6D") then
-							if v.Part0 == oldcloneroot then v.Part0 = clone end
-							if v.Part1 == oldcloneroot then v.Part1 = clone end
-						end
-						if v:IsA("BodyVelocity") then
-							v:Destroy()
-						end
-					end
-					for i,v in pairs(oldcloneroot:GetChildren()) do
-						if v:IsA("BodyVelocity") then
-							v:Destroy()
-						end
-					end
-					if hip then
-						lplr.Character.Humanoid.HipHeight = hip
-					end
-					hip = lplr.Character.Humanoid.HipHeight
-					clonesuccess = true
-				end
-				if not clonesuccess then
-					warningNotification("AnticheatBypass", "Character missing", 3)
-					acb.ToggleButton(false)
-					return
-				end
-				local goneup = false
-				RunLoops:BindToHeartbeat("AnticheatBypass", function(delta)
-					if GuiLibrary.ObjectsThatCanBeSaved["Lobby CheckToggle"].Api.Enabled then
-						if store.matchState == 0 then return end
-					end
-					if entityLibrary.isAlive then
-						tpt = tpt + 1
-						if isnetworkowner(oldcloneroot) then
-							local playerMass = (entityLibrary.character.HumanoidRootPart:GetMass() - 1.4) * (delta * 100)
-							--oldcloneroot.Anchored = true
-
-							oldcloneroot.Velocity = Vector3.new(0, 0, 0)
-							if tpt == 14 then
-								local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
-								speedCFrame[1] = clone.CFrame.X
-								speedCFrame[2] = clone.CFrame.Y
-								speedCFrame[3] = clone.CFrame.Z
-								oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
-								oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
-								tpt = 0
-							end
-						else
-							acb.ToggleButton(false)
-						end
-					end
-				end)
-			else
-				RunLoops:UnbindFromHeartbeat("AnticheatBypass")
-				if clonesuccess and oldcloneroot and clone and lplr.Character.Parent == workspace and oldcloneroot.Parent ~= nil and disabledproper and cloned == lplr.Character then
-					local rayparams = RaycastParams.new()
-					rayparams.FilterDescendantsInstances = {lplr.Character, gameCamera}
-					rayparams.RespectCanCollide = true
-					local ray = workspace:Raycast(Vector3.new(oldcloneroot.Position.X, clone.CFrame.p.Y, oldcloneroot.Position.Z), Vector3.new(0, -1000, 0), rayparams)
-					local origcf = {clone.CFrame:GetComponents()}
-					origcf[1] = oldcloneroot.Position.X
-					origcf[2] = ray and ray.Position.Y + (entityLibrary.character.Humanoid.HipHeight + (oldcloneroot.Size.Y / 2)) or clone.CFrame.p.Y
-					origcf[3] = oldcloneroot.Position.Z
-					oldcloneroot.CanCollide = true
-					bodyvelo = Instance.new("BodyVelocity")
-					bodyvelo.MaxForce = Vector3.new(0, 9e9, 0)
-					bodyvelo.Velocity = Vector3.new(0, -1, 0)
-					bodyvelo.Parent = oldcloneroot
-					oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, -1, clone.Velocity.Z)
-					RunLoops:BindToHeartbeat("AnticheatBypassOff", function(dt)
-						if oldcloneroot then
-							oldcloneroot.Anchored = false
-							oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, -1, clone.Velocity.Z)
-							local bruh = {clone.CFrame:GetComponents()}
-							bruh[2] = oldcloneroot.CFrame.Y
-							local newcf = CFrame.new(unpack(bruh))
-							FlyOverlap.FilterDescendantsInstances = {lplr.Character, gameCamera}
-							local allowed = true
-							for i,v in pairs(workspace:GetPartBoundsInRadius(newcf.p, 2, FlyOverlap)) do
-								if (v.Position.Y + (v.Size.Y / 2)) > (newcf.p.Y + 0.5) then
-									allowed = false
-									break
-								end
-							end
-							if allowed then
-								oldcloneroot.CFrame = newcf
-							end
-						end
-					end)
-					oldcloneroot.CFrame = CFrame.new(unpack(origcf))
-					entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
-					disabledproper = false
-					if isnetworkowner(oldcloneroot) then
-						warningNotification("AnticheatBypass", "Waiting 1.1s to not flag", 3)
-						task.delay(1.1, disablefunc)
-					else
-						disablefunc()
-					end
-				end
-			end
-		end,
-		HoverText = "Makes you go zoom",
-		ExtraText = function()
-			return "Heatseeker"
-		end
-	})
-end)
-
-run(function()
 	local tws = game:GetService("TweenService")
 	local PingSpoof = {Enabled = false}
 	local PingSpoofDelay = {Value = 50}
@@ -9544,16 +9356,29 @@ run(function()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
 						if bticks >= (PingSpoofDelay.Value) then
-							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
+							pcall(function()
+								for i,v in pairs(lplr.Character:GetChildren()) do
+									if gethiddenproperty(v, "NetworkIsSleeping") then
+										sethiddenproperty(v, "NetworkIsSleeping", false)
+									end
+								end
+							end)
 							bticks = 0
 							Blinking = false
 							show = true
-						elseif bticks >= (roundup(PingSpoofDelay.Value / 50)) then
-							show = true
 						else
-							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
+							pcall(function()
+								for i,v in pairs(lplr.Character:GetChildren()) do
+									if gethiddenproperty(v, "NetworkIsSleeping") then
+										sethiddenproperty(v, "NetworkIsSleeping", true)
+									end
+								end
+							end)
 							Blinking = true
 							show = false
+						end
+						if bticks >= (roundup(PingSpoofDelay.Value / 50)) then
+							show = true
 						end
 					end
 					if clonepos and show then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
