@@ -9375,14 +9375,28 @@ run(function()
 		oldY = newroot.CFrame.Y
     end
     local destructclone = function()
-		newroot.CFrame = oldroot.CFrame
-        lplr.Character.Parent = game
-        oldroot.Parent = lplr.Character
-        newroot.Parent = workspace
-        lplr.Character.PrimaryPart = oldroot
-        lplr.Character.Parent = workspace
+		lplr.Character.Parent = game
+		oldroot.Parent = lplr.Character
+		lplr.Character.PrimaryPart = oldroot
+		lplr.Character.Parent = workspace
+		oldroot.CanCollide = true
+		for i,v in pairs(lplr.Character:GetDescendants()) do
+			if v:IsA("Weld") or v:IsA("Motor6D") then
+				if v.Part0 == clone then v.Part0 = oldroot end
+				if v.Part1 == clone then v.Part1 = oldroot end
+			end
+			if v:IsA("BodyVelocity") then
+				v:Destroy()
+			end
+		end
+		for i,v in pairs(oldcloneroot:GetChildren()) do
+			if v:IsA("BodyVelocity") then
+				v:Destroy()
+			end
+		end
         entityLibrary.character.HumanoidRootPart = oldroot
         newroot:Remove()
+		newroot = nil
 		isCloned = false
     end
 
@@ -9416,7 +9430,7 @@ run(function()
 					lagback()
 					bticks = bticks + 1
 					if entityLibrary.isAlive then
-						if bticks >= (PingSpoofDelay.Value / 3 + (getSpeed * 2)) then
+						if bticks >= (PingSpoofDelay.Value / 3 + (getSpeed() * 2)) then
 							pcall(function()
 								for i,v in pairs(lplr.Character:GetChildren()) do
 									if gethiddenproperty(v, "NetworkIsSleeping") then
