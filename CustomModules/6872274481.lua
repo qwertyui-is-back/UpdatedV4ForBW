@@ -9382,9 +9382,14 @@ run(function()
 					local FakeChar = NewRoot
 					RealHRP.Velocity = Vector3.zero
 					if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
+						RealHRP.Velocity = Vector3.zero
 						local info = TweenInfo.new(ACBSpeed.Value / 100, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+						local cf = FakeChar.CFrame
+						if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
+							cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
+						end
 						local data = {
-							CFrame = FakeChar.CFrame
+							CFrame = cf
 						}
 						game:GetService("TweenService"):Create(RealHRP, info, data):Play()
 						DelayTicks = 0
