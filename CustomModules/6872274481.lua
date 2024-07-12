@@ -9380,6 +9380,7 @@ run(function()
 					DelayTicks += 1
 					local RealHRP = OldRoot
 					local FakeChar = NewRoot
+					RealHRP.Velocity = Vector3.zero
 					if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
 						local info = TweenInfo.new(ACBSpeed.Value / 100, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
 						local data = {
@@ -9390,9 +9391,7 @@ run(function()
 					end
 				until (not AnticheatBypass.Enabled)
 			else
-				if NewRoot.Parent and OldRoot.Parent then  
-					RemoveClonedCharacter()
-				end
+				RemoveClonedCharacter()
 			end
 		end,
 		HoverText = "Helps bypass the AntiCheat"
