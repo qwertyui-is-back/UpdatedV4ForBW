@@ -2860,11 +2860,6 @@ run(function()
 		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
 		oldcloneroot = nil
 		warningNotification("InfiniteFly", "Landed!", 3)
-		if not GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.Enabled and usedPingSpoof then 
-			task.wait(2)
-			GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.ToggleButton()
-			usedPingSpoof = false
-		end
 	end
 
 	InfiniteFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
@@ -3029,6 +3024,11 @@ run(function()
 				end
 				InfiniteFlyUp = false
 				InfiniteFlyDown = false
+				if not GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.Enabled and usedPingSpoof then 
+					task.wait(2)
+					GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.ToggleButton()
+					usedPingSpoof = false
+				end
 			end
 		end,
 		HoverText = "Makes you go zoom",
