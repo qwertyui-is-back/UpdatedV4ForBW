@@ -2819,6 +2819,7 @@ run(function()
 	local cloned
 	local clone
 	local bodyvelo
+	local usedPingSpoof = false
 	local FlyOverlap = OverlapParams.new()
 	FlyOverlap.MaxParts = 9e9
 	FlyOverlap.FilterDescendantsInstances = {}
@@ -2859,12 +2860,21 @@ run(function()
 		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
 		oldcloneroot = nil
 		warningNotification("InfiniteFly", "Landed!", 3)
+		if not GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.Enabled and usedPingSpoof then 
+			task.wait(2)
+			GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.ToggleButton()
+			usedPingSpoof = false
+		end
 	end
 
 	InfiniteFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "InfiniteFly",
 		Function = function(callback)
 			if callback then
+				if GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.Enabled then 
+					GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.ToggleButton()
+					usedPingSpoof = true
+				end
 				if not entityLibrary.isAlive then
 					disabledproper = true
 				end
