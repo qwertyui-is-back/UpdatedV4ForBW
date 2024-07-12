@@ -9355,7 +9355,7 @@ run(function()
 		OldRoot.Parent = workspace
 		lplr.Character.PrimaryPart = NewRoot
 		lplr.Character.Parent = workspace
-		OldRoot.Transparency = 0.4
+		OldRoot.Transparency = ACBShowPart and 0.4 or 1
 		entityLibrary.character.HumanoidRootPart = NewRoot
 	end
 
@@ -9388,6 +9388,7 @@ run(function()
 				end))
 				repeat task.wait()
 					DelayTicks += 1
+					OldRoot.Transparency = ACBShowPart and 0.4 or 1
 					local RealHRP = OldRoot
 					local FakeChar = NewRoot
 					RealHRP.Velocity = Vector3.zero
