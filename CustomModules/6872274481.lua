@@ -2804,11 +2804,8 @@ run(function()
 	})
 end)
 
-local PingSpoof = {Enabled = false}
-local InfiniteFly = {Enabled = false}
-local psor
-local psic = false
 run(function()
+	local InfiniteFly = {Enabled = false}
 	local InfiniteFlyMode = {Value = "CFrame"}
 	local InfiniteFlySpeed = {Value = 23}
 	local InfiniteFlyVerticalSpeed = {Value = 40}
@@ -2822,7 +2819,6 @@ run(function()
 	local cloned
 	local clone
 	local bodyvelo
-	local didps = false
 	local FlyOverlap = OverlapParams.new()
 	FlyOverlap.MaxParts = 9e9
 	FlyOverlap.FilterDescendantsInstances = {}
@@ -2831,39 +2827,37 @@ run(function()
 	local function disablefunc()
 		if bodyvelo then bodyvelo:Destroy() end
 		RunLoops:UnbindFromHeartbeat("InfiniteFlyOff")
-			if not PingSpoof.Enabled then
-			disabledproper = true
-			if not oldcloneroot or not oldcloneroot.Parent then return end
-			lplr.Character.Parent = game
-			oldcloneroot.Parent = lplr.Character
-			lplr.Character.PrimaryPart = oldcloneroot
-			lplr.Character.Parent = workspace
-			oldcloneroot.CanCollide = true
-			for i,v in pairs(lplr.Character:GetDescendants()) do
-				if v:IsA("Weld") or v:IsA("Motor6D") then
-					if v.Part0 == clone then v.Part0 = oldcloneroot end
-					if v.Part1 == clone then v.Part1 = oldcloneroot end
-				end
-				if v:IsA("BodyVelocity") then
-					v:Destroy()
-				end
+		disabledproper = true
+		if not oldcloneroot or not oldcloneroot.Parent then return end
+		lplr.Character.Parent = game
+		oldcloneroot.Parent = lplr.Character
+		lplr.Character.PrimaryPart = oldcloneroot
+		lplr.Character.Parent = workspace
+		oldcloneroot.CanCollide = true
+		for i,v in pairs(lplr.Character:GetDescendants()) do
+			if v:IsA("Weld") or v:IsA("Motor6D") then
+				if v.Part0 == clone then v.Part0 = oldcloneroot end
+				if v.Part1 == clone then v.Part1 = oldcloneroot end
 			end
-			for i,v in pairs(oldcloneroot:GetChildren()) do
-				if v:IsA("BodyVelocity") then
-					v:Destroy()
-				end
+			if v:IsA("BodyVelocity") then
+				v:Destroy()
 			end
-			local oldclonepos = clone.Position.Y
-			if clone then
-				clone:Destroy()
-				clone = nil
-			end
-			lplr.Character.Humanoid.HipHeight = hip or 2
-			local origcf = {oldcloneroot.CFrame:GetComponents()}
-			origcf[2] = oldclonepos
-			oldcloneroot.CFrame = CFrame.new(unpack(origcf))
-			oldcloneroot = nil
 		end
+		for i,v in pairs(oldcloneroot:GetChildren()) do
+			if v:IsA("BodyVelocity") then
+				v:Destroy()
+			end
+		end
+		local oldclonepos = clone.Position.Y
+		if clone then
+			clone:Destroy()
+			clone = nil
+		end
+		lplr.Character.Humanoid.HipHeight = hip or 2
+		local origcf = {oldcloneroot.CFrame:GetComponents()}
+		origcf[2] = oldclonepos
+		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
+		oldcloneroot = nil
 		warningNotification("InfiniteFly", "Landed!", 3)
 	end
 
@@ -2871,10 +2865,6 @@ run(function()
 		Name = "InfiniteFly",
 		Function = function(callback)
 			if callback then
-				if PingSpoof.Enabled then PingSpoof.ToggleButton(false) didps = true end
-				repeat task.wait() until not psic
-				if didps then warningNotification("Cat "..catver, "Wait 1 second before moving! (This is to help prevent lagbacks)", 1) task.wait(1) end
-				if didps then warningNotification("Cat "..catver, "You can fly now!",3)
 				if not entityLibrary.isAlive then
 					disabledproper = true
 				end
@@ -2912,43 +2902,39 @@ run(function()
 				end
 				clonesuccess = false
 				if entityLibrary.isAlive and entityLibrary.character.Humanoid.Health > 0 and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
-					if not PingSpoof.Enabled then
-						cloned = lplr.Character
-						oldcloneroot = entityLibrary.character.HumanoidRootPart
-						if not lplr.Character.Parent then
-							InfiniteFly.ToggleButton(false)
-							return
-						end
-						lplr.Character.Parent = game
-						clone = oldcloneroot:Clone()
-						clone.Parent = lplr.Character
-						oldcloneroot.Parent = gameCamera
-						bedwars.QueryUtil:setQueryIgnored(oldcloneroot, true)
-						clone.CFrame = oldcloneroot.CFrame
-						lplr.Character.PrimaryPart = clone
-						lplr.Character.Parent = workspace
-						for i,v in pairs(lplr.Character:GetDescendants()) do
-							if v:IsA("Weld") or v:IsA("Motor6D") then
-								if v.Part0 == oldcloneroot then v.Part0 = clone end
-								if v.Part1 == oldcloneroot then v.Part1 = clone end
-							end
-							if v:IsA("BodyVelocity") then
-								v:Destroy()
-							end
-						end
-						for i,v in pairs(oldcloneroot:GetChildren()) do
-							if v:IsA("BodyVelocity") then
-								v:Destroy()
-							end
-						end
-						if hip then
-							lplr.Character.Humanoid.HipHeight = hip
-						end
-						hip = lplr.Character.Humanoid.HipHeight
-						clonesuccess = true
-					else
-						clonesuccess = true
+					cloned = lplr.Character
+					oldcloneroot = entityLibrary.character.HumanoidRootPart
+					if not lplr.Character.Parent then
+						InfiniteFly.ToggleButton(false)
+						return
 					end
+					lplr.Character.Parent = game
+					clone = oldcloneroot:Clone()
+					clone.Parent = lplr.Character
+					oldcloneroot.Parent = gameCamera
+					bedwars.QueryUtil:setQueryIgnored(oldcloneroot, true)
+					clone.CFrame = oldcloneroot.CFrame
+					lplr.Character.PrimaryPart = clone
+					lplr.Character.Parent = workspace
+					for i,v in pairs(lplr.Character:GetDescendants()) do
+						if v:IsA("Weld") or v:IsA("Motor6D") then
+							if v.Part0 == oldcloneroot then v.Part0 = clone end
+							if v.Part1 == oldcloneroot then v.Part1 = clone end
+						end
+						if v:IsA("BodyVelocity") then
+							v:Destroy()
+						end
+					end
+					for i,v in pairs(oldcloneroot:GetChildren()) do
+						if v:IsA("BodyVelocity") then
+							v:Destroy()
+						end
+					end
+					if hip then
+						lplr.Character.Humanoid.HipHeight = hip
+					end
+					hip = lplr.Character.Humanoid.HipHeight
+					clonesuccess = true
 				end
 				if not clonesuccess then
 					warningNotification("InfiniteFly", "Character missing", 3)
@@ -2978,9 +2964,6 @@ run(function()
 								goneup = true
 							end
 							speedCFrame[3] = clone.CFrame.Z
-							if PingSpoof.Enabled then
-								oldcloneroot = psor
-							end
 							oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
 							oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 						else
@@ -3036,8 +3019,6 @@ run(function()
 				end
 				InfiniteFlyUp = false
 				InfiniteFlyDown = false
-				task.wait(1.1)
-				if not PingSpoof.Enabled and didps then PingSpoof.ToggleButton(false) didps = false end
 			end
 		end,
 		HoverText = "Makes you go zoom",
@@ -9339,6 +9320,102 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("melody")
+			end
+		end
+	})
+end)
+
+run(function()
+	local AnticheatBypass = {Enabled = false}
+
+	local ACBDelay = {Value = 35}
+	local ACBSpeed = {Value = 10}
+	local ACBShowPart = {Enabled = false}
+
+	local DelayTicks = 0
+	local OldRoot
+	local NewRoot
+
+	local function CreateClonedCharacter()
+		lplr.Character.Parent = game
+        lplr.Character.HumanoidRootPart.Archivable = true
+		OldRoot = lplr.Character.HumanoidRootPart 
+		NewRoot = OldRoot:Clone()
+		NewRoot.Parent = lplr.Character
+		OldRoot.Parent = workspace
+		lplr.Character.PrimaryPart = NewRoot
+		lplr.Character.Parent = workspace
+		OldRoot.Transparency = 0.4
+		entityLibrary.character.HumanoidRootPart = NewRoot
+	end
+
+	local function RemoveClonedCharacter()
+		lplr.Character.Parent = game
+		OldRoot.Parent = lplr.Character
+		NewRoot.Parent = workspace
+		lplr.Character.PrimaryPart = OldRoot
+		lplr.Character.Parent = workspace
+		entityLibrary.character.HumanoidRootPart = OldRoot
+		NewRoot:Remove()
+		NewRoot = {} 
+		OldRoot = {}
+		OldRoot.CFrame = NewRoot.CFrame
+	end
+
+	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "PingSpoof",
+		Function = function(callback)
+			if callback then
+				DelayTicks = 0
+				if store.matchState == 0 then
+					repeat task.wait() until store.matchState ~= 0  
+					task.wait(1.5)
+				end	
+				CreateClonedCharacter()
+				table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
+					task.wait(1.5)
+					CreateClonedCharacter()
+				end))
+				repeat task.wait()
+					DelayTicks += 1
+					local RealHRP = OldRoot
+					local FakeChar = NewRoot
+					if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
+						local info = TweenInfo.new(ACBSpeed.Value / 100, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+						local data = {
+							CFrame = FakeChar.CFrame
+						}
+						game:GetService("TweenService"):Create(RealHRP, info, data):Play()
+						DelayTicks = 0
+					end
+				until (not AnticheatBypass.Enabled)
+			else
+				if NewRoot.Parent and OldRoot.Parent then  
+					RemoveClonedCharacter()
+				end
+			end
+		end,
+		HoverText = "Helps bypass the AntiCheat"
+	})
+	ACBDelay = AnticheatBypass.CreateSlider({
+		Name = "Delay",
+		Min = 0,
+		Max = 300,
+		Default = 50,
+		Function = function() end
+	})
+	ACBSpeed = AnticheatBypass.CreateSlider({
+		Name = "TP Speed",
+		Min = 0,
+		Max = 100,
+		Default = 10,
+		Function = function() end
+	})
+	ACBShowPart = AnticheatBypass.CreateToggle({
+		Name = "Show Part",
+		Function = function(callback)
+			if OldRoot then
+				OldRoot.Transparency = callback and 0.7 or 1
 			end
 		end
 	})
