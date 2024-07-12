@@ -9344,112 +9344,97 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 	})
 end)
 
+run(function()
+	local AnticheatBypass = {Enabled = false}
 
-run(function() -- it didnt go as planned
-	local tws = game:GetService("TweenService")
-	local PingSpoofDelay = {Value = 50}
-	local PingSpoofPart = {Enabled = true}
-	local clonepos
-	local bticks = 0
-	local Blinking = false
-	local show = false
+	local ACBDelay = {Value = 35}
+	local ACBSpeed = {Value = 10}
+	local ACBShowPart = {Enabled = false}
 
-	local function roundup(num)
-		return math.ceil(num)
-	end
-	
-	local oldroot
-	local newroot
-	local oldY
-	local isCloned = false
-	-- Thanks to SystemXVoid for sending me these!
-	local createclone = function()
-		repeat task.wait() until entityLibrary.isAlive and store.matchState ~= 0
+	local DelayTicks = 0
+	local OldRoot
+	local NewRoot
+
+	local function CreateClonedCharacter()
 		lplr.Character.Parent = game
-		oldroot = lplr.Character.HumanoidRootPart
-		newroot = oldroot:Clone()
-		newroot.Parent = lplr.Character
-		lplr.Character.PrimaryPart = newroot
-		oldroot.Parent = workspace
+        lplr.Character.HumanoidRootPart.Archivable = true
+		OldRoot = lplr.Character.HumanoidRootPart 
+		NewRoot = OldRoot:Clone()
+		NewRoot.Parent = lplr.Character
+		OldRoot.Parent = workspace
+		lplr.Character.PrimaryPart = NewRoot
 		lplr.Character.Parent = workspace
-		oldroot.Transparency = 1
-		entityLibrary.character.HumanoidRootPart = newroot
-		psor = oldroot
-		isCloned = true
-		oldY = newroot.CFrame.Y
-		if hip then
-			lplr.Character.Humanoid.HipHeight = hip
-		end
-		hip = lplr.Character.Humanoid.HipHeight
-		psic = true
+		OldRoot.Transparency = 0.4
+		entityLibrary.character.HumanoidRootPart = NewRoot
 	end
-	local createclone2 = function()
-		task.wait(1.5)
-		pcall(createclone)
-	end
-	local destructclone = function()
+
+	local function RemoveClonedCharacter()
 		lplr.Character.Parent = game
-		oldroot.Parent = lplr.Character
-		lplr.Character.PrimaryPart = oldroot
+		OldRoot.Parent = lplr.Character
+		NewRoot.Parent = workspace
+		lplr.Character.PrimaryPart = OldRoot
 		lplr.Character.Parent = workspace
-		oldroot.CanCollide = true
-		for i,v in pairs(lplr.Character:GetDescendants()) do
-			if v:IsA("Weld") or v:IsA("Motor6D") then
-				if v.Part0 == newroot then v.Part0 = oldroot end
-				if v.Part1 == newroot then v.Part1 = oldroot end
-			end
-			if v:IsA("BodyVelocity") then
-				v:Destroy()
-			end
-		end
-		for i,v in pairs(oldcloneroot:GetChildren()) do
-			if v:IsA("BodyVelocity") then
-				v:Destroy()
-			end
-		end
-		entityLibrary.character.HumanoidRootPart = oldroot
-		newroot:Remove()
-		newroot = nil
-		isCloned = false
-		task.wait(0.05)
-		entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418
-		repeat task.wait() entityLibrary.character.Humanoid.HipHeight = 1.99999995231628418 until entityLibrary.character.Humanoid.HipHeight > 1
-		psic = false
+		entityLibrary.character.HumanoidRootPart = OldRoot
+		NewRoot:Remove()
+		NewRoot = {} 
+		OldRoot = {}
+		OldRoot.CFrame = NewRoot.CFrame
 	end
 
-	local function lagback()
-		if not isnetworkowner(oldroot or entityLibrary.character.HumanoidRootPart) and isCloned then
-			pcall(destructclone)
-		end
-		repeat task.wait() until isnetworkowner(entityLibrary.character.HumanoidRootPart)
-		if not isCloned then
-			createclone()
-		end
-	end
-
-	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "PingSpoof V2",
-		HoverText = "Makes you teleport to confuse the Anti-Cheat and raise ping",
+	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "PingSpoof",
 		Function = function(callback)
 			if callback then
+				DelayTicks = 0
+				if store.matchState == 0 then
+					repeat task.wait() until store.matchState ~= 0  
+					task.wait(1.5)
+				end	
+				CreateClonedCharacter()
+				table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
+					task.wait(1.5)
+					CreateClonedCharacter()
+				end))
+				repeat task.wait()
+					DelayTicks += 1
+					local RealHRP = OldRoot
+					local FakeChar = NewRoot
+					if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
+						local info = TweenInfo.new(ACBSpeed.Value / 100, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+						local data = {
+							CFrame = FakeChar.CFrame
+						}
+						game:GetService("TweenService"):Create(RealHRP, info, data):Play()
+						DelayTicks = 0
+					end
+				until (not AnticheatBypass.Enabled)
+			else
+				if NewRoot.Parent and OldRoot.Parent then  
+					RemoveClonedCharacter()
+				end
 			end
 		end,
-		ExtraText = function()
-			return PingSpoofDelay.Value
-		end
+		HoverText = "Helps bypass the AntiCheat"
 	})
-	PingSpoofDelay = PingSpoof.CreateSlider({
+	ACBDelay = AnticheatBypass.CreateSlider({
 		Name = "Delay",
 		Min = 0,
 		Max = 300,
 		Default = 50,
 		Function = function() end
 	})
-	PingSpoofPart = PingSpoof.CreateToggle({
+	ACBSpeed = AnticheatBypass.CreateSlider({
+		Name = "TP Speed",
+		Min = 0,
+		Max = 100,
+		Default = 10,
+		Function = function() end
+	})
+	ACBShowPart = AnticheatBypass.CreateToggle({
 		Name = "Show Part",
 		Function = function(callback)
-			if clonepos then
-				clonepos.Transparency = callback and 0.5 or 1
+			if OldRoot then
+				OldRoot.Transparency = callback and 0.7 or 1
 			end
 		end
 	})
