@@ -9368,7 +9368,7 @@ run(function()
 		OldRoot.Parent = workspace
 		lplr.Character.PrimaryPart = NewRoot
 		lplr.Character.Parent = workspace
-		OldRoot.Transparency = ACBShowPart and 0.4 or 1
+		OldRoot.Transparency = ACBShowPart and 0 or 1
 		entityLibrary.character.HumanoidRootPart = NewRoot
 	end
 
@@ -9403,7 +9403,7 @@ run(function()
 					end))
 					repeat task.wait()
 						DelayTicks += 1
-						OldRoot.Transparency = ACBShowPart.Enabled and 0.7 or 1
+						OldRoot.Transparency = ACBShowPart.Enabled and 0.35 or 1
 						local RealHRP = OldRoot
 						local FakeChar = NewRoot
 						RealHRP.Velocity = Vector3.zero
@@ -9446,7 +9446,7 @@ run(function()
 		Name = "Show Part",
 		Function = function(callback)
 			if OldRoot then
-				OldRoot.Transparency = callback and 0.7 or 1
+				OldRoot.Transparency = callback and 0.35 or 1
 			end
 		end
 	})
