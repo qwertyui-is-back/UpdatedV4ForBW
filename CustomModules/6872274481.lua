@@ -2810,6 +2810,7 @@ run(function()
 	local InfiniteFlySpeed = {Value = 23}
 	local InfiniteFlyVerticalSpeed = {Value = 40}
 	local InfiniteFlyVertical = {Enabled = true}
+	local InfiniteFlyNotifs = {Enabled = true}
 	local InfiniteFlyUp = false
 	local InfiniteFlyDown = false
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
@@ -2859,7 +2860,9 @@ run(function()
 		origcf[2] = oldclonepos
 		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
 		oldcloneroot = nil
-		warningNotification("InfiniteFly", "Landed!", 3)
+		if InfiniteFlyNotifs.Enabled then
+			warningNotification("InfiniteFly", "Landed!", 3)
+		end
 		if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
 			task.wait(0.5)
 			GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
@@ -2970,7 +2973,9 @@ run(function()
 							local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
 							speedCFrame[1] = clone.CFrame.X
 							if speedCFrame[2] < 1000 or (not goneup) then
-								task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
+								if InfiniteFlyNotifs.Enabled then
+									task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
+								end
 								speedCFrame[2] = 100000
 								goneup = true
 							end
@@ -3022,7 +3027,9 @@ run(function()
 					entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
 					disabledproper = false
 					if isnetworkowner(oldcloneroot) then
-						warningNotification("InfiniteFly", "Waiting 1.1s to not flag", 3)
+						if InfiniteFlyNotifs.Enabled then
+							warningNotification("InfiniteFly", "Waiting 1.1s to not flag", 3)
+						end
 						task.delay(1.1, disablefunc)
 					else
 						disablefunc()
@@ -3053,6 +3060,11 @@ run(function()
 	})
 	InfiniteFlyVertical = InfiniteFly.CreateToggle({
 		Name = "Y Level",
+		Function = function() end,
+		Default = true
+	})
+	InfiniteFlyNotifs = InfiniteFly.CreateToggle({
+		Name = "Notifications",
 		Function = function() end,
 		Default = true
 	})
