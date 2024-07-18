@@ -2953,11 +2953,6 @@ run(function()
 				if not clonesuccess then
 					warningNotification("InfiniteFly", "Character missing", 3)
 					InfiniteFly.ToggleButton(false)
-					if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
-						task.wait(0.5)
-						GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
-						usedPingSpoof = false
-					end
 					return
 				end
 				local goneup = false
