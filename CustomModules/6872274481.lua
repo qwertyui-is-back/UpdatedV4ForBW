@@ -2864,7 +2864,7 @@ run(function()
 			warningNotification("InfiniteFly", "Landed!", 3)
 		end
 		if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
-			task.wait(0.5)
+			task.wait(0.075)
 			GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
 			usedPingSpoof = false
 		end
@@ -9409,7 +9409,7 @@ run(function()
 						RealHRP.Velocity = Vector3.zero
 						if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
 							RealHRP.Velocity = Vector3.zero
-							local info = TweenInfo.new(ACBSpeed.Value / 100, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+							local info = TweenInfo.new(ACBSpeed.Value / 100)
 							local cf = FakeChar.CFrame
 							if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
 								cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
