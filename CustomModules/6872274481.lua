@@ -2860,14 +2860,20 @@ run(function()
 		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
 		oldcloneroot = nil
 		warningNotification("InfiniteFly", "Landed!", 3)
+		if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
+			task.wait(0.5)
+			GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
+			usedPingSpoof = false
+		end
 	end
 
 	InfiniteFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "InfiniteFly",
 		Function = function(callback)
 			if callback then
-				if GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.Enabled then 
-					GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.ToggleButton()
+				usedPingSpoof = false
+				if GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled then 
+					GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
 					usedPingSpoof = true
 				end
 				if not entityLibrary.isAlive then
@@ -3024,11 +3030,6 @@ run(function()
 				end
 				InfiniteFlyUp = false
 				InfiniteFlyDown = false
-				if not GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.Enabled and usedPingSpoof then 
-					task.wait(2)
-					GuiLibrary.ObjectsThatCanBeSaved.PingSpoofOptionsButton.Api.ToggleButton()
-					usedPingSpoof = false
-				end
 			end
 		end,
 		HoverText = "Makes you go zoom",
@@ -9373,39 +9374,41 @@ run(function()
 	end
 
 	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "PingSpoof",
+		Name = "AnticheatBypass",
 		Function = function(callback)
 			if callback then
-				DelayTicks = 0
-				if store.matchState == 0 then
-					repeat task.wait() until store.matchState ~= 0  
-					task.wait(1.5)
-				end	
-				CreateClonedCharacter()
-				table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
-					task.wait(1.5)
+				task.spawn(function()
+					DelayTicks = 0
+					if store.matchState == 0 then
+						repeat task.wait() until store.matchState ~= 0  
+						task.wait(1.5)
+					end	
 					CreateClonedCharacter()
-				end))
-				repeat task.wait()
-					DelayTicks += 1
-					OldRoot.Transparency = ACBShowPart and 0.4 or 1
-					local RealHRP = OldRoot
-					local FakeChar = NewRoot
-					RealHRP.Velocity = Vector3.zero
-					if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
+					table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
+						task.wait(1.5)
+						CreateClonedCharacter()
+					end))
+					repeat task.wait()
+						DelayTicks += 1
+						OldRoot.Transparency = ACBShowPart.Enabled and 0.7 or 1
+						local RealHRP = OldRoot
+						local FakeChar = NewRoot
 						RealHRP.Velocity = Vector3.zero
-						local info = TweenInfo.new(ACBSpeed.Value / 100, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-						local cf = FakeChar.CFrame
-						if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
-							cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
+						if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
+							RealHRP.Velocity = Vector3.zero
+							local info = TweenInfo.new(ACBSpeed.Value / 100, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+							local cf = FakeChar.CFrame
+							if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
+								cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
+							end
+							local data = {
+								CFrame = cf
+							}
+							game:GetService("TweenService"):Create(RealHRP, info, data):Play()
+							DelayTicks = 0
 						end
-						local data = {
-							CFrame = cf
-						}
-						game:GetService("TweenService"):Create(RealHRP, info, data):Play()
-						DelayTicks = 0
-					end
-				until (not AnticheatBypass.Enabled)
+					until (not AnticheatBypass.Enabled)
+				end)
 			else
 				RemoveClonedCharacter()
 			end
