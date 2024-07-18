@@ -9361,6 +9361,7 @@ run(function()
 	end
 
 	local function RemoveClonedCharacter()
+		OldRoot.Transparency = 1
 		lplr.Character.Parent = game
 		OldRoot.Parent = lplr.Character
 		NewRoot.Parent = workspace
@@ -9454,7 +9455,7 @@ run(function()
 							}
 						}
 	
-						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args))
+						pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args)) end)
 					end
 				end)
 			else
