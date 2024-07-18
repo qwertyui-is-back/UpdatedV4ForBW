@@ -2953,6 +2953,11 @@ run(function()
 				if not clonesuccess then
 					warningNotification("InfiniteFly", "Character missing", 3)
 					InfiniteFly.ToggleButton(false)
+					if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
+						task.wait(0.5)
+						GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
+						usedPingSpoof = false
+					end
 					return
 				end
 				local goneup = false
@@ -9891,6 +9896,113 @@ run(function()
 				end)          
 			end
         end
+	})
+end)
+
+run(function()
+	local HackerDetector = {Enabled = false}
+	local Detected = {}
+	Detected[lplr.Name] = "Hacking"
+	local function addTag(name, tag, color)
+		if whitelist ~= nil and whitelist.customtags ~= nil then
+			whitelist.customtags[player] = {
+				{
+					text = tag,
+					color = color
+				}
+			}
+		end
+	end
+	local function getPlayerSpeed(player)
+		local character = player.Character
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			local hrp = character.HumanoidRootPart
+			local currentPos = hrp.Position
+	
+			if not lastPos2 then
+				lastPos2 = currentPos
+				return 0
+			end
+	
+			local lastPos = lastPos2
+			local speed = (currentPos - lastPos).magnitude / 0.15
+	
+			hrp.LastPosition = currentPos
+			return speed
+		end
+		return 0
+	end
+	local Checks = { -- I asked ChatGPT on ideas to make this. They told me to add individual functions as checks in a table, so I'm making that.
+		Invisibility = function(player)
+			if Detected[player.Name] == "Legit" then
+				local anims = {
+					1 = "rbxassetid://11335949902",
+				}
+				for i,v in plr.Character.Humanoid:GetPlayingAnimationTracks() do
+					if v.Animation.AnimationId == anims[1] then
+						Detected[player.Name] = "Hacking"
+						warningNotification("Cat "..catver, player.Name.." is hacking! (Invisibility t:A)", 10)
+						addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
+					end
+				end
+			end
+		end,
+		InfiniteFly = function(player)
+			if Detected[player.Name] == "Legit" then
+				local height = {
+					InfiniteFly = 2500,
+					AntiHit = 25000
+				}
+				local cf = player.Character.HumanoidRootPart.CFrame.Y
+				if cf >= 1000 and cf <= 10000 then
+					Detected[player.Name] = "Hacking"
+					warningNotification("Cat "..catver, player.Name.." is hacking! (InfiniteFly t:A)", 10)
+					addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
+				elseif cf >= 10000 and cf <= 100000 then
+					Detected[player.Name] = "Hacking"
+					warningNotification("Cat "..catver, player.Name.." is hacking! (AntiHit t:A)", 10)
+					addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
+				end
+			end
+		end--[[,
+		Speed = function(player)
+			if Detected[player.Name] == "Legit" then
+				if player.Character.Humanoid.WalkSpeed >= 36 then
+					Detected[player.Name] = "Hacking"
+					warningNotification("Cat "..catver, player.Name.." is hacking! (Speed t:A)", 10)
+					addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
+				elseif getPlayerSpeed(player) >= 36 then
+					Detected[player.Name] = "Hacking"
+					warningNotification("Cat "..catver, player.Name.." is hacking! (Speed t:B)", 10)
+					addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
+				end
+			end
+		end]]
+	}
+
+	HackerDetector = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "HackerDetector",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("hack",function()
+					pcall(function()
+						for i,v in game.Players:GetChildren() do
+							for i,func in Checks do
+								if Detected[v] ~= "Hacking" then
+									task.spawn(func,v)
+								end
+							end
+						end
+					end)
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("hack")
+			end
+		end,
+		HoverText = "Detect other exploiters.",
+		ExtraText = function()
+			return math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
+		end
 	})
 end)
 
