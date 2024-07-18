@@ -9373,7 +9373,7 @@ run(function()
 	end
 
 	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "AnticheatBypass",
+		Name = "PingSpoof",
 		Function = function(callback)
 			if callback then
 				DelayTicks = 0
@@ -9388,7 +9388,7 @@ run(function()
 				end))
 				repeat task.wait()
 					DelayTicks += 1
-					OldRoot.Transparency = ACBShowPart.Enabled and 0.7 or 1
+					OldRoot.Transparency = ACBShowPart and 0.4 or 1
 					local RealHRP = OldRoot
 					local FakeChar = NewRoot
 					RealHRP.Velocity = Vector3.zero
@@ -9631,15 +9631,8 @@ end)
 
 run(function()
 	local AmongUs = {Enabled = false}
-	local CustomModelMode = {Value = "Among Us"}
 
 	local function camu(ent)
-		local sizes = {
-			"Among Us" = {
-				Offset = Vector3.new(0, -0.3, 0),
-				Scale = Vector3.new(0.11, 0.11, 0.11)
-			}
-		}
 		local asset = "http://www.roblox.com/asset/?id=6235963214"
 		local text = "http://www.roblox.com/asset/?id=6235963270"
 		local part = Instance.new("Part",ent.Character)
@@ -9649,11 +9642,8 @@ run(function()
 		mesh.MeshId = asset
 		mesh.TextureId = text
 		part.CanCollide = false
-		local ModelData = sizes[CustomModelMode.Value]
-		if ModelData then
-			mesh.Offset = ModelData.Offset
-			mesh.Scale = ModelData.Scale
-		end
+		mesh.Offset = Vector3.new(0,-0.3,0)
+		mesh.Scale = Vector3.new(0.11,0.11,0.11)
 		weld.Part0 = part
 		weld.Part1 = part.Parent.UpperTorso
 	end
@@ -9680,13 +9670,6 @@ run(function()
 								end
 								if v.Character:FindFirstChild("amogus") == nil then
 									camu(v)
-								else
-									local amogusPart = v.Character:FindFirstChild("amogus")
-									local weld = amogusPart and amogusPart:FindFirstChildWhichIsA("Weld")
-									if not weld or weld.Part1 ~= v.Character:FindFirstChild("UpperTorso") then
-										pcall(function() amogusPart:Destroy() end)
-										camu(v)
-									end
 								end
 							end
 						end
@@ -9717,17 +9700,18 @@ run(function()
 		Name = "InfiniteJump",
 		Function = function(callback)
 			if callback then
-				table.insert(InfiniteJump.Connections, game:GetService("UserInputService").JumpRequest:Connect(function()
-					if lplr.Character and lplr.Character:FindFirstChildOfClass("Humanoid") then
-						local hum = lplr.Character:FindFirstChildOfClass("Humanoid")
-						hum:ChangeState("Jumping")
-					end
-				end))
+
 			end
 		end
-	})       
+	})
+	game:GetService("UserInputService").JumpRequest:Connect(function()
+		if not InfiniteJump.Enabled then return end
+		if lplr.Character and lplr.Character:FindFirstChildOfClass("Humanoid") then
+			local hum = lplr.Character:FindFirstChildOfClass("Humanoid")
+			hum:ChangeState("Jumping")
+		end
+	end)         
 end)
-
 run(function()
     local coolpack = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
         Name = "TexturePack",
