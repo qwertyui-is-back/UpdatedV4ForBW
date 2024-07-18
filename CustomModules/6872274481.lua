@@ -9899,7 +9899,6 @@ run(function()
 	})
 end)
 
-
 run(function()
 	store.TPString = shared.vapeoverlay or nil
 	local origtpstring = store.TPString
