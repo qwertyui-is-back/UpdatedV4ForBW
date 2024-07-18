@@ -9899,7 +9899,7 @@ run(function()
 	})
 end)
 
-run(function()
+--[[run(function()
 	local HackerDetector = {Enabled = false}
 	local Detected = {}
 	Detected[lplr.Name] = "Hacking"
@@ -9964,20 +9964,7 @@ run(function()
 					addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
 				end
 			end
-		end--[[,
-		Speed = function(player)
-			if Detected[player.Name] == "Legit" then
-				if player.Character.Humanoid.WalkSpeed >= 36 then
-					Detected[player.Name] = "Hacking"
-					warningNotification("Cat "..catver, player.Name.." is hacking! (Speed t:A)", 10)
-					addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
-				elseif getPlayerSpeed(player) >= 36 then
-					Detected[player.Name] = "Hacking"
-					warningNotification("Cat "..catver, player.Name.." is hacking! (Speed t:B)", 10)
-					addTag(player.Name, "HACKER", color = Color3.fromRGB(255, 130, 70))
-				end
-			end
-		end]]
+		end
 	}
 
 	HackerDetector = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
@@ -10004,7 +9991,7 @@ run(function()
 			return math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
 		end
 	})
-end)
+end)]]
 
 run(function()
 	store.TPString = shared.vapeoverlay or nil
