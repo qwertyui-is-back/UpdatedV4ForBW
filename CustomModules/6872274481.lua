@@ -9348,28 +9348,6 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 	})
 end)
 
-local AntiHit = {Enabled = false}
-local AHD = {Value = 2}
-run(function()
-	AntiHit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "AntiHit",
-		Function = function(callback)
-			if callback and (not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled) then
-				GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
-			end
-		end
-	})
-	AHD = AntiHit.CreateSlider({
-		Name = "Delay",
-		Min = 1,
-		Max = 5,
-		Default = 2,
-		Function = function(val)
-
-		end
-	})
-end)
-
 run(function()
 	local AnticheatBypass = {Enabled = false}
 
@@ -9378,10 +9356,8 @@ run(function()
 	local ACBShowPart = {Enabled = false}
 
 	local DelayTicks = 0
-	local AHTicks = 0
 	local OldRoot
 	local NewRoot
-	local doAntiHit = false
 
 	local function CreateClonedCharacter()
 		lplr.Character.Parent = game
@@ -9410,17 +9386,12 @@ run(function()
 		OldRoot.CFrame = NewRoot.CFrame
 	end
 
-	local function roundUp(value)
-		return math.ceil(value)
-	end
-
 	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "AnticheatBypass",
 		Function = function(callback)
 			if callback then
 				task.spawn(function()
 					DelayTicks = 0
-					AHTicks = 0
 					if store.matchState == 0 then
 						repeat task.wait() until store.matchState ~= 0  
 						task.wait(1.5)
@@ -9430,20 +9401,7 @@ run(function()
 						task.wait(1.5)
 						CreateClonedCharacter()
 					end))
-					RunLoops:BindToHeartbeat("acb", function()
-						AHTicks += 1
-						if killauraNearPlayer and AntiHit.Enabled then
-							local antihitdelay = roundUp(AHD.Value / 10)
-							if AHTicks >= antihitdelay and not doAntiHit then
-								doAntiHit = true
-								AHTicks = 0
-							end
-							if AHTicks >= roundUp(antidelay / 2) and doAntiHit then
-								doAntiHit = false
-								AHTicks = 0
-							end
-						end
-						if not killauraNearPlayer or not AntiHit.Enabled then doAntiHit = false end
+					repeat task.wait()
 						DelayTicks += 1
 						OldRoot.Transparency = ACBShowPart.Enabled and 0.35 or 1
 						local RealHRP = OldRoot
@@ -9451,24 +9409,18 @@ run(function()
 						RealHRP.Velocity = Vector3.zero
 						if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
 							RealHRP.Velocity = Vector3.zero
+							local info = TweenInfo.new(ACBSpeed.Value / 100)
 							local cf = FakeChar.CFrame
-							if doAntiHit then
+							if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
+								cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
+							end
 							local data = {
 								CFrame = cf
 							}
-							if doAntiHit then
-								if data.CFrame.Y <= 1000 and (not GuiLibrary.ObjectsThatCanBeSaved.FlyOptionsButton.Api.Enabled) then
-									data.CFrame = data.CFrame + Vector3.new(0, 100000, 0)
-								end
-							else
-								if data.CFrame.Y >= 750 then
-									data.CFrame = CFrame.new(data.CFrame.X, FakeChar.CFrame.Y, data.CFrame.Z)
-								end
-							end
-							RealHRP.CFrame = data.CFrame
+							game:GetService("TweenService"):Create(RealHRP, info, data):Play()
 							DelayTicks = 0
 						end
-					end)
+					until (not AnticheatBypass.Enabled)
 				end)
 			else
 				RemoveClonedCharacter()
