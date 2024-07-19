@@ -2138,12 +2138,12 @@ if shared.VapeExecuted then
 						valSlider.Slider.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromHSV(hue, sat, 1))})]]
 
 						satSlider.Slider.UIGradient.Color = ColorSequence.new({
-							ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 126)),  -- Bright Pink
-							ColorSequenceKeypoint.new(1, Color3.fromRGB(36, 49, 161))  -- Pigment Blue
+							ColorSequenceKeypoint.new(0, Color3.fromHSV(327/360, 1, 1)),  -- Bright Pink
+							ColorSequenceKeypoint.new(1, Color3.fromHSV(232/360, 0.776, 0.631))  -- Pigment Blue
 						})
 						valSlider.Slider.UIGradient.Color = ColorSequence.new({
-							ColorSequenceKeypoint.new(0, Color3.fromRGB(36, 49, 161)),  -- Pigment Blue
-							ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 126))  -- Bright Pink
+							ColorSequenceKeypoint.new(0, Color3.fromHSV(232/360, 0.776, 0.631)),  -- Pigment Blue
+							ColorSequenceKeypoint.new(1, Color3.fromHSV(327/360, 1, 1))  -- Bright Pink
 						})
 						hueSlider.Slider.ButtonSlider.Position = UDim2.new(math.clamp(hue, 0.02, 0.95), -9, 0, -7)
 						satSlider.Slider.ButtonSlider.Position = UDim2.new(math.clamp(sat, 0.02, 0.95), -9, 0, -7)
