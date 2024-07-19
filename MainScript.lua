@@ -1080,8 +1080,7 @@ local function TextGUIUpdate()
 			table.insert(VapeBackgroundTable, backgroundFrame)
         end
 
-		GuiLibrary.UpdateUI(320/360, 1, 1, true)
-		--GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value)
+		GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value)
 	end
 	if shared.sigma then
 		VapeText.Font = Enum.Font.Roboto
@@ -1576,8 +1575,7 @@ ModuleSettings.CreateToggle({
 	HoverText = "Temporarily disables certain features in server lobbies."
 })
 GUIColorSlider = GUI.CreateColorSlider("GUI Theme", function(h, s, v)
-	--GuiLibrary.UpdateUI(h, s, v)
-	GuiLibrary.UpdateUI(320/360, 1, 1)
+	GuiLibrary.UpdateUI(h, s, v)
 end)
 local BlatantModeToggle = GUI.CreateToggle({
 	Name = "Blatant mode",
