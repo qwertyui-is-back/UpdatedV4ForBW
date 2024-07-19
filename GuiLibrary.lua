@@ -2134,17 +2134,8 @@ if shared.VapeExecuted then
 					sliderapi["Sat"] = sat
 					sliderapi["Value"] = val
 					pcall(function()
-						--[[satSlider.Slider.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(0, 0, val)), ColorSequenceKeypoint.new(1, Color3.fromHSV(hue, 1, val))})
-						valSlider.Slider.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromHSV(hue, sat, 1))})]]
-
-						satSlider.Slider.UIGradient.Color = ColorSequence.new({
-							ColorSequenceKeypoint.new(0, Color3.fromHSV(327/360, 1, 1)),  -- Bright Pink
-							ColorSequenceKeypoint.new(1, Color3.fromHSV(232/360, 0.776, 0.631))  -- Pigment Blue
-						})
-						valSlider.Slider.UIGradient.Color = ColorSequence.new({
-							ColorSequenceKeypoint.new(0, Color3.fromHSV(232/360, 0.776, 0.631)),  -- Pigment Blue
-							ColorSequenceKeypoint.new(1, Color3.fromHSV(327/360, 1, 1))  -- Bright Pink
-						})
+						satSlider.Slider.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(0, 0, val)), ColorSequenceKeypoint.new(1, Color3.fromHSV(hue, 1, val))})
+						valSlider.Slider.UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromHSV(hue, sat, 1))})
 						hueSlider.Slider.ButtonSlider.Position = UDim2.new(math.clamp(hue, 0.02, 0.95), -9, 0, -7)
 						satSlider.Slider.ButtonSlider.Position = UDim2.new(math.clamp(sat, 0.02, 0.95), -9, 0, -7)
 						valSlider.Slider.ButtonSlider.Position = UDim2.new(math.clamp(val, 0.02, 0.95), -9, 0, -7)
