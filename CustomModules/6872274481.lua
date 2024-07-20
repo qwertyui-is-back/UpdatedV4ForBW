@@ -2049,11 +2049,11 @@ run(function()
 		lplr.Character.Parent = workspace
 		entityLibrary.character.HumanoidRootPart = OldRoot
 		NewRoot:Remove()
-		NewRoot = nil
-		OldRoot = nil
 		if bool then
 			OldRoot.CFrame = NewRoot.CFrame
 		end
+		NewRoot = nil
+		OldRoot = nil
 	end
 
 	local isFlagged = false
