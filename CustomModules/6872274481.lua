@@ -2021,6 +2021,94 @@ run(function()
 	})
 end)
 
+local AnticheatBypass = {Enabled = false}
+run(function()
+	local OldRoot
+	local NewRoot
+
+	local function CreateClonedCharacter()
+		lplr.Character.Parent = game
+        lplr.Character.HumanoidRootPart.Archivable = true
+		OldRoot = lplr.Character.HumanoidRootPart 
+		NewRoot = OldRoot:Clone()
+		NewRoot.Parent = lplr.Character
+		OldRoot.Parent = workspace
+		lplr.Character.PrimaryPart = NewRoot
+		lplr.Character.Parent = workspace
+		OldRoot.Transparency = 1
+		entityLibrary.character.HumanoidRootPart = NewRoot
+	end
+
+	local function RemoveClonedCharacter(bool)
+		bool = bool or true
+		OldRoot.Transparency = 1
+		lplr.Character.Parent = game
+		OldRoot.Parent = lplr.Character
+		NewRoot.Parent = workspace
+		lplr.Character.PrimaryPart = OldRoot
+		lplr.Character.Parent = workspace
+		entityLibrary.character.HumanoidRootPart = OldRoot
+		NewRoot:Remove()
+		NewRoot = nil
+		OldRoot = nil
+		if bool then
+			OldRoot.CFrame = NewRoot.CFrame
+		end
+	end
+
+	local isFlagged = false
+
+	local function onLagback()
+		if not isnetworkowner(OldRoot) then
+			if not isFlagged then
+				isFlagged = true
+				RemoveClonedCharacter(false)
+				local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
+				warningNotification("Cat "..catver, "Detected lagback! (Ping: "..ping..")")
+			end
+		else
+			if isFlagged then
+				isFlagged = false
+				CreateClonedCharacter()
+			end
+		end
+	end
+
+	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "HumanoidRootPartFix",
+		Function = function(callback)
+			if callback then
+				task.spawn(function()
+					if store.matchState == 0 then
+						repeat task.wait() until store.matchState ~= 0  
+						task.wait(1.5)
+					end	
+					CreateClonedCharacter()
+					table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
+						task.wait(1.5)
+						CreateClonedCharacter()
+					end))
+					RunLoops:BindToHeartbeat("hrpf",function()
+						onLagback()
+						if not isFlagged then
+							if OldRoot ~= nil and NewRoot ~= nil then
+								local RealHRP = OldRoot
+								local FakeChar = NewRoot
+								local cf = FakeChar.CFrame
+								RealHRP.CFrame = cf
+							end
+						end
+					end)
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("hrpf")
+				RemoveClonedCharacter(false)
+			end
+		end,
+		HoverText = "Helps bypass the AntiCheat"
+	})
+end)
+
 run(function()
 	local Velocity = {Enabled = false}
 	local VelocityHorizontal = {Value = 100}
@@ -2863,9 +2951,9 @@ run(function()
 		if InfiniteFlyNotifs.Enabled then
 			warningNotification("InfiniteFly", "Landed!", 3)
 		end
-		if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
+		if not GuiLibrary.ObjectsThatCanBeSaved.HumanoidRootPartFixOptionsButton.Api.Enabled and usedPingSpoof then 
 			task.wait(0.075)
-			GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
+			GuiLibrary.ObjectsThatCanBeSaved.HumanoidRootPartFixOptionsButton.Api.ToggleButton()
 			usedPingSpoof = false
 		end
 	end
@@ -2875,8 +2963,8 @@ run(function()
 		Function = function(callback)
 			if callback then
 				usedPingSpoof = false
-				if GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled then 
-					GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
+				if GuiLibrary.ObjectsThatCanBeSaved.HumanoidRootPartFixOptionsButton.Api.Enabled then 
+					GuiLibrary.ObjectsThatCanBeSaved.HumanoidRootPartFixOptionsButton.Api.ToggleButton()
 					usedPingSpoof = true
 				end
 				if not entityLibrary.isAlive then
@@ -9349,110 +9437,6 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 end)
 
 run(function()
-	local AnticheatBypass = {Enabled = false}
-
-	local ACBDelay = {Value = 35}
-	local ACBSpeed = {Value = 10}
-	local ACBShowPart = {Enabled = false}
-
-	local DelayTicks = 0
-	local OldRoot
-	local NewRoot
-
-	local function CreateClonedCharacter()
-		lplr.Character.Parent = game
-        lplr.Character.HumanoidRootPart.Archivable = true
-		OldRoot = lplr.Character.HumanoidRootPart 
-		NewRoot = OldRoot:Clone()
-		NewRoot.Parent = lplr.Character
-		OldRoot.Parent = workspace
-		lplr.Character.PrimaryPart = NewRoot
-		lplr.Character.Parent = workspace
-		OldRoot.Transparency = ACBShowPart and 0 or 1
-		entityLibrary.character.HumanoidRootPart = NewRoot
-	end
-
-	local function RemoveClonedCharacter()
-		OldRoot.Transparency = 1
-		lplr.Character.Parent = game
-		OldRoot.Parent = lplr.Character
-		NewRoot.Parent = workspace
-		lplr.Character.PrimaryPart = OldRoot
-		lplr.Character.Parent = workspace
-		entityLibrary.character.HumanoidRootPart = OldRoot
-		NewRoot:Remove()
-		NewRoot = {} 
-		OldRoot = {}
-		OldRoot.CFrame = NewRoot.CFrame
-	end
-
-	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "AnticheatBypass",
-		Function = function(callback)
-			if callback then
-				task.spawn(function()
-					DelayTicks = 0
-					if store.matchState == 0 then
-						repeat task.wait() until store.matchState ~= 0  
-						task.wait(1.5)
-					end	
-					CreateClonedCharacter()
-					table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
-						task.wait(1.5)
-						CreateClonedCharacter()
-					end))
-					repeat task.wait()
-						DelayTicks += 1
-						OldRoot.Transparency = ACBShowPart.Enabled and 0.35 or 1
-						local RealHRP = OldRoot
-						local FakeChar = NewRoot
-						RealHRP.Velocity = Vector3.zero
-						if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
-							RealHRP.Velocity = Vector3.zero
-							local info = TweenInfo.new(ACBSpeed.Value / 100)
-							local cf = FakeChar.CFrame
-							if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
-								cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
-							end
-							local data = {
-								CFrame = cf
-							}
-							game:GetService("TweenService"):Create(RealHRP, info, data):Play()
-							DelayTicks = 0
-						end
-					until (not AnticheatBypass.Enabled)
-				end)
-			else
-				RemoveClonedCharacter()
-			end
-		end,
-		HoverText = "Helps bypass the AntiCheat"
-	})
-	ACBDelay = AnticheatBypass.CreateSlider({
-		Name = "Delay",
-		Min = 0,
-		Max = 300,
-		Default = 50,
-		Function = function() end
-	})
-	ACBSpeed = AnticheatBypass.CreateSlider({
-		Name = "TP Speed",
-		Min = 0,
-		Max = 100,
-		Default = 10,
-		Function = function() end
-	})
-	ACBShowPart = AnticheatBypass.CreateToggle({
-		Name = "Show Part",
-		Function = function(callback)
-			if OldRoot then
-				OldRoot.Transparency = callback and 0.35 or 1
-			end
-		end
-	})
-end)
-
-run(function()
 	local HannahExploit = {Enabled = false}
 	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "HannahExploit",
@@ -10161,5 +10145,8 @@ task.spawn(function()
 	repeat task.wait() until shared.VapeFullyLoaded
 	if not AutoLeave.Enabled then
 		AutoLeave.ToggleButton(false)
+	end
+	if not AnticheatBypass.Enabled then
+		AnticheatBypass.ToggleButton(false)
 	end
 end)
