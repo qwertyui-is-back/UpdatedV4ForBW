@@ -2059,19 +2059,21 @@ run(function()
 	local isFlagged = false
 
 	local function onLagback()
-		if not isnetworkowner(OldRoot) then
-			if not isFlagged then
-				isFlagged = true
-				RemoveClonedCharacter(false)
-				local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
-				warningNotification("Cat "..catver, "Detected lagback! (Ping: "..ping..")")
+		pcall(function()
+			if not isnetworkowner(OldRoot) then
+				if not isFlagged then
+					isFlagged = true
+					RemoveClonedCharacter(false)
+					local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
+					warningNotification("Cat "..catver, "Detected lagback! (Ping: "..ping..")")
+				end
+			else
+				if isFlagged then
+					isFlagged = false
+					CreateClonedCharacter()
+				end
 			end
-		else
-			if isFlagged then
-				isFlagged = false
-				CreateClonedCharacter()
-			end
-		end
+		end)
 	end
 
 	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
@@ -2088,14 +2090,26 @@ run(function()
 						task.wait(1.5)
 						CreateClonedCharacter()
 					end))
+					local goneup
 					RunLoops:BindToHeartbeat("hrpf",function()
 						onLagback()
 						if not isFlagged then
 							if OldRoot ~= nil and NewRoot ~= nil then
 								local RealHRP = OldRoot
 								local FakeChar = NewRoot
-								local cf = FakeChar.CFrame
-								RealHRP.CFrame = cf
+								local cf = {RealHRP.CFrame:GetComponents()}
+								cf[1] = FakeChar.CFrame.X
+								if cf[2] < 1000 or (not goneup) then
+									if InfiniteFly.Enabled then
+										task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
+										cf[2] = 100000
+										goneup = true
+									end
+								end
+								if not InfiniteFly.Enabled then cf[2] = FakeChar.CFrame.Y end
+								cf[3] = clone.CFrame.Z
+								RealHRP.CFrame = CFrame.new(unpack(cf))
+								RealHRP.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
 							end
 						end
 					end)
@@ -2407,9 +2421,9 @@ RunLoops:BindToStepped("Pulse",function()
 	if speedneeded == nil then speedneeded = 23 end
 	if pulset <= 50 then
 		pulsespeed = speedneeded
-	elseif pulset <= 50 + ptime then
+	elseif pulset <= 65 + ptime then
 		pulsespeed = speedneeded * multiply
-	elseif pulset >= 50 + ptime then
+	elseif pulset >= 65 + ptime then
 		pulsespeed = speedneeded
 		pulset = 0
 	end
@@ -2962,7 +2976,7 @@ run(function()
 		Name = "InfiniteFly",
 		Function = function(callback)
 			if callback then
-				usedPingSpoof = false
+				--[[usedPingSpoof = false
 				if GuiLibrary.ObjectsThatCanBeSaved.HumanoidRootPartFixOptionsButton.Api.Enabled then 
 					GuiLibrary.ObjectsThatCanBeSaved.HumanoidRootPartFixOptionsButton.Api.ToggleButton()
 					usedPingSpoof = true
@@ -2974,7 +2988,7 @@ run(function()
 					warningNotification("InfiniteFly", "Wait for the last fly to finish", 3)
 					InfiniteFly.ToggleButton(false)
 					return
-				end
+				end]]
 				table.insert(InfiniteFly.Connections, inputService.InputBegan:Connect(function(input1)
 					if InfiniteFlyVertical.Enabled and inputService:GetFocusedTextBox() == nil then
 						if input1.KeyCode == Enum.KeyCode.Space or input1.KeyCode == Enum.KeyCode.ButtonA then
@@ -3002,7 +3016,7 @@ run(function()
 						InfiniteFlyUp = jumpButton.ImageRectOffset.X == 146
 					end)
 				end
-				clonesuccess = false
+				--[[clonesuccess = false
 				if entityLibrary.isAlive and entityLibrary.character.Humanoid.Health > 0 and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
 					cloned = lplr.Character
 					oldcloneroot = entityLibrary.character.HumanoidRootPart
@@ -3042,42 +3056,25 @@ run(function()
 					warningNotification("InfiniteFly", "Character missing", 3)
 					InfiniteFly.ToggleButton(false)
 					return
-				end
+				end]]
 				local goneup = false
 				RunLoops:BindToHeartbeat("InfiniteFly", function(delta)
 					if GuiLibrary.ObjectsThatCanBeSaved["Lobby CheckToggle"].Api.Enabled then
 						if store.matchState == 0 then return end
 					end
 					if entityLibrary.isAlive then
-						if isnetworkowner(oldcloneroot) then
-							local playerMass = (entityLibrary.character.HumanoidRootPart:GetMass() - 1.4) * (delta * 100)
+						local playerMass = (entityLibrary.character.HumanoidRootPart:GetMass() - 1.4) * (delta * 100)
 
-							local flyVelocity = entityLibrary.character.Humanoid.MoveDirection * (InfiniteFlyMode.Value == "Normal" and InfiniteFlySpeed.Value or 20)
-							entityLibrary.character.HumanoidRootPart.Velocity = flyVelocity + (Vector3.new(0, playerMass + (InfiniteFlyUp and InfiniteFlyVerticalSpeed.Value or 0) + (InfiniteFlyDown and -InfiniteFlyVerticalSpeed.Value or 0), 0))
-							if InfiniteFlyMode.Value ~= "Normal" then
-								entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((InfiniteFlySpeed.Value * getSpeed()) - 20)) * delta
-							end
-
-							local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
-							speedCFrame[1] = clone.CFrame.X
-							if speedCFrame[2] < 1000 or (not goneup) then
-								if InfiniteFlyNotifs.Enabled then
-									task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
-								end
-								speedCFrame[2] = 100000
-								goneup = true
-							end
-							speedCFrame[3] = clone.CFrame.Z
-							oldcloneroot.CFrame = CFrame.new(unpack(speedCFrame))
-							oldcloneroot.Velocity = Vector3.new(clone.Velocity.X, oldcloneroot.Velocity.Y, clone.Velocity.Z)
-						else
-							InfiniteFly.ToggleButton(false)
+						local flyVelocity = entityLibrary.character.Humanoid.MoveDirection * (InfiniteFlyMode.Value == "Normal" and InfiniteFlySpeed.Value or 20)
+						entityLibrary.character.HumanoidRootPart.Velocity = flyVelocity + (Vector3.new(0, playerMass + (InfiniteFlyUp and InfiniteFlyVerticalSpeed.Value or 0) + (InfiniteFlyDown and -InfiniteFlyVerticalSpeed.Value or 0), 0))
+						if InfiniteFlyMode.Value ~= "Normal" then
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + (entityLibrary.character.Humanoid.MoveDirection * ((InfiniteFlySpeed.Value * getSpeed()) - 20)) * delta
 						end
 					end
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("InfiniteFly")
-				if clonesuccess and oldcloneroot and clone and lplr.Character.Parent == workspace and oldcloneroot.Parent ~= nil and disabledproper and cloned == lplr.Character then
+				--[[if clonesuccess and oldcloneroot and clone and lplr.Character.Parent == workspace and oldcloneroot.Parent ~= nil and disabledproper and cloned == lplr.Character then
 					local rayparams = RaycastParams.new()
 					rayparams.FilterDescendantsInstances = {lplr.Character, gameCamera}
 					rayparams.RespectCanCollide = true
@@ -3122,7 +3119,7 @@ run(function()
 					else
 						disablefunc()
 					end
-				end
+				end]]
 				InfiniteFlyUp = false
 				InfiniteFlyDown = false
 			end
@@ -3156,7 +3153,7 @@ run(function()
 		Function = function() end,
 		Default = true
 	})
-end)
+end)]]
 
 local killauraNearPlayer
 run(function()
