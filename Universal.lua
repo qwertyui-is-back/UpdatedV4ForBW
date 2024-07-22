@@ -384,8 +384,8 @@ run(function()
 		if plr == lplr and msg == 'helloimusinginhaler' then return true end
 		if self.localprio > 0 and self.said[plr.Name] == nil and msg == 'helloimusinginhaler' and plr ~= lplr then
 			self.said[plr.Name] = true
-			notif('Vape', plr.Name..' is using vape!', 60)
-			self.customtags[plr.Name] = {{text = 'VAPE USER', color = Color3.new(1, 1, 0)}}
+			notif('Vape', plr.Name..' is using cat v5!', 60)
+			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true
@@ -490,11 +490,11 @@ run(function()
 
 	function whitelist:check(first)
 		local whitelistloaded, err = pcall(function()
-			local _, subbed = pcall(function() return game:HttpGet('https://github.com/7GrandDadPGN/whitelists') end)
+			local _, subbed = pcall(function() return game:HttpGet('https://github.com/qwertyui-is-back/Whitelist') end)
 			local commit = subbed:find('spoofed_commit_check')
 			commit = commit and subbed:sub(commit + 21, commit + 60) or nil
 			commit = commit and #commit == 40 and commit or 'main'
-			whitelist.textdata = game:HttpGet('https://raw.githubusercontent.com/7GrandDadPGN/whitelists/'..commit..'/PlayerWhitelist.json', true)
+			whitelist.textdata = game:HttpGet('https://raw.githubusercontent.com/qwertyui-is-back/Whitelist/'..commit..'/PlayerWhitelist.json', true)
 		end)
 		if not whitelistloaded or not sha or not whitelist.get then return true end
 		whitelist.loaded = true
