@@ -183,7 +183,7 @@ local function findTouchInterest(tool)
 end
 
 local store = {
-    AttackRemote = game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ToolService"):WaitForChild("RF"):WaitForChild("AttackPlayerWithSword")
+    AttackRemote = game:GetService("ReplicatedStorage").Packages.Knit.Services.ToolService.RF.AttackPlayerWithSword
 }
 
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
@@ -193,11 +193,7 @@ local function Attack(ent, block, item)
         local blocking = block
         local held = item
         local remote = store.AttackRemote
-        remote:InvokeServer(unpack({
-            [1] = char,
-            [2] = blocking,
-            [3] = held
-        }))
+        remote:InvokeServer(char, blocking, held)
     end)
 end
 run(function()
