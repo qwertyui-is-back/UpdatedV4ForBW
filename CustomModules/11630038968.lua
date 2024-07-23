@@ -217,10 +217,12 @@ run(function()
             if callback then
                 BindToRenderStep("aura",1,function()
                     if isAlive() then
+                        print("alive")
 						local plr = GetAllTargets(range.Value)
                         local targettable = {}
                         local targetsize = 0
                         for i,v in next, plr do
+                            print("there are players")
                             local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
                             local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
                             local angle = math.acos(localfacing:Dot(vec))
@@ -235,6 +237,7 @@ run(function()
                             local targets = GetAllTargets(15); 
                             local aRemote = store.Remotes.AttackRemote
                             aRemote:InvokeServer(v.Player.Character, true, "WoodenSword")
+                            print("attacked")
                         end
                         targetinfo.UpdateInfo(targettable, targetsize)
                     end
