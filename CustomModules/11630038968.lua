@@ -383,7 +383,8 @@ runcode(function()
 	SpeedValue = Speed.CreateSlider({
 		Name = "Speed",
 		Min = 1,
-		Max = 150,
+		Max = 54,
+        Default = 52,
 		Function = function(val) end
 	})
 	SpeedJump = Speed.CreateToggle({
@@ -427,6 +428,8 @@ run(function()
         speed = 0.1
     }
 
+    local DelayValue = {Value = funnynumbers.delay * 10}
+    local SpeedVal = {Value = funnynumbers.speed}
 	local OldRoot
 	local NewRoot
     local dt = 0
@@ -459,8 +462,8 @@ run(function()
 	end
 
     AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-        Name = "AnticheatBypass",
-        HoverText = "spoofs anticheat lol",
+        Name = "SpeedDisabler",
+        HoverText = "Allows you to use 35+ speed",
         Function = function(callback)
             if callback then
 				task.spawn(function()
@@ -477,9 +480,9 @@ run(function()
                         local RealHRP = OldRoot
                         local FakeChar = NewRoot
                         RealHRP.Velocity = Vector3.zero
-                        if isAlive(lplr) and dt <= (math.ceil(funnynumbers.delay * 10)) then
+                        if isAlive(lplr) and dt >= (math.ceil(DelayValue.Value * 10)) then
                             RealHRP.Velocity = Vector3.zero
-                            local info = TweenInfo.new(funnynumbers.speed)
+                            local info = TweenInfo.new(SpeedVal.Value)
                             local cf = FakeChar.CFrame
                             local data = {
                                 CFrame = cf
@@ -494,6 +497,24 @@ run(function()
                 print("removed")
                 RemoveClonedCharacter()
             end
+        end
+    })
+    DelayValue = AnticheatByass.CreateSlider({
+        Name = "Delay",
+        Min = 1,
+        Max = 100,
+        Default = 35,
+        Function = function(val)
+            DelayValue.Value = val / 10
+        end
+    })
+    SpeedVal = AnticheatByass.CreateSlider({
+        Name = "Send Speed",
+        Min = 0,
+        Max = 50,
+        Default = 10,
+        Function = function(val)
+            SpeedVal.Value = val / 100
         end
     })
 	ShowPart = AnticheatBypass.CreateToggle({
