@@ -183,18 +183,29 @@ local function findTouchInterest(tool)
 end
 
 local store = {
-    AttackRemote = game:GetService("ReplicatedStorage").Packages.Knit.Services.ToolService.RF.AttackPlayerWithSword
+    Knit = game:GetService("ReplicatedStorage").Packages.Knit,
+    Services = store.Knit:WaitForChild('Services'),
+    ToolService = store.Services:WaitForChild('ToolService'),
+    Remotes = {
+        AttackRemote = store.ToolService:WaitForChild("RF").AttackPlayerWithSword
+    }
 }
 
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
-local function Attack(ent, block, item)
-    pcall(function()
-        local char = ent.Character
-        local blocking = block
-        local held = item
-        local remote = store.AttackRemote
-        remote:InvokeServer(char, blocking, held)
-    end)
+local GetAllTargets = function(distance, sort)
+    local targets = {}
+    for i,v in Players:GetPlayers() do 
+        if v ~= lplr and isAlive(v) and isAlive(lplr, true) then 
+            local playerdistance = (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
+            if playerdistance <= (distance or math.huge) then 
+                table.insert(targets, {Human = true, RootPart = v.Character.PrimaryPart, Humanoid = v.Character.Humanoid, Player = v})
+            end
+        end
+    end
+    if sort then 
+        table.sort(targets, sort)
+    end
+    return targets
 end
 run(function()
     local Killaura = {Enabled = false}
@@ -206,22 +217,24 @@ run(function()
             if callback then
                 BindToRenderStep("aura",1,function()
                     if isAlive() then
-						local plr = GetAllNearestHumanoidToPosition(killauratargetframe["Players"]["Enabled"], range["Value"], 100)
+						local plr = GetAllTargets(range.Value)
                         local targettable = {}
                         local targetsize = 0
-                        for i,v in pairs(plr) do
+                        for i,v in next, plr do
                             local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
-                            local vec = (v.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
+                            local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
                             local angle = math.acos(localfacing:Dot(vec))
                             killauranear = true
                             targettable[v.Name] = {
-                                ["UserId"] = v.UserId,
-                                ["Health"] = v.Character.Humanoid.Health,
-                                ["MaxHealth"] = v.Character.Humanoid.MaxHealth
+                                ["UserId"] = v.Player.UserId,
+                                ["Health"] = v.Player.Character.Humanoid.Health,
+                                ["MaxHealth"] = v.Player.Character.Humanoid.MaxHealth
                             }
                             targetsize = targetsize + 1
-                            lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
-                            Attack(v.Character, true, "WoodenSword")
+                            lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
+                            local targets = GetAllTargets(15); 
+                            local aRemote = store.Remotes.AttackRemote
+                            aRemote:InvokeServer(v.Player.Character, true, "WoodenSword")
                         end
                         targetinfo.UpdateInfo(targettable, targetsize)
                     end
