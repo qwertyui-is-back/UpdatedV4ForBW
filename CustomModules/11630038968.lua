@@ -352,7 +352,7 @@ runcode(function()
 				end))
 				BindToStepped("Speed", 1, function(time, delta)
 					if isAlive() then
-						local speed = SpeedValue.Value / 20
+						local speed = SpeedValue.Value * 20
 						if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) then
 							speed = speed * 1.65
 						end
