@@ -499,7 +499,7 @@ run(function()
             end
         end
     })
-    DelayValue = AnticheatByass.CreateSlider({
+    DelayValue = AnticheatBypass.CreateSlider({
         Name = "Delay",
         Min = 1,
         Max = 100,
@@ -508,7 +508,7 @@ run(function()
             DelayValue.Value = val / 10
         end
     })
-    SpeedVal = AnticheatByass.CreateSlider({
+    SpeedVal = AnticheatBypass.CreateSlider({
         Name = "Send Speed",
         Min = 0,
         Max = 50,
