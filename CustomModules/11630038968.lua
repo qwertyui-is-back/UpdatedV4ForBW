@@ -183,8 +183,7 @@ local function findTouchInterest(tool)
 end
 
 local store = {
-    ToolService = game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ToolService"),
-    AttackRemote = store.ToolService:WaitForChild("RF"):WaitForChild("AttackPlayerWithSword")
+    AttackRemote = game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ToolService"):WaitForChild("RF"):WaitForChild("AttackPlayerWithSword")
 }
 
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
