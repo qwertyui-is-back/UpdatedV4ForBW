@@ -194,7 +194,7 @@ GuiLibrary["RemoveObject"]("KillauraOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
     for i,v in players:GetPlayers() do 
-        if v ~= lplr and isAlive(v) and isAlive(lplr, true) then 
+        if v ~= lplr and isAlive(v) and isAlive(lplr) then 
             local playerdistance = (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
             if playerdistance <= (distance or math.huge) then 
                 table.insert(targets, {Human = true, RootPart = v.Character.PrimaryPart, Humanoid = v.Character.Humanoid, Player = v})
