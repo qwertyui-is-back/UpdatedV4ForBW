@@ -208,7 +208,6 @@ local GetAllTargets = function(distance, sort)
 end
 run(function()
     local Killaura = {Enabled = false}
-	local killauratargetframe = {["Players"] = {["Enabled"] = false}}
     local range = {Value = 20}
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         Name = "Killaura",
@@ -226,19 +225,12 @@ run(function()
                             local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
                             local angle = math.acos(localfacing:Dot(vec))
                             killauranear = true
-                            targettable[v.Name] = {
-                                ["UserId"] = v.Player.UserId,
-                                ["Health"] = v.Player.Character.Humanoid.Health,
-                                ["MaxHealth"] = v.Player.Character.Humanoid.MaxHealth
-                            }
-                            targetsize = targetsize + 1
                             lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
                             local targets = GetAllTargets(15); 
                             local aRemote = store.AttackRemote
                             aRemote:InvokeServer(v.Player.Character, true, "WoodenSword")
                             print("attacked")
                         end
-                        targetinfo.UpdateInfo(targettable, targetsize)
                     end
                 end)
             else
@@ -246,7 +238,6 @@ run(function()
             end
         end
     })
-	killauratargetframe = Killaura.CreateTargetWindow({})
 	range = Killaura.CreateSlider({
 		["Name"] = "Attack range",
 		["Min"] = 1,
