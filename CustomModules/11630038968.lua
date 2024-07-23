@@ -182,17 +182,13 @@ local function findTouchInterest(tool)
 	return nil
 end
 
-local store = {}
+local knit = game:GetService("ReplicatedStorage").Packages.Knit
+local services = knit:WaitForChild('Services')
+local ToolService = services:WaitForChild('ToolService')
 
-
-run(function()
-    store["Knit"] = game:GetService("ReplicatedStorage").Packages.Knit,
-    store["Services"] = store.Knit:WaitForChild('Services'),
-    store["ToolService"] = store.Services:WaitForChild('ToolService'),
-    store["Remotes"] = {
-        AttackRemote = store.ToolService:WaitForChild("RF").AttackPlayerWithSword
-    }
-end)
+local store = {
+    AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword
+}
 
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
 local GetAllTargets = function(distance, sort)
@@ -238,7 +234,7 @@ run(function()
                             targetsize = targetsize + 1
                             lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
                             local targets = GetAllTargets(15); 
-                            local aRemote = store.Remotes.AttackRemote
+                            local aRemote = store.AttackRemote
                             aRemote:InvokeServer(v.Player.Character, true, "WoodenSword")
                             print("attacked")
                         end
