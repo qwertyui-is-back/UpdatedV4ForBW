@@ -423,8 +423,8 @@ run(function()
     local AnticheatBypass = {Enabled = false}
     local ShowPart = {Enabled = false}
     local funnynumbers = {
-        delay = 0.1,
-        speed = 0.015
+        delay = 0.35,
+        speed = 0.1
     }
 
 	local OldRoot
@@ -477,7 +477,7 @@ run(function()
                         local RealHRP = OldRoot
                         local FakeChar = NewRoot
                         RealHRP.Velocity = Vector3.zero
-                        if isAlive(lplr) and dt >= (funnynumbers.delay * 10) then
+                        if isAlive(lplr) and dt >= (math.ceil(funnynumbers.delay * 10)) then
                             RealHRP.Velocity = Vector3.zero
                             local info = TweenInfo.new(funnynumbers.speed)
                             local cf = FakeChar.CFrame
