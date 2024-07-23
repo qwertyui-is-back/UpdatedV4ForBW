@@ -190,7 +190,7 @@ local store = {
     AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword,
     BlockRemote = ToolService:WaitForChild("RF").ToggleBlockSword
 }
-
+local entityLibrary = shared.vapeentity
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
@@ -207,6 +207,24 @@ local GetAllTargets = function(distance, sort)
     end
     return targets
 end
+local function getSword()
+    local sword = ""
+    if lplr.Character:FindFirstChild("WoodenSword") then
+        sword = "WoodenSword"
+    elseif lplr.Character:FindFirstChild("Sword") then
+        sword = "Sword"
+    end
+    return sword
+end
+local functions = {
+    Attack = function(ent, bool, item)
+        store.AttackRemote:InvokeServer(ent.Character, bool, item)
+    end,
+    Block = function(bool)
+        bool = bool or true
+        store.BlockRemote:InvokeServer(bool)
+    end
+}
 run(function()
     local Killaura = {Enabled = false}
     local Autoblock = {Enabled = false}
@@ -214,7 +232,7 @@ run(function()
     local blocking = false
     local function block()
         local shouldBlock = not blocking
-        store.BlockRemote:InvokeServer(shouldBlock, "WoodenSword")
+        functions.Block(shouldBlock, "WoodenSword")
         blocking = not blocking
     end
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
@@ -235,9 +253,8 @@ run(function()
                                 local angle = math.acos(localfacing:Dot(vec))
                                 killauranear = true
                                 lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
-                                local targets = GetAllTargets(15); 
-                                local aRemote = store.AttackRemote
-                                aRemote:InvokeServer(v.Player.Character, true, "WoodenSword")
+                                local targets = GetAllTargets(15)
+                                functions.Attack(v.Player.Character, true, getSword())
                                 if Autoblock.Enabled then
                                     block()
                                 end
@@ -263,4 +280,89 @@ run(function()
         Default = true,
         Function = function() end
     })
+end)
+
+run(function()
+    local AnticheatBypass = {Enabled = false}
+    local ShowPart = {Enabled = false}
+    local funnynumbers = {
+        delay = 0.1,
+        speed = 0.015
+    }
+
+	local OldRoot
+	local NewRoot
+    local dt = 0
+    
+	local function CreateClonedCharacter()
+		lplr.Character.Parent = game
+        lplr.Character.HumanoidRootPart.Archivable = true
+		OldRoot = lplr.Character.HumanoidRootPart 
+		NewRoot = OldRoot:Clone()
+		NewRoot.Parent = lplr.Character
+		OldRoot.Parent = workspace
+		lplr.Character.PrimaryPart = NewRoot
+		lplr.Character.Parent = workspace
+		OldRoot.Transparency = ShowPart.Enabled and 0.35 or 1
+		entityLibrary.character.HumanoidRootPart = NewRoot
+	end
+
+	local function RemoveClonedCharacter()
+		OldRoot.Transparency = 1
+		lplr.Character.Parent = game
+		OldRoot.Parent = lplr.Character
+		NewRoot.Parent = workspace
+		lplr.Character.PrimaryPart = OldRoot
+		lplr.Character.Parent = workspace
+		entityLibrary.character.HumanoidRootPart = OldRoot
+		NewRoot:Remove()
+		NewRoot = {} 
+		OldRoot = {}
+		OldRoot.CFrame = NewRoot.CFrame
+	end
+
+    AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "AnticheatBypass",
+        HoverText = "spoofs anticheat lol",
+        Function = function(callback)
+            if callback then
+				task.spawn(function()
+                    dt = 0
+                    CreateClonedCharacter()
+                    table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
+                        task.wait(0.5)
+                        CreateClonedCharacter()
+                    end))
+                    BindToHeartbeat("acb",1,function()
+                        dt += 1
+                        OldRoot.Transparency = ShowPart.Enabled and 0.35 or 1
+                        local RealHRP = OldRoot
+                        local FakeChar = NewRoot
+                        RealHRP.Velocity = Vector3.zero
+                        if isAlive(lplr) and dt >= (funnynumbers.delay * 10) then
+                            RealHRP.Velocity = Vector3.zero
+                            local info = TweenInfo.new(funnynumbers.speed)
+                            local cf = FakeChar.CFrame
+                            local data = {
+                                CFrame = cf
+                            }
+                            game:GetService("TweenService"):Create(RealHRP, info, data):Play()
+                            dt = 0
+                        end
+                    end)
+                end)
+            else
+                UnbindFromHeartbeat("acb")
+                RemoveClonedCharacter()
+            end
+        end
+    })
+	ShowPart = AnticheatBypass.CreateToggle({
+		Name = "Show Part",
+		Function = function(callback)
+			if OldRoot then
+				OldRoot.Transparency = callback and 0.35 or 1
+			end
+		end
+	})
 end)
