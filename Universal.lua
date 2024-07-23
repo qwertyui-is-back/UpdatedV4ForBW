@@ -352,7 +352,8 @@ run(function()
 
 	function whitelist:getplayer(arg)
 		if arg == 'default' and self.localprio == 0 then return true end
-		if arg == 'private' and self.localprio == 1 then return true end
+		if arg == 'special' and self.localprio == 1 then return true end
+		if arg == 'private' and self.localprio == 2 then return true end
 		if arg and lplr.Name:lower():sub(1, arg:len()) == arg:lower() then return true end
 		return false
 	end
@@ -374,6 +375,18 @@ run(function()
 				elseif replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
 					replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('/w '..v.Name..' helloimusinginhaler', 'All')
 				end
+			elseif self.localprio >= 1 and self.localprio ~= 3 then
+				olduninject = GuiLibrary.SelfDestruct
+				GuiLibrary.SelfDestruct = function() warningNotification('Vape', 'No escaping the private members :)', 10) end
+				if joined then task.wait(10) end
+				if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+					local oldchannel = textChatService.ChatInputBarConfiguration.TargetTextChannel
+					local newchannel = cloneref(game:GetService('RobloxReplicatedStorage')).ExperienceChat.WhisperChat:InvokeServer(v.UserId)
+					if newchannel then newchannel:SendAsync('helloimusingv6') end
+					textChatService.ChatInputBarConfiguration.TargetTextChannel = oldchannel
+				elseif replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
+					replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('/w '..v.Name..' helloimusingv6', 'All')
+				end
 			end
 		end
 	end
@@ -383,8 +396,15 @@ run(function()
 		if plr == lplr and msg == 'helloimusinginhaler' then return true end
 		if self.localprio > 0 and self.said[plr.Name] == nil and msg == 'helloimusinginhaler' and plr ~= lplr then
 			self.said[plr.Name] = true
-			notif('Vape', plr.Name..' is using vape!', 60)
-			self.customtags[plr.Name] = {{text = 'VAPE USER', color = Color3.new(1, 1, 0)}}
+			notif('Vape', plr.Name..' is using cat v5!', 60)
+			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
+			local newent = entityLibrary.getEntity(plr)
+			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
+			return true
+		elseif self.localprio > 1 and self.said[plr.Name] == nil and msg == 'helloimusingv6' and plr ~= lplr then
+			self.said[plr.Name] = true
+			notif('Vape', plr.Name..' is using cat v5!', 60)
+			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true

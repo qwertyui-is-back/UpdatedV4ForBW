@@ -87,8 +87,8 @@ local store = {
 		universalLagbacks = 0
 	},
 	whitelist = {
-		chatStrings1 = {helloimusinginhaler = "vape"},
-		chatStrings2 = {vape = "helloimusinginhaler"},
+		chatStrings1 = {helloimusinginhaler = "catv5", helloimusingv6 = "catv6"},
+		chatStrings2 = {catv5 = "helloimusinginhaler", catv6 = "helloimusingv6"},
 		clientUsers = {},
 		oldChatFunctions = {}
 	},
@@ -3804,7 +3804,6 @@ run(function()
 		Function = function() end,
 		HoverText = "no hit vape user"
 	})
-	killauranovape.Object.Visible = false
 end)
 
 local LongJump = {Enabled = false}
