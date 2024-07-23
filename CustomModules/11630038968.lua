@@ -192,6 +192,7 @@ local store = {
 }
 local entityLibrary = shared.vapeentity
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
+GuiLibrary.RemoveObject("SpeedOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
     for i,v in players:GetChildren() do 
@@ -225,6 +226,7 @@ local functions = {
         store.BlockRemote:InvokeServer(bool)
     end
 }
+local killauranear = false
 run(function()
     local Killaura = {Enabled = false}
     local Autoblock = {Enabled = false}
@@ -240,6 +242,7 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToRenderStep("aura",1,function()
+                    killauranear = false
                     pcall(function()
                         if isAlive() then
                             --print("alive")
@@ -247,6 +250,7 @@ run(function()
                             local targettable = {}
                             local targetsize = 0
                             for i,v in next, plr do
+                                killauranear = true
                                 --print("there are players")
                                 local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
                                 local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
@@ -280,6 +284,140 @@ run(function()
         Default = true,
         Function = function() end
     })
+end)
+
+runcode(function()
+	local Speed = {Enabled = false}
+	local SpeedValue = {Value = 1}
+	local SpeedMethod = {Value = "AntiCheat A"}
+	local SpeedMoveMethod = {Value = "MoveDirection"}
+	local SpeedDelay = {Value = 0.7}
+	local SpeedPulseDuration = {Value = 100}
+	local SpeedWallCheck = {Enabled = true}
+	local SpeedJump = {Enabled = false}
+	local SpeedJumpHeight = {Value = 20}
+	local SpeedJumpVanilla = {Enabled = false}
+	local SpeedJumpAlways = {Enabled = false}
+	local SpeedAnimation = {Enabled = false}
+	local SpeedDelayTick = tick()
+	local SpeedRaycast = RaycastParams.new()
+	SpeedRaycast.FilterType = Enum.RaycastFilterType.Blacklist
+	SpeedRaycast.RespectCanCollide = true
+	local oldWalkSpeed
+	local SpeedDown
+	local SpeedUp
+	local w = 0
+	local s = 0
+	local a = 0
+	local d = 0
+
+	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B", "AntiCheat C", "AntiCheat D"}
+	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "Speed",
+		Function = function(callback)
+			if callback then
+				w = uis:IsKeyDown(Enum.KeyCode.W) and -1 or 0
+				s = uis:IsKeyDown(Enum.KeyCode.S) and 1 or 0
+				a = uis:IsKeyDown(Enum.KeyCode.A) and -1 or 0
+				d = uis:IsKeyDown(Enum.KeyCode.D) and 1 or 0
+				table.insert(Speed.Connections, uis.InputBegan:Connect(function(input1)
+					if uis:GetFocusedTextBox() == nil then
+						if input1.KeyCode == Enum.KeyCode.W then
+							w = -1
+						end
+						if input1.KeyCode == Enum.KeyCode.S then
+							s = 1
+						end
+						if input1.KeyCode == Enum.KeyCode.A then
+							a = -1
+						end
+						if input1.KeyCode == Enum.KeyCode.D then
+							d = 1
+						end
+					end
+				end))
+				table.insert(Speed.Connections, uis.InputEnded:Connect(function(input1)
+					if input1.KeyCode == Enum.KeyCode.W then
+						w = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.S then
+						s = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.A then
+						a = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.D then
+						d = 0
+					end
+				end))
+				BindToStepped("Speed", 1, function(delta)
+					if isAlive() then
+						local speed = SpeedValue.Value
+                        local newpos = ((entityLibrary.character.Humanoid.MoveDirection * (SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed)) * delta)
+                        local raycastparameters = RaycastParams.new()
+                        raycastparameters.FilterDescendantsInstances = {entityLibrary.character}
+                        local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, raycastparameters)
+                        if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end -- skul
+                        entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
+							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
+								if SpeedJumpVanilla.Enabled then
+									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+								else
+									entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(entityLibrary.character.HumanoidRootPart.Velocity.X, SpeedJumpHeight.Value, entityLibrary.character.HumanoidRootPart.Velocity.Z)
+								end
+							end
+						end
+					end
+				end)
+			else
+				UnbindFromStepped("Speed")
+			end
+		end,
+		ExtraText = function()
+			if GuiLibrary.ObjectsThatCanBeSaved["Text GUIAlternate TextToggle"].Api.Enabled then
+				return alternatelist[table.find(SpeedMethod.List, SpeedMethod.Value)]
+			end
+			return "Teleport"
+		end
+	})
+	SpeedValue = Speed.CreateSlider({
+		Name = "Speed",
+		Min = 1,
+		Max = 150,
+		Function = function(val) end
+	})
+	SpeedJump = Speed.CreateToggle({
+		Name = "AutoJump",
+		Function = function(callback)
+			if SpeedJumpHeight.Object then SpeedJumpHeight.Object.Visible = callback end
+			if SpeedJumpAlways.Object then
+				SpeedJump.Object.ToggleArrow.Visible = callback
+				SpeedJumpAlways.Object.Visible = callback
+			end
+			if SpeedJumpVanilla.Object then SpeedJumpVanilla.Object.Visible = callback end
+		end,
+		Default = true
+	})
+	SpeedJumpHeight = Speed.CreateSlider({
+		Name = "Jump Height",
+		Min = 0,
+		Max = 30,
+		Default = 25,
+		Function = function() end
+	})
+	SpeedJumpAlways = Speed.CreateToggle({
+		Name = "Always Jump",
+		Function = function() end
+	})
+	SpeedJumpVanilla = Speed.CreateToggle({
+		Name = "Real Jump",
+		Function = function() end
+	})
+	SpeedAnimation = Speed.CreateToggle({
+		Name = "Slowdown Anim",
+		Function = function() end
+	})
 end)
 
 run(function()
