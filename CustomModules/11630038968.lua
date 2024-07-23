@@ -352,9 +352,9 @@ runcode(function()
 				end))
 				BindToStepped("Speed", 1, function(time, delta)
 					if isAlive() then
-						local speed = SpeedValue.Value
+						local speed = SpeedValue.Value / 20
 						if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) then
-							speed = speed * 1.35
+							speed = speed * 1.65
 						end
 						local newvelo = (entityLibrary.character.Humanoid.MoveDirection * speed) * delta
 						entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
