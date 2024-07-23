@@ -193,7 +193,7 @@ local store = {
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
-    for i,v in Players:GetPlayers() do 
+    for i,v in players:GetPlayers() do 
         if v ~= lplr and isAlive(v) and isAlive(lplr, true) then 
             local playerdistance = (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
             if playerdistance <= (distance or math.huge) then 
