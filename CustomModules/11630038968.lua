@@ -333,6 +333,7 @@ run(function()
                         task.wait(0.5)
                         CreateClonedCharacter()
                     end))
+                    print("began")
                     BindToRenderStep("acb",1,function()
                         dt += 1
                         OldRoot.Transparency = ShowPart.Enabled and 0.35 or 1
@@ -353,6 +354,7 @@ run(function()
                 end)
             else
                 UnbindFromRenderStep("acb")
+                print("removed")
                 RemoveClonedCharacter()
             end
         end
