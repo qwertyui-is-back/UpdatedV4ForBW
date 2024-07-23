@@ -333,7 +333,7 @@ run(function()
                         task.wait(0.5)
                         CreateClonedCharacter()
                     end))
-                    BindToHeartbeat("acb",1,function()
+                    BindToRenderStep("acb",1,function()
                         dt += 1
                         OldRoot.Transparency = ShowPart.Enabled and 0.35 or 1
                         local RealHRP = OldRoot
@@ -352,7 +352,7 @@ run(function()
                     end)
                 end)
             else
-                UnbindFromHeartbeat("acb")
+                UnbindFromRenderStep("acb")
                 RemoveClonedCharacter()
             end
         end
