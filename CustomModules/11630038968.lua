@@ -258,7 +258,7 @@ run(function()
                                 killauranear = true
                                 lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
                                 local targets = GetAllTargets(15)
-                                functions.Attack(v.Player.Character, true, getSword())
+                                store.AttackRemote:InvokeServer(v.Player.Character, true, getSword())
                                 if Autoblock.Enabled then
                                     block()
                                 end
