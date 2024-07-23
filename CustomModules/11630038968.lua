@@ -353,12 +353,11 @@ runcode(function()
 				BindToStepped("Speed", 1, function(delta)
 					if isAlive() then
 						local speed = SpeedValue.Value
-                        local newpos = ((entityLibrary.character.Humanoid.MoveDirection * (SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed)) * delta)
-                        local raycastparameters = RaycastParams.new()
-                        raycastparameters.FilterDescendantsInstances = {entityLibrary.character}
-                        local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, raycastparameters)
-                        if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end -- skul
-                        entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+						if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) then
+							speed = speed * 1.35
+						end
+						local newvelo = entityLibrary.character.Humanoid.MoveDirection * speed
+						entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
 								if SpeedJumpVanilla.Enabled then
