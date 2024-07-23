@@ -477,7 +477,7 @@ run(function()
                         local RealHRP = OldRoot
                         local FakeChar = NewRoot
                         RealHRP.Velocity = Vector3.zero
-                        if isAlive(lplr) and dt >= (math.ceil(funnynumbers.delay * 10)) then
+                        if isAlive(lplr) and dt <= (math.ceil(funnynumbers.delay * 10)) then
                             RealHRP.Velocity = Vector3.zero
                             local info = TweenInfo.new(funnynumbers.speed)
                             local cf = FakeChar.CFrame
