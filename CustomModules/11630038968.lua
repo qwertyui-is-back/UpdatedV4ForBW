@@ -182,14 +182,16 @@ local function findTouchInterest(tool)
 	return nil
 end
 
-local store = {
-    Knit = game:GetService("ReplicatedStorage").Packages.Knit,
-    Services = store.Knit:WaitForChild('Services'),
-    ToolService = store.Services:WaitForChild('ToolService'),
-    Remotes = {
+local store = {}
+
+run(function()
+    store["Knit"] = game:GetService("ReplicatedStorage").Packages.Knit,
+    store["Services"] = store.Knit:WaitForChild('Services'),
+    store["ToolService"] = store.Services:WaitForChild('ToolService'),
+    store["Remotes"] = {
         AttackRemote = store.ToolService:WaitForChild("RF").AttackPlayerWithSword
     }
-}
+end)
 
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
 local GetAllTargets = function(distance, sort)
