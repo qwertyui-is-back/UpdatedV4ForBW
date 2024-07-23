@@ -187,7 +187,8 @@ local services = knit:WaitForChild('Services')
 local ToolService = services:WaitForChild('ToolService')
 
 local store = {
-    AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword
+    AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword,
+    BlockRemote = ToolService:WaitForChild("RF").ToggleBlockSword
 }
 
 GuiLibrary["RemoveObject"]("KillauraOptionsButton")
@@ -208,7 +209,14 @@ local GetAllTargets = function(distance, sort)
 end
 run(function()
     local Killaura = {Enabled = false}
+    local Autoblock = {Enabled = false}
     local range = {Value = 20}
+    local blocking = false
+    local function block()
+        local shouldBlock = not blocking
+        store.BlockRemote:InvokeServer(shouldBlock, "WoodenSword")
+        blocking = not blocking
+    end
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         Name = "Killaura",
         Function = function(callback)
@@ -230,6 +238,9 @@ run(function()
                                 local targets = GetAllTargets(15); 
                                 local aRemote = store.AttackRemote
                                 aRemote:InvokeServer(v.Player.Character, true, "WoodenSword")
+                                if Autoblock.Enabled then
+                                    block()
+                                end
                                 --print("attacked")
                             end
                         end
@@ -247,4 +258,9 @@ run(function()
         ["Default"] = 25, 
 		["Function"] = function(val) end
 	})
+    Autoblock = Killaura.CreateToggle({
+        Name = "Autoblock",
+        Default = true,
+        Function = function() end
+    })
 end)
