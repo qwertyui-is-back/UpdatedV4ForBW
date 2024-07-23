@@ -107,6 +107,8 @@ local function runcode(func)
 	func()
 end
 
+local run = runcode
+
 local function GetAllNearestHumanoidToPosition(player, distance, amount)
 	local returnedplayer = {}
 	local currentamount = 0
@@ -179,3 +181,67 @@ local function findTouchInterest(tool)
 	end
 	return nil
 end
+
+local store = {
+    ToolService = game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ToolService"),
+    AttackRemote = store.ToolService:WaitForChild("RF"):WaitForChild("AttackPlayerWithSword")
+}
+
+GuiLibrary["RemoveObject"]("KillauraOptionsButton")
+local function Attack(ent, block, item)
+    pcall(function()
+        local char = ent.Character
+        local blocking = block
+        local held = item
+        local remote = store.AttackRemote
+        remote:InvokeServer(unpack({
+            [1] = char,
+            [2] = blocking,
+            [3] = held
+        }))
+    end)
+end
+run(function()
+    local Killaura = {Enabled = false}
+	local killauratargetframe = {["Players"] = {["Enabled"] = false}}
+    local range = {Value = 20}
+    Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+        Name = "Killaura",
+        Function = function(callback)
+            if callback then
+                BindToRenderStep("aura",1,function()
+                    if isAlive() then
+						local plr = GetAllNearestHumanoidToPosition(killauratargetframe["Players"]["Enabled"], range["Value"], 100)
+                        local targettable = {}
+                        local targetsize = 0
+                        for i,v in pairs(plr) do
+                            local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
+                            local vec = (v.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
+                            local angle = math.acos(localfacing:Dot(vec))
+                            killauranear = true
+                            targettable[v.Name] = {
+                                ["UserId"] = v.UserId,
+                                ["Health"] = v.Character.Humanoid.Health,
+                                ["MaxHealth"] = v.Character.Humanoid.MaxHealth
+                            }
+                            targetsize = targetsize + 1
+                            lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
+                            Attack(v.Character, true, "WoodenSword")
+                        end
+                        targetinfo.UpdateInfo(targettable, targetsize)
+                    end
+                end)
+            else
+                UnbindFromRenderStep("aura")
+            end
+        end
+    })
+	killauratargetframe = Killaura.CreateTargetWindow({})
+	range = Killaura.CreateSlider({
+		["Name"] = "Attack range",
+		["Min"] = 1,
+		["Max"] = 25,
+        ["Default"] = 25, 
+		["Function"] = function(val) end
+	})
+end)
