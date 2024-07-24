@@ -349,7 +349,7 @@ run(function()
             end
         end
     })
-	local animmethods = {}
+	local animmeth = {}
 	for i,v in pairs(anims) do table.insert(animmeth, i) end
 	blockanim = Killaura.CreateDropdown({
 		Name = "Animation",
