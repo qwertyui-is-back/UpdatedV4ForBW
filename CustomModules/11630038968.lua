@@ -374,8 +374,8 @@ end)
 
 run(function()
     local SwordEditor = {Enabled = false}
-    local X = {Value = 0},
-    local Y = {Value = 0},
+    local X = {Value = 0}
+    local Y = {Value = 0}
     local Z = {Value = 0}
     local item
 
