@@ -194,6 +194,7 @@ local entityLibrary = shared.vapeentity
 GuiLibrary.RemoveObject("KillauraOptionsButton")
 GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("FlyOptionsButton")
+GuiLibrary.RemoveObject("AntiVoidOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
     for i,v in players:GetChildren() do 
@@ -230,6 +231,7 @@ local functions = {
 local killauranear = false
 run(function()
     local Killaura = {Enabled = false}
+    local blockanim = {Value = "Test"}
     local Autoblock = {Enabled = false}
     local range = {Value = 20}
     local blocking = false
@@ -246,6 +248,10 @@ run(function()
 			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(115), math.rad(150), math.rad(350)), Time = 0.25},
 			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(60), math.rad(100), math.rad(360)), Time = 0.25}
 		},
+        Smooth = {
+            {CFrame = CFrame.new(0,-0.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(160)), Time = 0.15},
+            {CFrame = CFrame.new(0, 0.65, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.1}
+        }
     }
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         Name = "Killaura",
@@ -262,7 +268,7 @@ run(function()
                                 end
                                 if killauraplaying == false then
                                     killauraplaying = true
-                                    for i,v in pairs(anims.Test) do
+                                    for i,v in pairs(anims[blockanim.Value]) do
                                         if (not Killaura.Enabled) or (not killauranear) then break end
                                         if not oldNearPlayer then
                                             workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 = originalArmC0 * v.CFrame
@@ -343,6 +349,11 @@ run(function()
             end
         end
     })
+	blockanim = Killaura.CreateDropdown({
+		Name = "Animation",
+		List = anims,
+		Function = function(val) end
+	})
 	range = Killaura.CreateSlider({
 		["Name"] = "Attack range",
 		["Min"] = 1,
@@ -454,6 +465,72 @@ run(function()
 	SpeedAnimation = Speed.CreateToggle({
 		Name = "Slowdown Anim",
 		Function = function() end
+	})
+end)
+
+run(function()
+    local AntiVoid = {Enabled = false}
+	local AntiVoidTransparent = {Value = 50}
+	local AntiVoidColor = {Hue = 1, Sat = 1, Value = 0.55}
+	local AntiVoidPart
+	local AntiVoidConnection
+    local antivoiding = false
+
+    AntiVoid = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+        Name = "AntiVoid",
+        Function = function(callback)
+            if callback then
+                AntiVoidPart = Instance.new("Part")
+                AntiVoidPart.CanCollide = AntiVoidMode.Value == "Collide"
+                AntiVoidPart.Size = Vector3.new(10000, 1, 10000)
+                AntiVoidPart.Anchored = true
+                AntiVoidPart.Material = Enum.Material.Neon
+                AntiVoidPart.Color = Color3.fromHSV(AntiVoidColor.Hue, AntiVoidColor.Sat, AntiVoidColor.Value)
+                AntiVoidPart.Transparency = 1 - (AntiVoidTransparent.Value / 100)
+                AntiVoidPart.Position = Vector3.new(0, antivoidypos, 0)
+                AntiVoidPart.Parent = workspace
+                AntiVoidConnection = AntiVoidPart.Touched:Connect(function(touchedpart)
+                    if touchedpart.Parent == lplr.Character and entityLibrary.isAlive then
+                        if (not GuiLibrary.ObjectsThatCanBeSaved.FlyOptionsButton.Api.Enabled) and entityLibrary.character.Humanoid.Health > 0 then
+                            entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(24.4, 1.45, -1.4)
+                        end
+                    end
+                end)
+                repeat
+                    if entityLibrary.isAlive and AntiVoidMoveMode.Value == "Normal" then
+                        local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, Vector3.new(0, -1000, 0), store.blockRaycast)
+                        if ray or GuiLibrary.ObjectsThatCanBeSaved.FlyOptionsButton.Api.Enabled or GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
+                            AntiVoidPart.Position = entityLibrary.character.HumanoidRootPart.Position - Vector3.new(0, 21, 0)
+                        end
+                    end
+                    task.wait()
+                until (not AntiVoid.Enabled)
+            else
+				if AntiVoidConnection then AntiVoidConnection:Disconnect() end
+				if AntiVoidPart then
+					AntiVoidPart:Destroy()
+				end
+            end
+        end
+    })
+	AntiVoidTransparent = AntiVoid.CreateSlider({
+		Name = "Invisible",
+		Min = 1,
+		Max = 100,
+		Default = 50,
+		Function = function(val)
+			if AntiVoidPart then
+				AntiVoidPart.Transparency = 1 - (val / 100)
+			end
+		end,
+	})
+	AntiVoidColor = AntiVoid.CreateColorSlider({
+		Name = "Color",
+		Function = function(h, s, v)
+			if AntiVoidPart then
+				AntiVoidPart.Color = Color3.fromHSV(h, s, v)
+			end
+		end
 	})
 end)
 
