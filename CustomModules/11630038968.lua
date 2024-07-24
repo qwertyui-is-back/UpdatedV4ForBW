@@ -281,6 +281,7 @@ run(function()
 				end)
                 BindToRenderStep("aura",1,function()
                     killauranear = false
+                    firstPlayerNear = false
                     pcall(function()
                         if isAlive() then
                             --print("alive")
@@ -318,7 +319,7 @@ run(function()
                                 pcall(function()
                                     killauracurrentanim:Cancel()
                                 end)
-                                killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                                killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.3), {C0 = originalArmC0})
                                 killauracurrentanim:Play()
                             end
                         end)
@@ -501,6 +502,8 @@ run(function()
                     local cframe = {entityLibrary.character.HumanoidRootPart.CFrame:GetComponents()}
                     cframe[2] = YCFrame
                     entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(unpack(cframe))
+                    local velo = entityLibrary.character.HumanoidRootPart.Velocity
+                    entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(velo.X, 0, velo.Z)
                 end)
             else
 				FlyUp = false
