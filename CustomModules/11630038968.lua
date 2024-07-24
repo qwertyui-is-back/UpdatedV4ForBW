@@ -335,26 +335,26 @@ run(function()
                             local plr = GetAllTargets(range.Value)
                             local targettable = {}
                             local targetsize = 0
-                            if next(plr) == nil then
-                                if blocking then unblock() end
-                            else
-                                for i,v in next, plr do
-                                    if not firstPlayerNear then
-                                        firstPlayerNear = true
-                                    end
-                                    killauranear = true
-                                    --print("there are players")
-                                    local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
-                                    local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
-                                    local angle = math.acos(localfacing:Dot(vec))
-                                    killauranear = true
-                                    lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
-                                    functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
-                                    if Autoblock.Enabled then
-                                        block()
-                                    end
-                                    --print("attacked")
+                            for i,v in next, plr do
+                                targetsize += 1
+                                if not firstPlayerNear then
+                                    firstPlayerNear = true
                                 end
+                                killauranear = true
+                                --print("there are players")
+                                local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
+                                local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
+                                local angle = math.acos(localfacing:Dot(vec))
+                                killauranear = true
+                                lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
+                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
+                                if Autoblock.Enabled then
+                                    block()
+                                end
+                                --print("attacked")
+                            end
+                            if targetsize == 0 then
+                                unblock()
                             end
                             if
                         end
