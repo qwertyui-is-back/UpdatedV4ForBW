@@ -244,7 +244,7 @@ run(function()
     local firstPlayerNear = false
     local function block()
         local shouldBlock = not blocking
-        functions.Block(shouldBlock, getSword())
+        functions.Block(true, getSword())
         blocking = not blocking
     end
 	local anims = {
