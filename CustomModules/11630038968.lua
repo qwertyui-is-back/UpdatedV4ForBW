@@ -258,17 +258,17 @@ run(function()
                         if killauranear then
                             pcall(function()
                                 if originalArmC0 == nil then
-                                    originalArmC0 = gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                                    originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
                                 end
                                 if killauraplaying == false then
                                     killauraplaying = true
                                     for i,v in pairs(anims.Test) do
                                         if (not Killaura.Enabled) or (not killauranear) then break end
                                         if not oldNearPlayer then
-                                            gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 = originalArmC0 * v.CFrame
+                                            workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 = originalArmC0 * v.CFrame
                                             continue
                                         end
-                                        killauracurrentanim = game:GetService("TweenService"):Create(gameCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
+                                        killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
                                         killauracurrentanim:Play()
                                         task.wait(v.Time - 0.01)
                                     end
@@ -313,13 +313,13 @@ run(function()
                     killauraNearPlayer = false
                     pcall(function()
                         if originalArmC0 == nil then
-                            originalArmC0 = gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                            originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
                         end
-                        if gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
+                        if workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
                             pcall(function()
                                 killauracurrentanim:Cancel()
                             end)
-                            killauracurrentanim = game:GetService("TweenService"):Create(gameCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                            killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
                             killauracurrentanim:Play()
                         end
                     end)
@@ -327,13 +327,13 @@ run(function()
             else
                 UnbindFromRenderStep("aura")
                 if originalArmC0 == nil then
-                    originalArmC0 = gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                    originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
                 end
-                if gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
+                if workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
                     pcall(function()
                         killauracurrentanim:Cancel()
                     end)
-                    killauracurrentanim = game:GetService("TweenService"):Create(gameCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                    killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
                     killauracurrentanim:Play()
                 end
             end
@@ -497,7 +497,7 @@ run(function()
                     end
                     local cframe = {entityLibrary.character.HumanoidRootPart.CFrame:GetComponents()}
                     cframe[2] = YCFrame
-                    entityLibrary.character.HumanoidRootPart.CFrame = cframe
+                    entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(unpack(speedCFrame))
                 end)
             else
 				FlyUp = false
