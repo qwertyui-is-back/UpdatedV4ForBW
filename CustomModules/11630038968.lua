@@ -192,9 +192,11 @@ local store = {
 }
 local entityLibrary = shared.vapeentity
 GuiLibrary.RemoveObject("KillauraOptionsButton")
-GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("FlyOptionsButton")
-GuiLibrary.RemoveObject("AntiVoidOptionsButton")
+GuiLibrary.RemoveObject("ReachOptionsButton")
+GuiLibrary.RemoveObject("ClientKickDisablerOptionsButton")
+GuiLibrary.RemoveObject("SilentAimOptionsButton")
+GuiLibrary.RemoveObject("AutoLeaveOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
     for i,v in players:GetChildren() do 
@@ -264,17 +266,17 @@ run(function()
                         if killauranear then
                             pcall(function()
                                 if originalArmC0 == nil then
-                                    originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0
                                 end
                                 if killauraplaying == false then
                                     killauraplaying = true
                                     for i,v in pairs(anims[blockanim.Value]) do
                                         if (not Killaura.Enabled) or (not killauranear) then break end
                                         if not oldNearPlayer then
-                                            workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 = originalArmC0 * v.CFrame
+                                            cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0 = originalArmC0 * v.CFrame
                                             continue
                                         end
-                                        killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
+                                        killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
                                         killauracurrentanim:Play()
                                         task.wait(v.Time - 0.01)
                                     end
@@ -319,13 +321,13 @@ run(function()
                         killauranear = false
                         pcall(function()
                             if originalArmC0 == nil then
-                                originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                                originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0
                             end
-                            if workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
+                            if cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0 ~= originalArmC0 then
                                 pcall(function()
                                     killauracurrentanim:Cancel()
                                 end)
-                                killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.3), {C0 = originalArmC0})
+                                killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart, TweenInfo.new(0.3), {C0 = originalArmC0})
                                 killauracurrentanim:Play()
                             end
                         end)
@@ -334,13 +336,13 @@ run(function()
             else
                 UnbindFromRenderStep("aura")
                 if originalArmC0 == nil then
-                    originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0
                 end
-                if workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
+                if cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0 ~= originalArmC0 then
                     pcall(function()
                         killauracurrentanim:Cancel()
                     end)
-                    killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                    killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
                     killauracurrentanim:Play()
                 end
                 oldNearPlayer = false
@@ -371,168 +373,53 @@ run(function()
 end)
 
 run(function()
-	local Speed = {Enabled = false}
-	local SpeedValue = {Value = 1}
-	local SpeedMethod = {Value = "AntiCheat A"}
-	local SpeedMoveMethod = {Value = "MoveDirection"}
-	local SpeedDelay = {Value = 0.7}
-	local SpeedPulseDuration = {Value = 100}
-	local SpeedWallCheck = {Enabled = true}
-	local SpeedJump = {Enabled = false}
-	local SpeedJumpHeight = {Value = 20}
-	local SpeedJumpVanilla = {Enabled = false}
-	local SpeedJumpAlways = {Enabled = false}
-	local SpeedAnimation = {Enabled = false}
-	local SpeedDelayTick = tick()
-	local SpeedRaycast = RaycastParams.new()
-	SpeedRaycast.FilterType = Enum.RaycastFilterType.Blacklist
-	SpeedRaycast.RespectCanCollide = true
-	local oldWalkSpeed
-	local SpeedDown
-	local SpeedUp
-	local w = 0
-	local s = 0
-	local a = 0
-	local d = 0
+    local SwordEditor = {Enabled = false}
+    local X = {Value = 0},
+    local Y = {Value = 0},
+    local Z = {Value = 0}
+    local item
 
-	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B", "AntiCheat C", "AntiCheat D"}
-	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = "Speed",
-		Function = function(callback)
-			if callback then
-				BindToStepped("Speed", 1, function(time, delta)
-					if isAlive() then
-						local speed = SpeedValue.Value * 20
-						if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) then
-							speed = speed * 1.65
-						end
-						local newvelo = (entityLibrary.character.Humanoid.MoveDirection * speed) * delta
-						entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
-						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
-							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-								if SpeedJumpVanilla.Enabled then
-									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-								else
-									entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(entityLibrary.character.HumanoidRootPart.Velocity.X, SpeedJumpHeight.Value, entityLibrary.character.HumanoidRootPart.Velocity.Z)
-								end
-							end
-						end
-					end
-				end)
-			else
-				UnbindFromStepped("Speed")
-			end
-		end,
-		ExtraText = function()
-			if GuiLibrary.ObjectsThatCanBeSaved["Text GUIAlternate TextToggle"].Api.Enabled then
-				return alternatelist[table.find(SpeedMethod.List, SpeedMethod.Value)]
-			end
-			return "Teleport"
-		end
-	})
-	SpeedValue = Speed.CreateSlider({
-		Name = "Speed",
-		Min = 1,
-		Max = 54,
-        Default = 52,
-		Function = function(val) end
-	})
-	SpeedJump = Speed.CreateToggle({
-		Name = "AutoJump",
-		Function = function(callback)
-			if SpeedJumpHeight.Object then SpeedJumpHeight.Object.Visible = callback end
-			if SpeedJumpAlways.Object then
-				SpeedJump.Object.ToggleArrow.Visible = callback
-				SpeedJumpAlways.Object.Visible = callback
-			end
-			if SpeedJumpVanilla.Object then SpeedJumpVanilla.Object.Visible = callback end
-		end,
-		Default = true
-	})
-	SpeedJumpHeight = Speed.CreateSlider({
-		Name = "Jump Height",
-		Min = 0,
-		Max = 30,
-		Default = 25,
-		Function = function() end
-	})
-	SpeedJumpAlways = Speed.CreateToggle({
-		Name = "Always Jump",
-		Function = function() end
-	})
-	SpeedJumpVanilla = Speed.CreateToggle({
-		Name = "Real Jump",
-		Function = function() end
-	})
-	SpeedAnimation = Speed.CreateToggle({
-		Name = "Slowdown Anim",
-		Function = function() end
-	})
-end)
-
-run(function()
-    local AntiVoid = {Enabled = false}
-	local AntiVoidTransparent = {Value = 50}
-	local AntiVoidColor = {Hue = 1, Sat = 1, Value = 0.55}
-	local AntiVoidPart
-	local AntiVoidConnection
-    local antivoiding = false
-
-    AntiVoid = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
-        Name = "AntiVoid",
+    SwordEditor = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        Name = "ViewmodelEditor",
         Function = function(callback)
             if callback then
-                AntiVoidPart = Instance.new("Part")
-                AntiVoidPart.CanCollide = AntiVoidMode.Value == "Collide"
-                AntiVoidPart.Size = Vector3.new(10000, 1, 10000)
-                AntiVoidPart.Anchored = true
-                AntiVoidPart.Material = Enum.Material.Neon
-                AntiVoidPart.Color = Color3.fromHSV(AntiVoidColor.Hue, AntiVoidColor.Sat, AntiVoidColor.Value)
-                AntiVoidPart.Transparency = 1 - (AntiVoidTransparent.Value / 100)
-                AntiVoidPart.Position = Vector3.new(0, antivoidypos, 0)
-                AntiVoidPart.Parent = workspace
-                AntiVoidConnection = AntiVoidPart.Touched:Connect(function(touchedpart)
-                    if touchedpart.Parent == lplr.Character and entityLibrary.isAlive then
-                        if (not GuiLibrary.ObjectsThatCanBeSaved.FlyOptionsButton.Api.Enabled) and entityLibrary.character.Humanoid.Health > 0 then
-                            entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(24.4, 1.45, -1.4)
+                BindToStepped("ve",1,function()
+                    pcall(function()
+                        local viewmodel = cam:WaitForChild("Viewmodel")
+                        for i,v in pairs(viewmodel:GetChildren()) do
+                            if v.MainPart ~= nil then
+                                item = v
+                                v.MainPart.Mesh.Offset = Vector3.new(X.Value / 100, Y.Value / 100, Z.Value / 100)
+                            end
                         end
-                    end
+                    end)
                 end)
-                repeat
-                    if entityLibrary.isAlive and AntiVoidMoveMode.Value == "Normal" then
-                        local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, Vector3.new(0, -1000, 0), store.blockRaycast)
-                        if ray or GuiLibrary.ObjectsThatCanBeSaved.FlyOptionsButton.Api.Enabled or GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
-                            AntiVoidPart.Position = entityLibrary.character.HumanoidRootPart.Position - Vector3.new(0, 21, 0)
-                        end
-                    end
-                    task.wait()
-                until (not AntiVoid.Enabled)
             else
-				if AntiVoidConnection then AntiVoidConnection:Disconnect() end
-				if AntiVoidPart then
-					AntiVoidPart:Destroy()
-				end
+                UnbindFromStepped("ve")
+                item.MainPart.Mesh.Offset = Vector3.zero
             end
         end
     })
-	AntiVoidTransparent = AntiVoid.CreateSlider({
-		Name = "Invisible",
-		Min = 1,
-		Max = 100,
-		Default = 50,
-		Function = function(val)
-			if AntiVoidPart then
-				AntiVoidPart.Transparency = 1 - (val / 100)
-			end
-		end,
+	X = SwordEditor.CreateSlider({
+		["Name"] = "X Pos",
+		["Min"] = 0,
+		["Max"] = 30,
+        ["Default"] = 0, 
+		["Function"] = function(val) end
 	})
-	AntiVoidColor = AntiVoid.CreateColorSlider({
-		Name = "Color",
-		Function = function(h, s, v)
-			if AntiVoidPart then
-				AntiVoidPart.Color = Color3.fromHSV(h, s, v)
-			end
-		end
+	Y = SwordEditor.CreateSlider({
+		["Name"] = "Y Pos,
+		["Min"] = 0,
+		["Max"] = 30,
+        ["Default"] = 0, 
+		["Function"] = function(val) end
+	})
+	Z = SwordEditor.CreateSlider({
+		["Name"] = "Y Pos",
+		["Min"] = 0,
+		["Max"] = 30,
+        ["Default"] = 0, 
+		["Function"] = function(val) end
 	})
 end)
 
@@ -600,7 +487,7 @@ run(function()
 	})
 end)
 
-run(function()
+--[[run(function()
     local AnticheatBypass = {Enabled = false}
     local ShowPart = {Enabled = false}
     local funnynumbers = {
@@ -705,4 +592,4 @@ run(function()
 			end
 		end
 	})
-end)-- not the best tbh, especially with the fps issue bridge duels has
+end)]]-- not the best tbh, especially with the fps issue bridge duels has
