@@ -213,7 +213,7 @@ local GetAllTargets = function(distance, sort)
     return targets
 end
 local function getSword()
-    local sword = ""
+    local sword = "WoodenSword"
     if lplr.Character:FindFirstChild("WoodenSword") then
         sword = "WoodenSword"
     elseif lplr.Character:FindFirstChild("Sword") then
@@ -289,6 +289,37 @@ run(function()
                         oldNearPlayer = killauranear
 					until Killaura.Enabled == false
 				end)
+                table.insert(Killaura.Connections, lplr.CharacterAdded:Connect(function()
+                    task.wait(0.5)
+                    task.spawn(function()
+                        local oldNearPlayer
+                        repeat
+                            task.wait()
+                            if killauranear then
+                                pcall(function()
+                                    if originalArmC0 == nil then
+                                        originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0
+                                    end
+                                    if killauraplaying == false then
+                                        killauraplaying = true
+                                        for i,v in pairs(anims[blockanim.Value]) do
+                                            if (not Killaura.Enabled) or (not killauranear) then break end
+                                            if not oldNearPlayer then
+                                                cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0 = originalArmC0 * v.CFrame
+                                                continue
+                                            end
+                                            killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
+                                            killauracurrentanim:Play()
+                                            task.wait(v.Time - 0.01)
+                                        end
+                                        killauraplaying = false
+                                    end
+                                end)
+                            end
+                            oldNearPlayer = killauranear
+                        until Killaura.Enabled == false
+                    end)
+                end))
                 BindToRenderStep("aura",1,function()
                     killauranear = false
                     firstPlayerNear = false
