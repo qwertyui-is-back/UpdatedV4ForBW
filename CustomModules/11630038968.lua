@@ -349,9 +349,11 @@ run(function()
             end
         end
     })
+	local animmethods = {}
+	for i,v in pairs(anims) do table.insert(animmeth, i) end
 	blockanim = Killaura.CreateDropdown({
 		Name = "Animation",
-		List = anims,
+		List = animmeth,
 		Function = function(val) end
 	})
 	range = Killaura.CreateSlider({
