@@ -230,6 +230,30 @@ local functions = {
         store.BlockRemote:InvokeServer(bool)
     end
 }
+run(function()
+    local Criticals = {Enabled = false}
+    Criticals = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+        Name = "Criticals",
+        Function = function(callback) end,
+        ExtraText = function()
+            return "Hookmetamethod"
+        end
+    })
+
+    local new
+    new = hookmetamethod(game, "__namecall",function(self,...)
+        local args = {...}
+        local method = getnamecallmethod():lower()
+        if Criticals.Enabled then
+            if not checkcaller() and self == store.AttackRemote and method == "InvokeServer" then
+                args[2] = true
+                return namecall(self,unpack(args))
+            end
+        end
+        return namecall(self,...)
+    end)
+end)
+
 local killauranear = false
 run(function()
     local Killaura = {Enabled = false}
@@ -266,17 +290,17 @@ run(function()
                         if killauranear then
                             pcall(function()
                                 if originalArmC0 == nil then
-                                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0
+                                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0
                                 end
                                 if killauraplaying == false then
                                     killauraplaying = true
                                     for i,v in pairs(anims[blockanim.Value]) do
                                         if (not Killaura.Enabled) or (not killauranear) then break end
                                         if not oldNearPlayer then
-                                            cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0 = originalArmC0 * v.CFrame
+                                            cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0 = originalArmC0 * v.CFrame
                                             continue
                                         end
-                                        killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
+                                        killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
                                         killauracurrentanim:Play()
                                         task.wait(v.Time - 0.01)
                                     end
@@ -307,8 +331,7 @@ run(function()
                                 local angle = math.acos(localfacing:Dot(vec))
                                 killauranear = true
                                 lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
-                                local targets = GetAllTargets(15)
-                                functions.Attack(v.Player, true, getSword())
+                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or false, getSword())
                                 if Autoblock.Enabled then
                                     block()
                                 end
@@ -321,13 +344,13 @@ run(function()
                         killauranear = false
                         pcall(function()
                             if originalArmC0 == nil then
-                                originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0
+                                originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0
                             end
-                            if cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0 ~= originalArmC0 then
+                            if cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0 ~= originalArmC0 then
                                 pcall(function()
                                     killauracurrentanim:Cancel()
                                 end)
-                                killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart, TweenInfo.new(0.3), {C0 = originalArmC0})
+                                killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart, TweenInfo.new(0.3), {C0 = originalArmC0})
                                 killauracurrentanim:Play()
                             end
                         end)
@@ -336,13 +359,13 @@ run(function()
             else
                 UnbindFromRenderStep("aura")
                 if originalArmC0 == nil then
-                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0
+                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0
                 end
-                if cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart.C0 ~= originalArmC0 then
+                if cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0 ~= originalArmC0 then
                     pcall(function()
                         killauracurrentanim:Cancel()
                     end)
-                    killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild("WoodenSword").Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                    killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
                     killauracurrentanim:Play()
                 end
                 oldNearPlayer = false
@@ -415,7 +438,7 @@ run(function()
 		["Function"] = function(val) end
 	})
 	Z = SwordEditor.CreateSlider({
-		["Name"] = "Y Pos",
+		["Name"] = "Z Pos",
 		["Min"] = 0,
 		["Max"] = 30,
         ["Default"] = 0, 
