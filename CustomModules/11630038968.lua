@@ -373,6 +373,57 @@ run(function()
 end)
 
 run(function()
+    local SwordEditor = {Enabled = false}
+    local X = {Value = 0},
+    local Y = {Value = 0},
+    local Z = {Value = 0}
+    local item
+
+    SwordEditor = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        Name = "ViewmodelEditor",
+        Function = function(callback)
+            if callback then
+                BindToStepped("ve",1,function()
+                    pcall(function()
+                        local viewmodel = cam:WaitForChild("Viewmodel")
+                        for i,v in pairs(viewmodel:GetChildren()) do
+                            if v.MainPart ~= nil then
+                                item = v
+                                v.MainPart.Mesh.Offset = Vector3.new(X.Value / 100, Y.Value / 100, Z.Value / 100)
+                            end
+                        end
+                    end)
+                end)
+            else
+                UnbindFromStepped("ve")
+                item.MainPart.Mesh.Offset = Vector3.zero
+            end
+        end
+    })
+	X = SwordEditor.CreateSlider({
+		["Name"] = "X Pos",
+		["Min"] = 0,
+		["Max"] = 30,
+        ["Default"] = 0, 
+		["Function"] = function(val) end
+	})
+	Y = SwordEditor.CreateSlider({
+		["Name"] = "Y Pos",
+		["Min"] = 0,
+		["Max"] = 30,
+        ["Default"] = 0, 
+		["Function"] = function(val) end
+	})
+	Z = SwordEditor.CreateSlider({
+		["Name"] = "Y Pos",
+		["Min"] = 0,
+		["Max"] = 30,
+        ["Default"] = 0, 
+		["Function"] = function(val) end
+	})
+end)
+
+run(function()
     local Fly = {Enabled = false}
     local VerticalSpeed = {Value = 75}
     local YCFrame = 0
