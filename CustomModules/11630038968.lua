@@ -230,35 +230,13 @@ local functions = {
         store.BlockRemote:InvokeServer(bool)
     end
 }
-run(function()
-    local Criticals = {Enabled = false}
-    Criticals = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
-        Name = "Criticals",
-        Function = function(callback) end,
-        ExtraText = function()
-            return "Hookmetamethod"
-        end
-    })
-
-    local new
-    new = hookmetamethod(game, "__namecall",function(self,...)
-        local args = {...}
-        local method = getnamecallmethod():lower()
-        if Criticals.Enabled then
-            if not checkcaller() and self == store.AttackRemote and method == "InvokeServer" then
-                args[2] = true
-                return namecall(self,unpack(args))
-            end
-        end
-        return namecall(self,...)
-    end)
-end)
 
 local killauranear = false
 run(function()
     local Killaura = {Enabled = false}
     local blockanim = {Value = "Test"}
     local Autoblock = {Enabled = false}
+    local Criticals = {Enabled = false}
     local range = {Value = 20}
     local blocking = false
     local killauraplaying = false
@@ -331,7 +309,7 @@ run(function()
                                 local angle = math.acos(localfacing:Dot(vec))
                                 killauranear = true
                                 lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
-                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or false, getSword())
+                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
                                 if Autoblock.Enabled then
                                     block()
                                 end
@@ -388,6 +366,11 @@ run(function()
         ["Default"] = 25, 
 		["Function"] = function(val) end
 	})
+    Criticals = Killaura.CreateToggle({
+        Name = "Criticals",
+        Default = true,
+        Function = function() end
+    })
     Autoblock = Killaura.CreateToggle({
         Name = "Autoblock",
         Default = true,
