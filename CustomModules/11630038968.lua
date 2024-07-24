@@ -356,7 +356,6 @@ run(function()
                             if targetsize == 0 then
                                 unblock()
                             end
-                            if
                         end
                     end)
                     if not firstPlayerNear then
