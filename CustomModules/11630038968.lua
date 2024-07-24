@@ -307,23 +307,23 @@ run(function()
                             end
                         end
                     end)
+                    if not firstPlayerNear then
+                        targetedPlayer = nil
+                        killauranear = false
+                        pcall(function()
+                            if originalArmC0 == nil then
+                                originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                            end
+                            if workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
+                                pcall(function()
+                                    killauracurrentanim:Cancel()
+                                end)
+                                killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                                killauracurrentanim:Play()
+                            end
+                        end)
+                    end
                 end)
-                if not firstPlayerNear then
-                    targetedPlayer = nil
-                    killauraNearPlayer = false
-                    pcall(function()
-                        if originalArmC0 == nil then
-                            originalArmC0 = workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
-                        end
-                        if workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
-                            pcall(function()
-                                killauracurrentanim:Cancel()
-                            end)
-                            killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
-                            killauracurrentanim:Play()
-                        end
-                    end)
-                end
             else
                 UnbindFromRenderStep("aura")
                 if originalArmC0 == nil then
@@ -336,6 +336,9 @@ run(function()
                     killauracurrentanim = game:GetService("TweenService"):Create(workspace.CurrentCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
                     killauracurrentanim:Play()
                 end
+                oldNearPlayer = false
+                firstPlayerNear = false
+                killauranear = false
             end
         end
     })
@@ -497,7 +500,7 @@ run(function()
                     end
                     local cframe = {entityLibrary.character.HumanoidRootPart.CFrame:GetComponents()}
                     cframe[2] = YCFrame
-                    entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(unpack(speedCFrame))
+                    entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(unpack(cframe))
                 end)
             else
 				FlyUp = false
