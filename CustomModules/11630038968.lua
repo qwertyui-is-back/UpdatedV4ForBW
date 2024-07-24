@@ -191,8 +191,9 @@ local store = {
     BlockRemote = ToolService:WaitForChild("RF").ToggleBlockSword
 }
 local entityLibrary = shared.vapeentity
-GuiLibrary["RemoveObject"]("KillauraOptionsButton")
+GuiLibrary.RemoveObject("KillauraOptionsButton")
 GuiLibrary.RemoveObject("SpeedOptionsButton")
+GuiLibrary.RemoveObject("FlyOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
     for i,v in players:GetChildren() do 
@@ -232,15 +233,52 @@ run(function()
     local Autoblock = {Enabled = false}
     local range = {Value = 20}
     local blocking = false
+    local killauraplaying = false
+    local oldNearPlayer = false
+    local firstPlayerNear = false
     local function block()
         local shouldBlock = not blocking
-        functions.Block(shouldBlock, "WoodenSword")
+        functions.Block(shouldBlock, getSword())
         blocking = not blocking
     end
+	local anims = {
+		Test = {
+			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(115), math.rad(150), math.rad(350)), Time = 0.25},
+			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(60), math.rad(100), math.rad(360)), Time = 0.25}
+		},
+    }
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         Name = "Killaura",
         Function = function(callback)
             if callback then
+				task.spawn(function()
+					local oldNearPlayer
+					repeat
+						task.wait()
+                        if killauranear then
+                            pcall(function()
+                                if originalArmC0 == nil then
+                                    originalArmC0 = gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                                end
+                                if killauraplaying == false then
+                                    killauraplaying = true
+                                    for i,v in pairs(anims.Test) do
+                                        if (not Killaura.Enabled) or (not killauranear) then break end
+                                        if not oldNearPlayer then
+                                            gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 = originalArmC0 * v.CFrame
+                                            continue
+                                        end
+                                        killauracurrentanim = game:GetService("TweenService"):Create(gameCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
+                                        killauracurrentanim:Play()
+                                        task.wait(v.Time - 0.01)
+                                    end
+                                    killauraplaying = false
+                                end
+                            end)
+                        end
+                        oldNearPlayer = killauranear
+					until Killaura.Enabled == false
+				end)
                 BindToRenderStep("aura",1,function()
                     killauranear = false
                     pcall(function()
@@ -250,6 +288,9 @@ run(function()
                             local targettable = {}
                             local targetsize = 0
                             for i,v in next, plr do
+                                if not firstPlayerNear then
+                                    firstPlayerNear = true
+                                end
                                 killauranear = true
                                 --print("there are players")
                                 local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
@@ -258,7 +299,7 @@ run(function()
                                 killauranear = true
                                 lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
                                 local targets = GetAllTargets(15)
-                                store.AttackRemote:InvokeServer(v.Player.Character, true, getSword())
+                                functions.Attack(v.Player, true, getSword())
                                 if Autoblock.Enabled then
                                     block()
                                 end
@@ -267,8 +308,34 @@ run(function()
                         end
                     end)
                 end)
+                if not firstPlayerNear then
+                    targetedPlayer = nil
+                    killauraNearPlayer = false
+                    pcall(function()
+                        if originalArmC0 == nil then
+                            originalArmC0 = gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                        end
+                        if gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
+                            pcall(function()
+                                killauracurrentanim:Cancel()
+                            end)
+                            killauracurrentanim = game:GetService("TweenService"):Create(gameCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                            killauracurrentanim:Play()
+                        end
+                    end)
+                end
             else
                 UnbindFromRenderStep("aura")
+                if originalArmC0 == nil then
+                    originalArmC0 = gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0
+                end
+                if gameCamera.Viewmodel.WoodenSword.Handle.MainPart.C0 ~= originalArmC0 then
+                    pcall(function()
+                        killauracurrentanim:Cancel()
+                    end)
+                    killauracurrentanim = game:GetService("TweenService"):Create(gameCamera.Viewmodel.WoodenSword.Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                    killauracurrentanim:Play()
+                end
             end
         end
     })
@@ -286,7 +353,7 @@ run(function()
     })
 end)
 
-runcode(function()
+run(function()
 	local Speed = {Enabled = false}
 	local SpeedValue = {Value = 1}
 	local SpeedMethod = {Value = "AntiCheat A"}
@@ -316,40 +383,6 @@ runcode(function()
 		Name = "Speed",
 		Function = function(callback)
 			if callback then
-				w = uis:IsKeyDown(Enum.KeyCode.W) and -1 or 0
-				s = uis:IsKeyDown(Enum.KeyCode.S) and 1 or 0
-				a = uis:IsKeyDown(Enum.KeyCode.A) and -1 or 0
-				d = uis:IsKeyDown(Enum.KeyCode.D) and 1 or 0
-				table.insert(Speed.Connections, uis.InputBegan:Connect(function(input1)
-					if uis:GetFocusedTextBox() == nil then
-						if input1.KeyCode == Enum.KeyCode.W then
-							w = -1
-						end
-						if input1.KeyCode == Enum.KeyCode.S then
-							s = 1
-						end
-						if input1.KeyCode == Enum.KeyCode.A then
-							a = -1
-						end
-						if input1.KeyCode == Enum.KeyCode.D then
-							d = 1
-						end
-					end
-				end))
-				table.insert(Speed.Connections, uis.InputEnded:Connect(function(input1)
-					if input1.KeyCode == Enum.KeyCode.W then
-						w = 0
-					end
-					if input1.KeyCode == Enum.KeyCode.S then
-						s = 0
-					end
-					if input1.KeyCode == Enum.KeyCode.A then
-						a = 0
-					end
-					if input1.KeyCode == Enum.KeyCode.D then
-						d = 0
-					end
-				end))
 				BindToStepped("Speed", 1, function(time, delta)
 					if isAlive() then
 						local speed = SpeedValue.Value * 20
@@ -417,6 +450,68 @@ runcode(function()
 	SpeedAnimation = Speed.CreateToggle({
 		Name = "Slowdown Anim",
 		Function = function() end
+	})
+end)
+
+run(function()
+    local Fly = {Enabled = false}
+    local VerticalSpeed = {Value = 75}
+    local YCFrame = 0
+    local FlyUp = false
+    local FlyDown = false
+
+    Fly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+        Name = "Fly",
+        Function = function(callback)
+            if callback then
+				table.insert(Fly.Connections, uis.InputBegan:Connect(function(input1)
+					if uis:GetFocusedTextBox() ~= nil then return end
+                    if input1.KeyCode == Enum.KeyCode.Space then
+                        FlyUp = true
+                    elseif input1.KeyCode == Enum.KeyCode.LeftShift then
+                        FlyDown = true
+                    end
+				end))
+				table.insert(Fly.Connections, uis.InputEnded:Connect(function(input1)
+                    if input1.KeyCode == Enum.KeyCode.Space then
+						FlyUp = false
+					elseif input1.KeyCode == Enum.KeyCode.LeftShift then
+						FlyDown = false
+					end
+				end))
+				if uis.TouchEnabled then
+					pcall(function()
+						local jumpButton = lplr.PlayerGui.TouchGui.TouchControlFrame.JumpButton
+						table.insert(Fly.Connections, jumpButton:GetPropertyChangedSignal("ImageRectOffset"):Connect(function()
+							FlyUp = jumpButton.ImageRectOffset.X == 146
+						end))
+						FlyUp = jumpButton.ImageRectOffset.X == 146
+					end)
+				end
+                YCFrame = entityLibrary.character.HumanoidRootPart.CFrame.Y
+                BindToStepped("fly",1,function()
+                    if FlyUp then
+                        YCFrame += VerticalSpeed.Value
+                    elseif FlyDown then
+                        YCFrame -= VerticalSpeed.Value
+                    end
+                    local cframe = {entityLibrary.character.HumanoidRootPart.CFrame:GetComponents()}
+                    cframe[2] = YCFrame
+                    entityLibrary.character.HumanoidRootPart.CFrame = cframe
+                end)
+            else
+				FlyUp = false
+				FlyDown = false
+                UnbindFromStepped("fly")
+            end
+        end
+    })
+	VerticalSpeed = Fly.CreateSlider({
+		["Name"] = "Vertical speed",
+		["Min"] = 1,
+		["Max"] = 100,
+        ["Default"] = 75, 
+		["Function"] = function(val) end
 	})
 end)
 
@@ -525,4 +620,4 @@ run(function()
 			end
 		end
 	})
-end)
+end)-- not the best tbh, especially with the fps issue bridge duels has
