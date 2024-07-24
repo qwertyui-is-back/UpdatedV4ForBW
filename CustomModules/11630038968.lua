@@ -225,9 +225,10 @@ local functions = {
     Attack = function(ent, bool, item)
         store.AttackRemote:InvokeServer(ent.Character, bool, item)
     end,
-    Block = function(bool)
+    Block = function(bool, item)
         bool = bool or true
-        store.BlockRemote:InvokeServer(bool)
+        item = item or "WoodenSword"
+        store.BlockRemote:InvokeServer(bool, item)
     end
 }
 
@@ -243,9 +244,14 @@ run(function()
     local oldNearPlayer = false
     local firstPlayerNear = false
     local function block()
-        local shouldBlock = not blocking
-        functions.Block(true, getSword())
-        blocking = not blocking
+        local shouldBlock = true
+        functions.Block(shouldBlock, getSword())
+        blocking = shouldBlock
+    end
+    local function unblock()
+        local shouldBlock = false
+        functions.Block(shouldBlock, getSword())
+        blocking = shouldBlock
     end
 	local anims = {
 		Test = {
@@ -329,23 +335,28 @@ run(function()
                             local plr = GetAllTargets(range.Value)
                             local targettable = {}
                             local targetsize = 0
-                            for i,v in next, plr do
-                                if not firstPlayerNear then
-                                    firstPlayerNear = true
+                            if next(plr) == nil then
+                                if blocking then unblock() end
+                            else
+                                for i,v in next, plr do
+                                    if not firstPlayerNear then
+                                        firstPlayerNear = true
+                                    end
+                                    killauranear = true
+                                    --print("there are players")
+                                    local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
+                                    local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
+                                    local angle = math.acos(localfacing:Dot(vec))
+                                    killauranear = true
+                                    lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
+                                    functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
+                                    if Autoblock.Enabled then
+                                        block()
+                                    end
+                                    --print("attacked")
                                 end
-                                killauranear = true
-                                --print("there are players")
-                                local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
-                                local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
-                                local angle = math.acos(localfacing:Dot(vec))
-                                killauranear = true
-                                lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
-                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
-                                if Autoblock.Enabled then
-                                    block()
-                                end
-                                --print("attacked")
                             end
+                            if
                         end
                     end)
                     if not firstPlayerNear then
