@@ -224,7 +224,6 @@ GuiLibrary.RemoveObject("FlyOptionsButton")
 GuiLibrary.RemoveObject("ReachOptionsButton")
 GuiLibrary.RemoveObject("ClientKickDisablerOptionsButton")
 GuiLibrary.RemoveObject("SilentAimOptionsButton")
-GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("AutoLeaveOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
@@ -447,116 +446,6 @@ run(function()
         Default = true,
         Function = function() end
     })
-end)
-
-run(function()
-	local Speed = {Enabled = false}
-	local SpeedValue = {Value = 1}
-	local SpeedMethod = {Value = "AntiCheat A"}
-	local SpeedMoveMethod = {Value = "MoveDirection"}
-	local SpeedWallCheck = {Enabled = true}
-	local SpeedJump = {Enabled = false}
-	local SpeedJumpHeight = {Value = 20}
-	local SpeedJumpVanilla = {Enabled = false}
-	local SpeedJumpAlways = {Enabled = false}
-	local SpeedAnimation = {Enabled = false}
-	local SpeedDelayTick = tick()
-	local SpeedRaycast = RaycastParams.new()
-	SpeedRaycast.FilterType = Enum.RaycastFilterType.Blacklist
-	SpeedRaycast.RespectCanCollide = true
-	local oldWalkSpeed
-	local SpeedDown
-	local SpeedUp
-
-	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B", "AntiCheat C", "AntiCheat D"}
-	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = "Speed",
-		Function = function(callback)
-			if callback then
-				BindToStepped("Speed", 1, function(delta)
-					if isAlive() and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
-						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
-						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
-						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
-                        if SpeedMethod.Value == "CFrame" then
-							for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
-								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-									v:AdjustSpeed(SpeedValue.Value / 15)
-								end
-							end
-                            local newpos = ((lplr.Character.Humanoid.MoveDirection * (SpeedValue.Value - lplr.Character.Humanoid.WalkSpeed)) * delta)
-                            local raycastparameters = RaycastParams.new()
-                            raycastparameters.FilterDescendantsInstances = {lplr.Character}
-                            local ray = workspace:Raycast(lplr.Character.HumanoidRootPart.Position, newpos, raycastparameters)
-                            if ray then newpos = (ray.Position - lplr.Character.HumanoidRootPart.Position) end -- skul
-                            lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame + newpos
-						end
-						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
-							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-								if SpeedJumpVanilla.Enabled then
-									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-								else
-									entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(entityLibrary.character.HumanoidRootPart.Velocity.X, SpeedJumpHeight.Value, entityLibrary.character.HumanoidRootPart.Velocity.Z)
-								end
-							end
-						end
-					end
-				end)
-			else
-				UnbindFromStepped("Speed")
-			end
-		end,
-		ExtraText = function()
-			if GuiLibrary.ObjectsThatCanBeSaved["Text GUIAlternate TextToggle"].Api.Enabled then
-				return alternatelist[table.find(SpeedMethod.List, SpeedMethod.Value)]
-			end
-			return SpeedMethod.Value
-		end
-	})
-	SpeedMethod = Speed.CreateDropdown({
-		Name = "Mode",
-		List = {"CFrame", "Hypixel"},
-		Function = function(val)
-		end
-	})
-	SpeedValue = Speed.CreateSlider({
-		Name = "Speed",
-		Min = 1,
-		Max = 34,
-        Default = 27,
-		Function = function(val) end
-	})
-	SpeedJump = Speed.CreateToggle({
-		Name = "AutoJump",
-		Function = function(callback)
-			if SpeedJumpHeight.Object then SpeedJumpHeight.Object.Visible = callback end
-			if SpeedJumpAlways.Object then
-				SpeedJump.Object.ToggleArrow.Visible = callback
-				SpeedJumpAlways.Object.Visible = callback
-			end
-			if SpeedJumpVanilla.Object then SpeedJumpVanilla.Object.Visible = callback end
-		end,
-		Default = true
-	})
-	SpeedJumpHeight = Speed.CreateSlider({
-		Name = "Jump Height",
-		Min = 0,
-		Max = 30,
-		Default = 25,
-		Function = function() end
-	})
-	SpeedJumpAlways = Speed.CreateToggle({
-		Name = "Always Jump",
-		Function = function() end
-	})
-	SpeedJumpVanilla = Speed.CreateToggle({
-		Name = "Real Jump",
-		Function = function() end
-	})
-	SpeedAnimation = Speed.CreateToggle({
-		Name = "Slowdown Anim",
-		Function = function() end
-	})
 end)
 
 run(function()
