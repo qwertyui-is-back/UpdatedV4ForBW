@@ -397,15 +397,15 @@ run(function()
 		if plr == lplr and msg == 'helloimusinginhaler' then return true end
 		if self.localprio > 0 and self.said[plr.Name] == nil and msg == 'helloimusinginhaler' and plr ~= lplr then
 			self.said[plr.Name] = true
-			notif('Vape', plr.Name..' is using cat v5!', 60)
+			warningNotification('Vape', plr.Name..' is using cat v5!', 60)
 			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true
 		elseif self.localprio > 1 and self.said[plr.Name] == nil and msg == 'helloimusingv6' and plr ~= lplr then
 			self.said[plr.Name] = true
-			notif('Vape', plr.Name..' is using cat v5!', 60)
-			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
+			warningNotification('Vape', plr.Name..' is using cat v6!', 60)
+			self.customtags[plr.Name] = {{text = 'CAT V6 USER', color = Color3.new(0.8, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true

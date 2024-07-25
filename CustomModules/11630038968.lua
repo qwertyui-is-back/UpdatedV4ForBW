@@ -1,4 +1,43 @@
 -- Credits to Inf Yield & all the other scripts that helped me make bypasses
+local GuiLibrary = shared.GuiLibrary
+
+local function warningNotification(title, text, delay)
+	pcall(function()
+		local frame = GuiLibrary["CreateNotification"](title, text, delay, "assets/WarningNotification.png")
+		frame.Frame.BackgroundColor3 = Color3.fromRGB(236, 129, 44)
+		frame.Frame.Frame.BackgroundColor3 = Color3.fromRGB(236, 129, 44)
+	end)
+end
+
+local missingfunc = false
+local missrequire = false
+local misshookmeta = false
+local misshookfunc = false
+
+local function checkForMissingFunctions()
+    if not require then
+        if not missingfunc then warningNotification("Cat "..catver, "Missing function detected, some features may not work properly.", 10) end
+        missingfunc = true
+        missrequire = true
+    end
+    if not hookmetamethod then
+        if not missingfunc then warningNotification("Cat "..catver, "Missing function detected, some features may not work properly.", 10) end
+        missingfunc = true
+        misshookmeta = true
+    end
+    if not hookfunction then
+        if not missingfunc then warningNotification("Cat "..catver, "Missing function detected, some features may not work properly.", 10) end
+        missingfunc = true
+        misshookfunc = true
+    end
+end
+
+require = require or function() end
+hookmetamethod = hookmetamethod or function() end
+hookfunction = hookfunction or function() end
+
+task.spawn(checkForMissingFunctions)
+
 local oldgame; oldgame = hookmetamethod(game, '__namecall', function(self, ...) -- credits to SystemXVoid
     if checkcaller() then 
         return oldgame(self, ...)
@@ -17,7 +56,7 @@ local oldwarn; oldwarn = hookfunction(warn, function(message, ...)
     end;
     return oldwarn(message, ...)
 end) -- credits to SystemXVoid
-local GuiLibrary = shared.GuiLibrary
+local catver = "V5"
 local players = game:GetService("Players")
 local textservice = game:GetService("TextService")
 local lplr = players.LocalPlayer
@@ -65,14 +104,6 @@ local function UnbindFromStepped(name)
 		StepTable[name]:Disconnect()
 		StepTable[name] = nil
 	end
-end
-
-local function createwarning(title, text, delay)
-	pcall(function()
-		local frame = GuiLibrary["CreateNotification"](title, text, delay, "assets/WarningNotification.png")
-		frame.Frame.BackgroundColor3 = Color3.fromRGB(236, 129, 44)
-		frame.Frame.Frame.BackgroundColor3 = Color3.fromRGB(236, 129, 44)
-	end)
 end
 
 local function friendCheck(plr, recolor)
@@ -216,7 +247,16 @@ local ToolService = services:WaitForChild('ToolService')
 
 local store = {
     AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword,
-    BlockRemote = ToolService:WaitForChild("RF").ToggleBlockSword
+    BlockRemote = ToolService:WaitForChild("RF").ToggleBlockSword,
+    isBlocking = function()
+        return lplr:GetAttribute("Blocking")
+    end,
+    isEating = function()
+        return lplr:GetAttribute("Eating")
+    end,
+    isSlow = function()
+        return lplr.Character.Humanoid.WalkSpeed <= 15 and true or false
+    end
 }
 local entityLibrary = shared.vapeentity
 GuiLibrary.RemoveObject("KillauraOptionsButton")
@@ -382,14 +422,12 @@ run(function()
                                 end
                                 --print("attacked")
                             end
-                            if targetsize == 0 and blocking and Autoblock.Enabled then
-                                unblock()
-                            end
                         end
                     end)
                     if not firstPlayerNear then
                         targetedPlayer = nil
                         killauranear = false
+                        if Autoblock.Enabled then unblock() end
                         pcall(function()
                             if originalArmC0 == nil then
                                 originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0
@@ -445,6 +483,31 @@ run(function()
         Name = "Autoblock",
         Default = true,
         Function = function() end
+    })
+end)
+
+run(function()
+    local NoSlowdown = {Enabled = false}
+    local NoSlowMethod = {Value = "Spoof"}
+
+    NoSlowdown = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+        Name = "NoSlowdown",
+        Function = function(callback)
+            if callback then
+                BindToRenderStep("NoSlow",1,function()
+                    if NoSlowMethod.Value == "Spoof" then
+                        if store.isBlocking() or store.isEating() or store.isSlow() then
+                            lplr.Character.Humanoid.WalkSpeed = 16.83
+                        end
+                    end
+                end)
+            else
+                UnbindFromRenderStep("NoSlow")
+            end
+        end,
+        ExtraText = function()
+            return NoSlowMethod.Value
+        end
     })
 end)
 
