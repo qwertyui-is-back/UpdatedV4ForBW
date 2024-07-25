@@ -409,20 +409,6 @@ run(function()
                             local targettable = {}
                             local targetsize = 0
                             for i,v in next, plr do
-                                if v.Player.Team ~= lplr.Team then
-                                    targetsize += 1
-                                    if not firstPlayerNear then
-                                        firstPlayerNear = true
-                                    end
-                                    killauranear = true
-                                    --print("there are players")
-                                    killauranear = true
-                                    functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
-                                    if Autoblock.Enabled then
-                                        block()
-                                    end
-                                    --print("attacked")
-                                end
                             end
                         end
                     end)
