@@ -472,7 +472,7 @@ run(function()
 		Function = function(callback)
 			if callback then
 				BindToStepped("Speed", 1, function(delta)
-					if isAlive() isnetworkowner(entityLibrary.character.HumanoidRootPart) then
+					if isAlive() and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
 						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
