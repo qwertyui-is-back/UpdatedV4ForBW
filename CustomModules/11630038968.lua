@@ -270,7 +270,11 @@ local GetAllTargets = function(distance, sort, teamCheck)
     local targets = {}
     for i,v in players:GetChildren() do 
         if v ~= lplr and isAlive(v) and isAlive(lplr) then 
-            if teamCheck then if v.Team == lplr.Team then return end
+            if teamCheck then
+                if v.Team == lplr.Team then
+                    return
+                end
+            end
             local playerdistance = (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
             if playerdistance <= (distance or math.huge) then 
                 table.insert(targets, {Human = true, RootPart = v.Character.PrimaryPart, Humanoid = v.Character.Humanoid, Player = v})
