@@ -1,4 +1,22 @@
 -- Credits to Inf Yield & all the other scripts that helped me make bypasses
+local oldgame; oldgame = hookmetamethod(game, '__namecall', function(self, ...) -- credits to SystemXVoid
+    if checkcaller() then 
+        return oldgame(self, ...)
+    end;
+    if getnamecallmethod():lower() == 'kick' then 
+        return
+    end;
+    if typeof(self) == 'Instance' and self.ClassName:lower():find('remote') and (tostring(self):lower():find('tps') or tostring(self):lower():find('cps') or tostring(self):lower():find('head')) then 
+        return
+    end;
+    return oldgame(self, ...)
+end);
+local oldwarn; oldwarn = hookfunction(warn, function(message, ...)
+    if not checkcaller() then 
+        return 
+    end;
+    return oldwarn(message, ...)
+end) -- credits to SystemXVoid
 local GuiLibrary = shared.GuiLibrary
 local players = game:GetService("Players")
 local textservice = game:GetService("TextService")
@@ -11,6 +29,14 @@ local uis = game:GetService("UserInputService")
 local localmouse = lplr:GetMouse()
 local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
 local getasset = getsynasset or getcustomasset
+local isnetworkowner = function(part)
+	local suc, res = pcall(function() return gethiddenproperty(part, "NetworkOwnershipRule") end)
+	if suc and res == Enum.NetworkOwnership.Manual then
+		sethiddenproperty(part, "NetworkOwnershipRule", Enum.NetworkOwnership.Automatic)
+		networkownerswitch = tick() + 8
+	end
+	return networkownerswitch <= tick()
+end
 
 local RenderStepTable = {}
 local StepTable = {}
@@ -261,6 +287,11 @@ run(function()
         Smooth = {
             {CFrame = CFrame.new(0,-0.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(160)), Time = 0.15},
             {CFrame = CFrame.new(0, 0.65, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.1}
+        },
+        Leaked = {
+            {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0},
+            {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(10), math.rad(90), math.rad(45)), Time = 0.156},
+            {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0.075}
         }
     }
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
@@ -342,18 +373,14 @@ run(function()
                                 end
                                 killauranear = true
                                 --print("there are players")
-                                local localfacing = lplr.Character.HumanoidRootPart.CFrame.lookVector
-                                local vec = (v.Player.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).unit
-                                local angle = math.acos(localfacing:Dot(vec))
                                 killauranear = true
-                                lplr.Character:SetPrimaryPartCFrame(CFrame.new(lplr.Character.PrimaryPart.Position, Vector3.new(v.Player.Character:FindFirstChild("HumanoidRootPart").Position.X, lplr.Character.PrimaryPart.Position.Y, v.Player.Character:FindFirstChild("HumanoidRootPart").Position.Z)))
                                 functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
                                 if Autoblock.Enabled then
                                     block()
                                 end
                                 --print("attacked")
                             end
-                            if targetsize == 0 then
+                            if targetsize == 0 and blocking and Autoblock.Enabled then
                                 unblock()
                             end
                         end
@@ -417,6 +444,114 @@ run(function()
         Default = true,
         Function = function() end
     })
+end)
+
+run(function()
+	local Speed = {Enabled = false}
+	local SpeedValue = {Value = 1}
+	local SpeedMethod = {Value = "AntiCheat A"}
+	local SpeedMoveMethod = {Value = "MoveDirection"}
+	local SpeedWallCheck = {Enabled = true}
+	local SpeedJump = {Enabled = false}
+	local SpeedJumpHeight = {Value = 20}
+	local SpeedJumpVanilla = {Enabled = false}
+	local SpeedJumpAlways = {Enabled = false}
+	local SpeedAnimation = {Enabled = false}
+	local SpeedDelayTick = tick()
+	local SpeedRaycast = RaycastParams.new()
+	SpeedRaycast.FilterType = Enum.RaycastFilterType.Blacklist
+	SpeedRaycast.RespectCanCollide = true
+	local oldWalkSpeed
+	local SpeedDown
+	local SpeedUp
+
+	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B", "AntiCheat C", "AntiCheat D"}
+	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "Speed",
+		Function = function(callback)
+			if callback then
+				BindToHeartbeat("Speed", function(delta)
+					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
+						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
+						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
+						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
+                        if SpeedMethod.Value == "CFrame" then
+							for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
+								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
+									v:AdjustSpeed(SpeedValue.Value / 15)
+								end
+							end
+							local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
+                            local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
+                            if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
+							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+						end
+						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
+							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
+								if SpeedJumpVanilla.Enabled then
+									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+								else
+									entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(entityLibrary.character.HumanoidRootPart.Velocity.X, SpeedJumpHeight.Value, entityLibrary.character.HumanoidRootPart.Velocity.Z)
+								end
+							end
+						end
+					end
+				end)
+			else
+				UnbindFromHeartbeat("Speed")
+			end
+		end,
+		ExtraText = function()
+			if GuiLibrary.ObjectsThatCanBeSaved["Text GUIAlternate TextToggle"].Api.Enabled then
+				return alternatelist[table.find(SpeedMethod.List, SpeedMethod.Value)]
+			end
+			return SpeedMethod.Value
+		end
+	})
+	SpeedMethod = Speed.CreateDropdown({
+		Name = "Mode",
+		List = {"CFrame", "Hypixel"},
+		Function = function(val)
+		end
+	})
+	SpeedValue = Speed.CreateSlider({
+		Name = "Speed",
+		Min = 1,
+		Max = 34,
+        Default = 27,
+		Function = function(val) end
+	})
+	SpeedJump = Speed.CreateToggle({
+		Name = "AutoJump",
+		Function = function(callback)
+			if SpeedJumpHeight.Object then SpeedJumpHeight.Object.Visible = callback end
+			if SpeedJumpAlways.Object then
+				SpeedJump.Object.ToggleArrow.Visible = callback
+				SpeedJumpAlways.Object.Visible = callback
+			end
+			if SpeedJumpVanilla.Object then SpeedJumpVanilla.Object.Visible = callback end
+		end,
+		Default = true
+	})
+	SpeedJumpHeight = Speed.CreateSlider({
+		Name = "Jump Height",
+		Min = 0,
+		Max = 30,
+		Default = 25,
+		Function = function() end
+	})
+	SpeedJumpAlways = Speed.CreateToggle({
+		Name = "Always Jump",
+		Function = function() end
+	})
+	SpeedJumpVanilla = Speed.CreateToggle({
+		Name = "Real Jump",
+		Function = function() end
+	})
+	SpeedAnimation = Speed.CreateToggle({
+		Name = "Slowdown Anim",
+		Function = function() end
+	})
 end)
 
 run(function()
