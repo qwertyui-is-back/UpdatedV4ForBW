@@ -405,12 +405,6 @@ run(function()
                     firstPlayerNear = false
                     pcall(function()
                         if isAlive() then
-                            --print("alive")
-                            local plr = GetAllNearestHumanoidToPosition(killauratargetframe["Players"]["Enabled"], range["Value"], 100)
-                            local targettable = {}
-                            local targetsize = 0
-                            for i,v in pairs(plr) do
-                            end
                         end
                     end)
                     if not firstPlayerNear then
