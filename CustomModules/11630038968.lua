@@ -471,7 +471,7 @@ run(function()
 		Name = "Speed",
 		Function = function(callback)
 			if callback then
-				BindToStepped("Speed", function(delta)
+				BindToStepped("Speed", 1, function(delta)
 					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
 						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
