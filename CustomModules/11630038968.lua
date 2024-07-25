@@ -265,27 +265,6 @@ GuiLibrary.RemoveObject("ReachOptionsButton")
 GuiLibrary.RemoveObject("ClientKickDisablerOptionsButton")
 GuiLibrary.RemoveObject("SilentAimOptionsButton")
 GuiLibrary.RemoveObject("AutoLeaveOptionsButton")
-local GetAllTargets = function(distance, sort, teamCheck)
-    teamCheck = teamCheck or true
-    local targets = {}
-    for i,v in players:GetChildren() do 
-        if v ~= lplr and isAlive(v) and isAlive(lplr) then 
-            if teamCheck then
-                if v.Team == lplr.Team then
-                    return
-                end
-            end
-            local playerdistance = (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
-            if playerdistance <= (distance or math.huge) then 
-                table.insert(targets, {Human = true, RootPart = v.Character.PrimaryPart, Humanoid = v.Character.Humanoid, Player = v})
-            end
-        end
-    end
-    if sort then 
-        table.sort(targets, sort)
-    end
-    return targets
-end
 local function getSword()
     local sword = "WoodenSword"
     if lplr.Character:FindFirstChild("WoodenSword") then
@@ -342,6 +321,7 @@ run(function()
         functions.Block(shouldBlock, getSword())
         blocking = shouldBlock
     end
+	local killauratargetframe = {["Players"] = {["Enabled"] = false}}
 	local anims = {
 		Test = {
 			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(115), math.rad(150), math.rad(350)), Time = 0.25},
@@ -426,22 +406,24 @@ run(function()
                     pcall(function()
                         if isAlive() then
                             --print("alive")
-                            local plr = GetAllTargets(range.Value)
+                            local plr = GetAllNearestHumanoidToPosition(killauratargetframe["Players"]["Enabled"], range["Value"], 100)
                             local targettable = {}
                             local targetsize = 0
-                            for i,v in next, plr do
-                                targetsize += 1
-                                if not firstPlayerNear then
-                                    firstPlayerNear = true
+                            for i,v in pairs(plr) do
+                                if v.Team ~= lplr.Team then
+                                    targetsize += 1
+                                    if not firstPlayerNear then
+                                        firstPlayerNear = true
+                                    end
+                                    killauranear = true
+                                    --print("there are players")
+                                    killauranear = true
+                                    functions.Attack(v, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
+                                    if Autoblock.Enabled then
+                                        block()
+                                    end
+                                    --print("attacked")
                                 end
-                                killauranear = true
-                                --print("there are players")
-                                killauranear = true
-                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
-                                if Autoblock.Enabled then
-                                    block()
-                                end
-                                --print("attacked")
                             end
                         end
                     end)
@@ -483,6 +465,7 @@ run(function()
     })
 	local animmeth = {}
 	for i,v in pairs(anims) do table.insert(animmeth, i) end
+	killauratargetframe = Killaura.CreateTargetWindow({})
 	blockanim = Killaura.CreateDropdown({
 		Name = "Animation",
 		List = animmeth,
