@@ -265,10 +265,12 @@ GuiLibrary.RemoveObject("ReachOptionsButton")
 GuiLibrary.RemoveObject("ClientKickDisablerOptionsButton")
 GuiLibrary.RemoveObject("SilentAimOptionsButton")
 GuiLibrary.RemoveObject("AutoLeaveOptionsButton")
-local GetAllTargets = function(distance, sort)
+local GetAllTargets = function(distance, sort, teamCheck)
+    teamCheck = teamCheck or true
     local targets = {}
     for i,v in players:GetChildren() do 
         if v ~= lplr and isAlive(v) and isAlive(lplr) then 
+            if teamCheck then if v.Team == lplr.Team then return end
             local playerdistance = (lplr.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
             if playerdistance <= (distance or math.huge) then 
                 table.insert(targets, {Human = true, RootPart = v.Character.PrimaryPart, Humanoid = v.Character.Humanoid, Player = v})
@@ -288,6 +290,21 @@ local function getSword()
         sword = "Sword"
     end
     return sword
+end
+local function getItem()
+    local item = "Sword"
+    if lplr.Character:FindFirstChild("Sword") then
+        item = "Sword"
+    elseif lplr.Character:FindFirstChild("WoodenSword") then
+        item = "WoodenSword"
+    elseif lplr.Character:FindFirstChild("Pickaxe") then
+        item = "Pickaxe"
+    elseif lplr.Character:FindFirstChild("GoldenApple") then
+        item = "GoldenApple"
+    elseif lplr.Character:FindFirstChild("Bow") then
+        item = "Bow
+    end
+    return item
 end
 local functions = {
     Attack = function(ent, bool, item)
@@ -409,6 +426,18 @@ run(function()
                             local targettable = {}
                             local targetsize = 0
                             for i,v in next, plr do
+                                targetsize += 1
+                                if not firstPlayerNear then
+                                    firstPlayerNear = true
+                                end
+                                killauranear = true
+                                --print("there are players")
+                                killauranear = true
+                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
+                                if Autoblock.Enabled then
+                                    block()
+                                end
+                                --print("attacked")
                             end
                         end
                     end)
