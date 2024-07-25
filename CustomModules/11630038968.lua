@@ -352,7 +352,6 @@ run(function()
 						task.wait()
                         if viewmodel then
                             if killauranear then
-                                pcall(function()
                                     if originalArmC0 == nil then
                                         originalArmC0 = viewmodel.Handle.MainPart.C0
                                     end
@@ -370,7 +369,6 @@ run(function()
                                         end
                                         killauraplaying = false
                                     end
-                                end)
                             end
                         end
                         oldNearPlayer = killauranear
