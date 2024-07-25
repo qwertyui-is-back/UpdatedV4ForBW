@@ -484,10 +484,12 @@ run(function()
 									v:AdjustSpeed(SpeedValue.Value / 15)
 								end
 							end
-							local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
-                            local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
-                            if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
-							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+                            local newpos = ((lplr.Character.Humanoid.MoveDirection * (SpeedValue.Value - lplr.Character.Humanoid.WalkSpeed)) * delta)
+                            local raycastparameters = RaycastParams.new()
+                            raycastparameters.FilterDescendantsInstances = {lplr.Character}
+                            local ray = workspace:Raycast(lplr.Character.HumanoidRootPart.Position, newpos, raycastparameters)
+                            if ray then newpos = (ray.Position - lplr.Character.HumanoidRootPart.Position) end -- skul
+                            lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame + newpos
 						end
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
@@ -554,57 +556,6 @@ run(function()
 	SpeedAnimation = Speed.CreateToggle({
 		Name = "Slowdown Anim",
 		Function = function() end
-	})
-end)
-
-run(function()
-    local SwordEditor = {Enabled = false}
-    local X = {Value = 0}
-    local Y = {Value = 0}
-    local Z = {Value = 0}
-    local item
-
-    SwordEditor = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-        Name = "ViewmodelEditor",
-        Function = function(callback)
-            if callback then
-                BindToStepped("ve",1,function()
-                    pcall(function()
-                        local viewmodel = cam:WaitForChild("Viewmodel")
-                        for i,v in pairs(viewmodel:GetChildren()) do
-                            if v.MainPart ~= nil then
-                                item = v
-                                v.MainPart.Mesh.Offset = Vector3.new(X.Value / 100, Y.Value / 100, Z.Value / 100)
-                            end
-                        end
-                    end)
-                end)
-            else
-                UnbindFromStepped("ve")
-                item.MainPart.Mesh.Offset = Vector3.zero
-            end
-        end
-    })
-	X = SwordEditor.CreateSlider({
-		["Name"] = "X Pos",
-		["Min"] = 0,
-		["Max"] = 30,
-        ["Default"] = 0, 
-		["Function"] = function(val) end
-	})
-	Y = SwordEditor.CreateSlider({
-		["Name"] = "Y Pos",
-		["Min"] = 0,
-		["Max"] = 30,
-        ["Default"] = 0, 
-		["Function"] = function(val) end
-	})
-	Z = SwordEditor.CreateSlider({
-		["Name"] = "Z Pos",
-		["Min"] = 0,
-		["Max"] = 30,
-        ["Default"] = 0, 
-		["Function"] = function(val) end
 	})
 end)
 
