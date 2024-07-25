@@ -289,21 +289,6 @@ local function getSword()
     end
     return sword
 end
-local function getItem()
-    local item = "Sword"
-    if lplr.Character:FindFirstChild("Sword") then
-        item = "Sword"
-    elseif lplr.Character:FindFirstChild("WoodenSword") then
-        item = "WoodenSword"
-    elseif lplr.Character:FindFirstChild("Pickaxe") then
-        item = "Pickaxe"
-    elseif lplr.Character:FindFirstChild("GoldenApple") then
-        item = "GoldenApple"
-    elseif lplr.Character:FindFirstChild("Bow") then
-        item = "Bow
-    end
-    return item
-end
 local functions = {
     Attack = function(ent, bool, item)
         store.AttackRemote:InvokeServer(ent.Character, bool, item)
