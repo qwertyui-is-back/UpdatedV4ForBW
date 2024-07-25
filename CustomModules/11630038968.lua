@@ -222,6 +222,7 @@ GuiLibrary.RemoveObject("FlyOptionsButton")
 GuiLibrary.RemoveObject("ReachOptionsButton")
 GuiLibrary.RemoveObject("ClientKickDisablerOptionsButton")
 GuiLibrary.RemoveObject("SilentAimOptionsButton")
+GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("AutoLeaveOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
