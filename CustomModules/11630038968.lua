@@ -471,7 +471,7 @@ run(function()
 		Name = "Speed",
 		Function = function(callback)
 			if callback then
-				BindToHeartbeat("Speed", function(delta)
+				BindToStepped("Speed", function(delta)
 					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
 						local movevec = (entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
@@ -499,7 +499,7 @@ run(function()
 					end
 				end)
 			else
-				UnbindFromHeartbeat("Speed")
+				UnbindFromStepped("Speed")
 			end
 		end,
 		ExtraText = function()
