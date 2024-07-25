@@ -352,6 +352,7 @@ run(function()
 						task.wait()
                         if viewmodel then
                             if killauranear then
+                                pcall(function()
                                     if originalArmC0 == nil then
                                         originalArmC0 = viewmodel.Handle.MainPart.C0
                                     end
@@ -369,12 +370,13 @@ run(function()
                                         end
                                         killauraplaying = false
                                     end
+                                end)
                             end
                         end
                         oldNearPlayer = killauranear
 					until Killaura.Enabled == false
 				end)
-                --[[table.insert(Killaura.Connections, lplr.CharacterAdded:Connect(function()
+                table.insert(Killaura.Connections, lplr.CharacterAdded:Connect(function()
                     task.wait(0.5)
                     task.spawn(function()
                         local oldNearPlayer
@@ -404,7 +406,7 @@ run(function()
                             oldNearPlayer = killauranear
                         until Killaura.Enabled == false
                     end)
-                end))]]
+                end))
                 BindToRenderStep("aura",1,function()
                     killauranear = false
                     firstPlayerNear = false
