@@ -401,29 +401,6 @@ run(function()
                     end)
                 end))
                 BindToRenderStep("aura",1,function()
-                    killauranear = false
-                    firstPlayerNear = false
-                    pcall(function()
-                        if isAlive() then
-                        end
-                    end)
-                    if not firstPlayerNear then
-                        targetedPlayer = nil
-                        killauranear = false
-                        if Autoblock.Enabled then unblock() end
-                        pcall(function()
-                            if originalArmC0 == nil then
-                                originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(getItem()).Handle.MainPart.C0
-                            end
-                            if cam:WaitForChild("Viewmodel"):WaitForChild(getItem()).Handle.MainPart.C0 ~= originalArmC0 then
-                                pcall(function()
-                                    killauracurrentanim:Cancel()
-                                end)
-                                killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(getItem()).Handle.MainPart, TweenInfo.new(0.3), {C0 = originalArmC0})
-                                killauracurrentanim:Play()
-                            end
-                        end)
-                    end
                 end)
             else
                 UnbindFromRenderStep("aura")
