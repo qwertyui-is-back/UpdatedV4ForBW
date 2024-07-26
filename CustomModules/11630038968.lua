@@ -336,7 +336,7 @@ run(function()
             {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0.075}
         },
         Slide2 = {
-            {CFrame = CFrame.new(0, 0.25, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.02},
+            {CFrame = CFrame.new(0, 0.25, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.05},
             {CFrame =  CFrame.new(0,-1.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(170)), Time = 0.16}
         }
     }
@@ -448,7 +448,7 @@ run(function()
                                 pcall(function()
                                     killauracurrentanim:Cancel()
                                 end)
-                                killauracurrentanim = game:GetService("TweenService"):Create(viewmodel.Handle.MainPart, TweenInfo.new(0.3), {C0 = originalArmC0})
+                                killauracurrentanim = game:GetService("TweenService"):Create(viewmodel.Handle.MainPart, TweenInfo.new(0), {C0 = originalArmC0})
                                 killauracurrentanim:Play()
                             end
                         end)
