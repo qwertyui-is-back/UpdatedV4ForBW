@@ -223,6 +223,33 @@ local function findTouchInterest(tool)
 	return nil
 end
 
+local function EntityNearPosition(distance, checktab)
+	checktab = checktab or {}
+	if entityLibrary.isAlive then
+		local sortedentities = {}
+		for i, v in pairs(entityLibrary.entityList) do -- loop through playersService
+			if not v.Targetable then continue end
+            if isVulnerable(v) then -- checks
+				local playerPosition = v.RootPart.Position
+				local mag = (entityLibrary.character.HumanoidRootPart.Position - playerPosition).magnitude
+				if checktab.Prediction and mag > distance then
+					mag = (entityLibrary.LocalPosition - playerPosition).magnitude
+				end
+                if mag <= distance then -- mag check
+					table.insert(sortedentities, {entity = v, Magnitude = v.Target and -1 or mag})
+                end
+            end
+        end
+		table.sort(sortedentities, function(a, b) return a.Magnitude < b.Magnitude end)
+		for i, v in pairs(sortedentities) do
+			if checktab.WallCheck then
+				if not raycastWallCheck(v.entity, checktab) then continue end
+			end
+			return v.entity
+		end
+	end
+end
+
 local knit = game:GetService("ReplicatedStorage").Packages.Knit
 local services = knit:WaitForChild('Services')
 local ToolService = services:WaitForChild('ToolService')
@@ -248,6 +275,7 @@ GuiLibrary.RemoveObject("FlyOptionsButton")
 GuiLibrary.RemoveObject("ReachOptionsButton")
 GuiLibrary.RemoveObject("ClientKickDisablerOptionsButton")
 GuiLibrary.RemoveObject("SilentAimOptionsButton")
+GuiLibrary.RemoveObject("TargetStrafeOptionsButton")
 GuiLibrary.RemoveObject("AutoLeaveOptionsButton")
 local GetAllTargets = function(distance, sort)
     local targets = {}
@@ -403,7 +431,7 @@ run(function()
                     pcall(function()
                         if isAlive() then
                             --print("alive")
-                            local plr = GetAllTargets(range.Value)
+                            local plr = GetAllTargets(range.Value, function(a, b) return a.Magnitude < b.Magnitude end)
                             local targettable = {}
                             local targetsize = 0
                             for i,v in next, plr do
@@ -695,6 +723,64 @@ run(function()
 	SpeedAnimation = Speed.CreateToggle({
 		Name = "Slowdown Anim",
 		Function = function() end
+	})
+end)
+
+run(function()
+	local targetstrafe = {Enabled = false}
+	local targetstraferange = {Value = 0}
+	local oldmove
+	local controlmodule
+	targetstrafe = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "TargetStrafe",
+		Function = function(callback)
+			if callback then
+				if not controlmodule then
+					local suc = pcall(function() controlmodule = require(lplr.PlayerScripts.PlayerModule).controls end)
+					if not suc then controlmodule = {} end
+				end
+				oldmove = controlmodule.moveFunction
+				controlmodule.moveFunction = function(Self, vec, facecam, ...)
+					if entityLibrary.isAlive then
+						local plr = EntityNearPosition(targetstraferange.Value, {
+							WallCheck = false,
+							AimPart = "RootPart"
+						})
+						if plr then
+							facecam = false
+							--code stolen from roblox since the way I tried to make it apparently sucks
+							local c, s
+							local plrCFrame = CFrame.lookAt(entityLibrary.character.HumanoidRootPart.Position, Vector3.new(plr.RootPart.Position.X, 0, plr.RootPart.Position.Z))
+							local _, _, _, R00, R01, R02, _, _, R12, _, _, R22 = plrCFrame:GetComponents()
+							if R12 < 1 and R12 > -1 then
+								c = R00
+								s = -R01*math.sign(R12)
+							else
+								c = R22
+								s = R02
+							end
+							local norm = math.sqrt(c*c + s*s)
+							local cameraRelativeMoveVector = controlmodule:GetMoveVector()
+							vec = Vector3.new(
+								(c*cameraRelativeMoveVector.X + s*cameraRelativeMoveVector.Z)/norm,
+								0,
+								(c*cameraRelativeMoveVector.Z - s*cameraRelativeMoveVector.X)/norm
+							)
+						end
+					end
+					return oldmove(Self, vec, facecam, ...)
+				end
+			else
+				controlmodule.moveFunction = oldmove
+			end
+		end
+	})
+	targetstraferange = targetstrafe.CreateSlider({
+		Name = "Range",
+		Function = function() end,
+		Min = 0,
+		Max = 100,
+		Default = 14
 	})
 end)
 
