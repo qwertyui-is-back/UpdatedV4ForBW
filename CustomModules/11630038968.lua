@@ -583,7 +583,7 @@ run(function()
                                 end
                             end
                         end
-                        local newvelo = (movevec * SpeedValue.Value) + boostedSpeed
+                        local newvelo = movevec * (SpeedValue.Value + boostedSpeed)
                         entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or KillauraNearTarget) or SpeedMode.Value == "Boost" then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
