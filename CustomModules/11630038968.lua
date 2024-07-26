@@ -568,13 +568,13 @@ run(function()
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
                         if boostDelay >= 5 and boostDelay <= 10 then
-                            boostDelay = 7
+                            boostedSpeed = 7
                         elseif boostDelay >= 10 and boostDelay <= 15 then
-                            boostDelay = 4
+                            boostedSpeed = 4
                         elseif boostDelay >= 15 and boostDelay <= 20 then
-                            boostDelay = 2
+                            boostedSpeed = 2
                         elseif boostDelay >= 20 then
-                            boostDelay = 0
+                            boostedSpeed = 0
                         end
                         if SpeedAnimation.Enabled then
                             for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
@@ -583,12 +583,12 @@ run(function()
                                 end
                             end
                         end
-                        local newvelo = movevec * SpeedValue.Value + boostedSpeed
+                        local newvelo = (movevec * SpeedValue.Value) + boostedSpeed
                         entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or KillauraNearTarget) or SpeedMode.Value == "Boost" then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-                                boostedSpeed = SpeedValue.Value
-                                boostDelay = 9
+                                boostedSpeed = 9
+                                boostDelay = 0
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 								else
@@ -734,8 +734,7 @@ run(function()
             if callback then
                 velo = CombatService:WaitForChild("RE").KnockBackApplied
                 oldparent = velo.Parent
-                velo.Name = "AddHealth"
-                velo.Parent = workspace
+                velo:Remove()
             else
                 velo.Parent = oldparent
                 oldparent = nil
