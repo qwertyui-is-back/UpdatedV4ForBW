@@ -664,10 +664,12 @@ run(function()
 		end,
 		reveal = function(args)
 			task.delay(0.1, function()
+				local text = "cat v5 client"
+				if self.localprio > 1 then text = "cat v6 client" end
 				if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the inhaler client')
+                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the '..text)
                 else
-                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler client', 'All')
+                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler '..text, 'All')
                 end
 			end)
 		end,

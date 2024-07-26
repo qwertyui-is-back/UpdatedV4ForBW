@@ -50,6 +50,7 @@ local uis = game:GetService("UserInputService")
 local localmouse = lplr:GetMouse()
 local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
 local getasset = getsynasset or getcustomasset
+local entityLibrary = shared.vapeentity
 
 local networkownerswitch = tick()
 local isnetworkowner = function(part)
@@ -268,7 +269,6 @@ local store = {
         return lplr.Character.Humanoid.WalkSpeed <= 15 and true or false
     end
 }
-local entityLibrary = shared.vapeentity
 GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("KillauraOptionsButton")
 GuiLibrary.RemoveObject("FlyOptionsButton")
