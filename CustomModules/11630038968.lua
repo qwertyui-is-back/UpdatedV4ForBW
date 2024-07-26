@@ -741,7 +741,7 @@ run(function()
 				end
 				oldmove = controlmodule.moveFunction
 				controlmodule.moveFunction = function(Self, vec, facecam, ...)
-					if entityLibrary.isAlive then
+					if isAlive() then
 						local plr = EntityNearPosition(targetstraferange.Value, {
 							WallCheck = false,
 							AimPart = "RootPart"
