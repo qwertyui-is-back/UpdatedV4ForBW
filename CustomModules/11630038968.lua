@@ -540,7 +540,7 @@ run(function()
         Function = function(callback)
             if callback then
                 oldparent = CombatService:WaitForChild("RE").KnockBackApplied.Parent
-                CombatService:WaitForChild("RE").KnockBackApplied.Parent = nil
+                CombatService:WaitForChild("RE").KnockBackApplied.Parent = game
             else
                 CombatService:WaitForChild("RE").KnockBackApplied.Parent = oldparent
                 oldparent = nil
