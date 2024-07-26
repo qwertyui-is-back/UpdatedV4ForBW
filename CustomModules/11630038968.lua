@@ -38,24 +38,6 @@ hookfunction = hookfunction or function() end
 
 task.spawn(checkForMissingFunctions)
 
-local oldgame; oldgame = hookmetamethod(game, '__namecall', function(self, ...) -- credits to SystemXVoid
-    if checkcaller() then 
-        return oldgame(self, ...)
-    end;
-    if getnamecallmethod():lower() == 'kick' then 
-        return
-    end;
-    if typeof(self) == 'Instance' and self.ClassName:lower():find('remote') and (tostring(self):lower():find('tps') or tostring(self):lower():find('cps') or tostring(self):lower():find('head')) then 
-        return
-    end;
-    return oldgame(self, ...)
-end);
-local oldwarn; oldwarn = hookfunction(warn, function(message, ...)
-    if not checkcaller() then 
-        return 
-    end;
-    return oldwarn(message, ...)
-end) -- credits to SystemXVoid
 local catver = "V5"
 local players = game:GetService("Players")
 local textservice = game:GetService("TextService")
@@ -540,9 +522,9 @@ run(function()
         Function = function(callback)
             if callback then
                 oldparent = CombatService:WaitForChild("RE").KnockBackApplied.Parent
-                CombatService:WaitForChild("RE").KnockBackApplied.Parent = game
+                CombatService:WaitForChild("RE").KnockBackApplied.Parent = workspace
             else
-                CombatService:WaitForChild("RE").KnockBackApplied.Parent = oldparent
+                workspace.KnockBackApplied.Parent = oldparent
                 oldparent = nil
             end
         end,
@@ -722,3 +704,42 @@ end)
 		end
 	})
 end)]]-- not the best tbh, especially with the fps issue bridge duels has
+
+run(function()
+    local SecurityFeatures = {Enabled = false}
+
+    local old
+    local oldwarn
+    SecurityFeatures = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "SecurityFeatures",
+        Function = function(callback)
+            if callback then
+                oldgame = hookmetamethod(game, '__namecall', function(self, ...) -- credits to SystemXVoid
+                    if checkcaller() then 
+                        return oldgame(self, ...)
+                    end;
+                    if getnamecallmethod():lower() == 'kick' then 
+                        return
+                    end;
+                    if typeof(self) == 'Instance' and self.ClassName:lower():find('remote') and (tostring(self):lower():find('tps') or tostring(self):lower():find('cps') or tostring(self):lower():find('head')) then 
+                        return
+                    end;
+                    return oldgame(self, ...)
+                end);
+                oldwarn = hookfunction(warn, function(message, ...)
+                    if not checkcaller() then 
+                        return 
+                    end;
+                    return oldwarn(message, ...)
+                end) -- credits to SystemXVoid
+            else
+                oldgame = nil
+                oldwarn = nil
+            end
+        end,
+        HoverText = "Helps prevent detections",
+        ExtraText = function()
+            return "Hook"
+        end
+    })
+end)
