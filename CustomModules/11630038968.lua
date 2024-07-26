@@ -541,9 +541,7 @@ run(function()
         Function = function(callback)
             if callback then
                 oldparent = store.VelocityRemote.Parent
-                if VelocityMode.Value == "Parent" then
-                    store.VelocityRemote.Parent = game
-                end
+                store.VelocityRemote.Parent:Remove()
             else
                 if store.VelocityRemote.Parent ~= oldparent then
                     store.VelocityRemote.Parent = oldparent
