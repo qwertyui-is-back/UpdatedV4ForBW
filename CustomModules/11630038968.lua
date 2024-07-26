@@ -567,14 +567,17 @@ run(function()
 						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
-                        if boostDelay >= 5 and boostDelay <= 10 then
+                        if boostDelay >= 2 and boostDelay <= 5 then
                             boostedSpeed = 7
-                        elseif boostDelay >= 10 and boostDelay <= 15 then
+                            entityLibrary.character.Humanoid.WalkSpeed = 17.5
+                        elseif boostDelay >= 5 and boostDelay <= 7 then
                             boostedSpeed = 4
-                        elseif boostDelay >= 15 and boostDelay <= 20 then
+                            entityLibrary.character.Humanoid.WalkSpeed = 17
+                        elseif boostDelay >= 7 and boostDelay <= 10 then
                             boostedSpeed = 2
-                        elseif boostDelay >= 20 then
+                        elseif boostDelay >= 10 then
                             boostedSpeed = 0
+                            entityLibrary.character.Humanoid.WalkSpeed = 13
                         end
                         if SpeedAnimation.Enabled then
                             for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
@@ -587,8 +590,9 @@ run(function()
                         entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or KillauraNearTarget) or SpeedMode.Value == "Boost" then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-                                boostedSpeed = 9
+                                boostedSpeed = 10
                                 boostDelay = 0
+                                entityLibrary.character.Humanoid.WalkSpeed = 18.5
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 								else
@@ -600,10 +604,7 @@ run(function()
 				end)
 			else
 				SpeedDelayTick = 0
-				if oldWalkSpeed then
-					entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
-					oldWalkSpeed = nil
-				end
+                entityLibrary.character.Humanoid.WalkSpeed = 16.83
 				UnbindFromRenderStep("Speed")
 			end
 		end,
@@ -732,13 +733,9 @@ run(function()
         Name = "Velocity",
         Function = function(callback)
             if callback then
-                velo = CombatService:WaitForChild("RE").KnockBackApplied
-                oldparent = velo.Parent
-                velo:Remove()
+                velo:Destroy()
             else
-                velo.Parent = oldparent
-                oldparent = nil
-                velo = nil
+                warningNotification("Cat "..catver, "Fixed next game", 5)
             end
         end,
         ExtraText = function()
