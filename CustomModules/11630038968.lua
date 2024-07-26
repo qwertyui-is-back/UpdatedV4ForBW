@@ -533,19 +533,17 @@ end)
 
 run(function()
     local Velocity = {Enabled = false}
-    local VelocityMode = {Value = "Parent"}
+    local VelocityMode = {Value = "Replace"}
 
     local oldparent
     Velocity = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
         Name = "Velocity",
         Function = function(callback)
             if callback then
-                oldparent = store.VelocityRemote.Parent
-                store.VelocityRemote:FireClient = function() end
+                oldparent = store.VelocityRemote.FireClient
+                store.VelocityRemote.FireClient = function() end
             else
-                if store.VelocityRemote.Parent ~= oldparent then
-                    store.VelocityRemote.Parent = oldparent
-                end
+                store.VelocityRemote.Parent = oldparent
                 oldparent = nil
             end
         end,
