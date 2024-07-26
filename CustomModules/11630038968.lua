@@ -431,7 +431,7 @@ run(function()
                     pcall(function()
                         if isAlive() then
                             --print("alive")
-                            local plr = GetAllTargets(range.Value, function(a, b) return a.Magnitude < b.Magnitude end)
+                            local plr = GetAllTargets(range.Value)
                             local targettable = {}
                             local targetsize = 0
                             for i,v in next, plr do
