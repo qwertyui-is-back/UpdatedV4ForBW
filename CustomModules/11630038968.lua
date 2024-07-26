@@ -559,7 +559,7 @@ run(function()
 						task.wait((SpeedDelay.Value / 10) + (SpeedPulseDuration.Value / 100))
 					until (not Speed.Enabled)
 				end)
-				BindToRenderStep("Speed", function(delta)
+				BindToRenderStep("Speed", 1, function(delta)
 					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
 						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
