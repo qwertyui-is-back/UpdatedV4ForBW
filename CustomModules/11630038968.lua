@@ -541,7 +541,7 @@ run(function()
         Function = function(callback)
             if callback then
                 oldparent = store.VelocityRemote.Parent
-                store.VelocityRemote.Parent:Remove()
+                store.VelocityRemote:Remove()
             else
                 if store.VelocityRemote.Parent ~= oldparent then
                     store.VelocityRemote.Parent = oldparent
