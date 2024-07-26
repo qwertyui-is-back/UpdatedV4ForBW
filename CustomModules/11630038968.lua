@@ -249,7 +249,6 @@ local CombatService = services:WaitForChild("CombatService")
 local store = {
     AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword,
     BlockRemote = ToolService:WaitForChild("RF").ToggleBlockSword,
-    VelocityRemote = CombatService:WaitForChild("RE").KnockBackApplied,
     isBlocking = function()
         return lplr:GetAttribute("Blocking")
     end,
@@ -315,12 +314,12 @@ run(function()
     local firstPlayerNear = false
     local function block()
         local shouldBlock = true
-        functions.Block(shouldBlock, getSword())
+        functions.Block(true, getSword())
         blocking = shouldBlock
     end
     local function unblock()
         local shouldBlock = false
-        functions.Block(shouldBlock, getSword())
+        functions.Block(false, getSword())
         blocking = shouldBlock
     end
 	local anims = {
@@ -433,7 +432,7 @@ run(function()
                                 --print("there are players")
                                 killauranear = true
                                 functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
-                                if Autoblock.Enabled then
+                                if Autoblock.Enabled and (not store.isBlocking()) then
                                     block()
                                 end
                                 --print("attacked")
@@ -540,10 +539,10 @@ run(function()
         Name = "Velocity",
         Function = function(callback)
             if callback then
-                oldparent = store.VelocityRemote.FireClient
-                store.VelocityRemote.FireClient = function() end -- should work
+                oldparent = CombatService:WaitForChild("RE").KnockBackApplied.Parent
+                CombatService:WaitForChild("RE").KnockBackApplied.Parent = nil
             else
-                store.VelocityRemote.Parent = oldparent
+                CombatService:WaitForChild("RE").KnockBackApplied.Parent = oldparent
                 oldparent = nil
             end
         end,
