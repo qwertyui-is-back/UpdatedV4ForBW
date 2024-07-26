@@ -244,7 +244,7 @@ end
 local knit = game:GetService("ReplicatedStorage").Packages.Knit
 local services = knit:WaitForChild('Services')
 local ToolService = services:WaitForChild('ToolService')
-local CombatService = services:WaitForCHild("CombatService")
+local CombatService = services:WaitForChild("CombatService")
 
 local store = {
     AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword,
