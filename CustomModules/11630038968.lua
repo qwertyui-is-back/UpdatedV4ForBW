@@ -512,6 +512,8 @@ run(function()
 	local s = 0
 	local a = 0
 	local d = 0
+    local boostedSpeed = 9
+    local boostDelay = 0
 
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B", "AntiCheat C", "AntiCheat D"}
 	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
@@ -561,53 +563,32 @@ run(function()
 				end)
 				BindToRenderStep("Speed", 1, function(delta)
 					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
+                        boostDelay += 1
 						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
-						if SpeedMethod.Value == "Velocity" then
-							if SpeedAnimation.Enabled then
-								for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
-									if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-										v:AdjustSpeed(entityLibrary.character.Humanoid.WalkSpeed / 16)
-									end
-								end
-							end
-							local newvelo = movevec * SpeedValue.Value
-							entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
-						elseif SpeedMethod.Value == "CFrame" then
-							for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
-								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-									v:AdjustSpeed(SpeedValue.Value / 15)
-								end
-							end
-							local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
-							if SpeedWallCheck.Enabled then
-								local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
-								if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
-							end
-							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
-						elseif SpeedMethod.Value == "TP" then
-							if SpeedDelayTick <= tick() then
-								SpeedDelayTick = tick() + (SpeedDelay.Value / 10)
-								local newpos = (movevec * SpeedValue.Value)
-								if SpeedWallCheck.Enabled then
-									local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
-									if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
-								end
-								entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
-							end
-						elseif SpeedMethod.Value == "Pulse" then
-							local pulsenum = (SpeedPulseDuration.Value / 100)
-							local newvelo = movevec * (SpeedValue.Value + (entityLibrary.character.Humanoid.WalkSpeed - SpeedValue.Value) * (1 - (math.max(pulsetick - tick(), 0)) / pulsenum))
-							entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
-						elseif SpeedMethod.Value == "WalkSpeed" then
-							if oldWalkSpeed == nil then
-								oldWalkSpeed = entityLibrary.character.Humanoid.WalkSpeed
-							end
-							entityLibrary.character.Humanoid.WalkSpeed = SpeedValue.Value
-						end
-						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or KillauraNearTarget) then
+                        if boostDelay >= 5 and boostDelay <= 10 then
+                            boostDelay = 7
+                        elseif boostDelay >= 10 and boostDelay <= 15 then
+                            boostDelay = 4
+                        elseif boostDelay >= 15 and boostDelay <= 20 then
+                            boostDelay = 2
+                        elseif boostDelay >= 20 then
+                            boostDelay = 0
+                        end
+                        if SpeedAnimation.Enabled then
+                            for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
+                                if v.Name == "WalkAnim" or v.Name == "RunAnim" then
+                                    v:AdjustSpeed(entityLibrary.character.Humanoid.WalkSpeed / 16)
+                                end
+                            end
+                        end
+                        local newvelo = movevec * SpeedValue.Value + boostedSpeed
+                        entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
+						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or KillauraNearTarget) or SpeedMode.Value == "Boost" then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
+                                boostedSpeed = SpeedValue.Value
+                                boostDelay = 9
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 								else
@@ -635,7 +616,7 @@ run(function()
 	})
 	SpeedMethod = Speed.CreateDropdown({
 		Name = "Mode",
-		List = {"Velocity", "CFrame", "TP", "Pulse", "WalkSpeed"},
+		List = {"Velocity", "Boost"},
 		Function = function(val)
 			if oldWalkSpeed then
 				entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
@@ -650,12 +631,14 @@ run(function()
 	SpeedMoveMethod = Speed.CreateDropdown({
 		Name = "Movement",
 		List = {"Manual", "MoveDirection"},
+        Default = "MoveDirection",
 		Function = function(val) end
 	})
 	SpeedValue = Speed.CreateSlider({
 		Name = "Speed",
 		Min = 1,
-		Max = 150,
+		Max = 36,
+        Default = 27,
 		Function = function(val) end
 	})
 	SpeedDelay = Speed.CreateSlider({
