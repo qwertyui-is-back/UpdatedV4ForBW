@@ -541,7 +541,7 @@ run(function()
         Function = function(callback)
             if callback then
                 oldparent = store.VelocityRemote.FireClient
-                store.VelocityRemote.FireClient = function() end
+                store.VelocityRemote.FireClient = function() end -- should work
             else
                 store.VelocityRemote.Parent = oldparent
                 oldparent = nil
