@@ -244,10 +244,12 @@ end
 local knit = game:GetService("ReplicatedStorage").Packages.Knit
 local services = knit:WaitForChild('Services')
 local ToolService = services:WaitForChild('ToolService')
+local CombatService = services:WaitForCHild("CombatService")
 
 local store = {
     AttackRemote = ToolService:WaitForChild("RF").AttackPlayerWithSword,
     BlockRemote = ToolService:WaitForChild("RF").ToggleBlockSword,
+    VelocityRemote = CombatService:WaitForChild("RE").KnockBackApplied,
     isBlocking = function()
         return lplr:GetAttribute("Blocking")
     end,
@@ -386,26 +388,28 @@ run(function()
                         local oldNearPlayer
                         repeat
                             task.wait()
-                            if killauranear then
-                                pcall(function()
-                                    if originalArmC0 == nil then
-                                        originalArmC0 = viewmodel.Handle.MainPart.C0
-                                    end
-                                    if killauraplaying == false then
-                                        killauraplaying = true
-                                        for i,v in pairs(anims[blockanim.Value]) do
-                                            if (not Killaura.Enabled) or (not killauranear) then break end
-                                            if not oldNearPlayer then
-                                                viewmodel.Handle.MainPart.C0 = originalArmC0 * v.CFrame
-                                                continue
-                                            end
-                                            killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
-                                            killauracurrentanim:Play()
-                                            task.wait(v.Time - 0.01)
+                            if viewmodel then
+                                if killauranear then
+                                    pcall(function()
+                                        if originalArmC0 == nil then
+                                            originalArmC0 = viewmodel.Handle.MainPart.C0
                                         end
-                                        killauraplaying = false
-                                    end
-                                end)
+                                        if killauraplaying == false then
+                                            killauraplaying = true
+                                            for i,v in pairs(anims[blockanim.Value]) do
+                                                if (not Killaura.Enabled) or (not killauranear) then break end
+                                                if not oldNearPlayer then
+                                                    viewmodel.Handle.MainPart.C0 = originalArmC0 * v.CFrame
+                                                    continue
+                                                end
+                                                killauracurrentanim = game:GetService("TweenService"):Create(viewmodel.Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
+                                                killauracurrentanim:Play()
+                                                task.wait(v.Time - 0.01)
+                                            end
+                                            killauraplaying = false
+                                        end
+                                    end)
+                                end
                             end
                             oldNearPlayer = killauranear
                         until Killaura.Enabled == false
@@ -471,6 +475,9 @@ run(function()
                 firstPlayerNear = false
                 killauranear = false
             end
+        end,
+        ExtraText = function()
+            return blockanim.Value
         end
     })
 	local animmeth = {}
@@ -520,6 +527,32 @@ run(function()
         end,
         ExtraText = function()
             return NoSlowMethod.Value
+        end
+    })
+end)
+
+run(function()
+    local Velocity = {Enabled = false}
+    local VelocityMode = {Value = "Parent"}
+
+    local oldparent
+    Velocity = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+        Name = "Velocity",
+        Function = function(callback)
+            if callback then
+                oldparent = store.VelocityRemote.Parent
+                if VelocityMode.Value == "Parent" then
+                    store.VelocityRemote.Parent = game
+                end
+            else
+                if store.VelocityRemote.Parent ~= oldparent then
+                    store.VelocityRemote.Parent = oldparent
+                end
+                oldparent = nil
+            end
+        end,
+        ExtraText = function()
+            return VelocityMode.Value
         end
     })
 end)
