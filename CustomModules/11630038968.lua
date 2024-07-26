@@ -493,6 +493,8 @@ run(function()
 	local SpeedValue = {Value = 1}
 	local SpeedMethod = {Value = "AntiCheat A"}
 	local SpeedMoveMethod = {Value = "MoveDirection"}
+	local SpeedDelay = {Value = 0.7}
+	local SpeedPulseDuration = {Value = 100}
 	local SpeedWallCheck = {Enabled = true}
 	local SpeedJump = {Enabled = false}
 	local SpeedJumpHeight = {Value = 20}
@@ -506,29 +508,105 @@ run(function()
 	local oldWalkSpeed
 	local SpeedDown
 	local SpeedUp
+	local w = 0
+	local s = 0
+	local a = 0
+	local d = 0
 
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B", "AntiCheat C", "AntiCheat D"}
 	Speed = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "Speed",
 		Function = function(callback)
 			if callback then
-				BindToStepped("Speed", 1, function(delta)
-					if isAlive() and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
-						local movevec = entityLibrary.character.Humanoid.MoveDirection
+				w = inputService:IsKeyDown(Enum.KeyCode.W) and -1 or 0
+				s = inputService:IsKeyDown(Enum.KeyCode.S) and 1 or 0
+				a = inputService:IsKeyDown(Enum.KeyCode.A) and -1 or 0
+				d = inputService:IsKeyDown(Enum.KeyCode.D) and 1 or 0
+				table.insert(Speed.Connections, inputService.InputBegan:Connect(function(input1)
+					if inputService:GetFocusedTextBox() == nil then
+						if input1.KeyCode == Enum.KeyCode.W then
+							w = -1
+						end
+						if input1.KeyCode == Enum.KeyCode.S then
+							s = 1
+						end
+						if input1.KeyCode == Enum.KeyCode.A then
+							a = -1
+						end
+						if input1.KeyCode == Enum.KeyCode.D then
+							d = 1
+						end
+					end
+				end))
+				table.insert(Speed.Connections, inputService.InputEnded:Connect(function(input1)
+					if input1.KeyCode == Enum.KeyCode.W then
+						w = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.S then
+						s = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.A then
+						a = 0
+					end
+					if input1.KeyCode == Enum.KeyCode.D then
+						d = 0
+					end
+				end))
+				local pulsetick = tick()
+				task.spawn(function()
+					repeat
+						pulsetick = tick() + (SpeedPulseDuration.Value / 100)
+						task.wait((SpeedDelay.Value / 10) + (SpeedPulseDuration.Value / 100))
+					until (not Speed.Enabled)
+				end)
+				BindToRenderStep("Speed", function(delta)
+					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
+						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
-                        if SpeedMethod.Value == "CFrame" then
+						if SpeedMethod.Value == "Velocity" then
+							if SpeedAnimation.Enabled then
+								for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
+									if v.Name == "WalkAnim" or v.Name == "RunAnim" then
+										v:AdjustSpeed(entityLibrary.character.Humanoid.WalkSpeed / 16)
+									end
+								end
+							end
+							local newvelo = movevec * SpeedValue.Value
+							entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
+						elseif SpeedMethod.Value == "CFrame" then
 							for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
 								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
 									v:AdjustSpeed(SpeedValue.Value / 15)
 								end
 							end
-                            local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
-                            local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
-                            if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
+							local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
+							if SpeedWallCheck.Enabled then
+								local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
+								if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
+							end
 							entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+						elseif SpeedMethod.Value == "TP" then
+							if SpeedDelayTick <= tick() then
+								SpeedDelayTick = tick() + (SpeedDelay.Value / 10)
+								local newpos = (movevec * SpeedValue.Value)
+								if SpeedWallCheck.Enabled then
+									local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
+									if ray then newpos = (ray.Position - entityLibrary.character.HumanoidRootPart.Position) end
+								end
+								entityLibrary.character.HumanoidRootPart.CFrame = entityLibrary.character.HumanoidRootPart.CFrame + newpos
+							end
+						elseif SpeedMethod.Value == "Pulse" then
+							local pulsenum = (SpeedPulseDuration.Value / 100)
+							local newvelo = movevec * (SpeedValue.Value + (entityLibrary.character.Humanoid.WalkSpeed - SpeedValue.Value) * (1 - (math.max(pulsetick - tick(), 0)) / pulsenum))
+							entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
+						elseif SpeedMethod.Value == "WalkSpeed" then
+							if oldWalkSpeed == nil then
+								oldWalkSpeed = entityLibrary.character.Humanoid.WalkSpeed
+							end
+							entityLibrary.character.Humanoid.WalkSpeed = SpeedValue.Value
 						end
-						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
+						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or KillauraNearTarget) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
@@ -540,7 +618,12 @@ run(function()
 					end
 				end)
 			else
-				UnbindFromStepped("Speed")
+				SpeedDelayTick = 0
+				if oldWalkSpeed then
+					entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
+					oldWalkSpeed = nil
+				end
+				UnbindFromRenderStep("Speed")
 			end
 		end,
 		ExtraText = function()
@@ -552,16 +635,46 @@ run(function()
 	})
 	SpeedMethod = Speed.CreateDropdown({
 		Name = "Mode",
-		List = {"CFrame", "Hypixel"},
+		List = {"Velocity", "CFrame", "TP", "Pulse", "WalkSpeed"},
 		Function = function(val)
+			if oldWalkSpeed then
+				entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
+				oldWalkSpeed = nil
+			end
+			SpeedDelay.Object.Visible = val == "TP" or val == "Pulse"
+			SpeedWallCheck.Object.Visible = val == "CFrame" or val == "TP"
+			SpeedPulseDuration.Object.Visible = val == "Pulse"
+			SpeedAnimation.Object.Visible = val == "Velocity"
 		end
+	})
+	SpeedMoveMethod = Speed.CreateDropdown({
+		Name = "Movement",
+		List = {"Manual", "MoveDirection"},
+		Function = function(val) end
 	})
 	SpeedValue = Speed.CreateSlider({
 		Name = "Speed",
 		Min = 1,
-		Max = 34,
-        Default = 27,
+		Max = 150,
 		Function = function(val) end
+	})
+	SpeedDelay = Speed.CreateSlider({
+		Name = "Delay",
+		Min = 1,
+		Max = 50,
+		Function = function(val)
+			SpeedDelayTick = tick() + (val / 10)
+		end,
+		Default = 7,
+		Double = 10
+	})
+	SpeedPulseDuration = Speed.CreateSlider({
+		Name = "Pulse Duration",
+		Min = 1,
+		Max = 100,
+		Function = function() end,
+		Default = 50,
+		Double = 100
 	})
 	SpeedJump = Speed.CreateToggle({
 		Name = "AutoJump",
@@ -589,6 +702,11 @@ run(function()
 	SpeedJumpVanilla = Speed.CreateToggle({
 		Name = "Real Jump",
 		Function = function() end
+	})
+	SpeedWallCheck = Speed.CreateToggle({
+		Name = "Wall Check",
+		Function = function() end,
+		Default = true
 	})
 	SpeedAnimation = Speed.CreateToggle({
 		Name = "Slowdown Anim",
