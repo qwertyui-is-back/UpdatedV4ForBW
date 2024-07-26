@@ -819,7 +819,7 @@ run(function()
         Name = "Velocity",
         Function = function(callback)
             if callback then
-                velo:Destroy()
+                CombatService:WaitForChild("RE").KnockBackApplied:Destroy()
             else
                 warningNotification("Cat "..catver, "Fixed next game", 5)
             end
