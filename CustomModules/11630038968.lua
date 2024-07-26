@@ -225,7 +225,7 @@ end
 
 local function EntityNearPosition(distance, checktab)
 	checktab = checktab or {}
-	if entityLibrary.isAlive then
+	if isAlive() then
 		local sortedentities = {}
 		for i, v in pairs(entityLibrary.entityList) do -- loop through playersService
 			if not v.Targetable then continue end
