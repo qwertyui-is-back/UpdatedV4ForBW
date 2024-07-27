@@ -224,6 +224,10 @@ local function findTouchInterest(tool)
 	return nil
 end
 
+local function isVulnerable(plr)
+	return plr.Humanoid.Health > 0 and not plr.Character.FindFirstChildWhichIsA(plr.Character, "ForceField")
+end
+
 local function EntityNearPosition(distance, checktab)
 	checktab = checktab or {}
 	if isAlive() then
