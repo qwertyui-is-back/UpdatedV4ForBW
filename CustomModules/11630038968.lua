@@ -601,14 +601,14 @@ run(function()
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
                         if boostDelay >= 1 and boostDelay <= 3 then
                             boostedSpeed = 11
-                            entityLibrary.character.Humanoid.WalkSpeed = 17.5
+                            entityLibrary.character.Humanoid.WalkSpeed = 16.5
                         elseif boostDelay >= 3 and boostDelay <= 5 then
-                            boostedSpeed = 7
-                            entityLibrary.character.Humanoid.WalkSpeed = 17
+                            boostedSpeed = 8
+                            entityLibrary.character.Humanoid.WalkSpeed = 16
                         elseif boostDelay >= 5 and boostDelay <= 9 then
-                            boostedSpeed = 5
+                            boostedSpeed = 6
                         elseif boostDelay >= 9 then
-                            boostedSpeed = 0
+                            boostedSpeed = 0.005
                             entityLibrary.character.Humanoid.WalkSpeed = 13
                         end
                         if SpeedAnimation.Enabled then
