@@ -763,7 +763,7 @@ run(function()
 								c = R22
 								s = R02
 							end
-							local norm = math.sqrt(c*c + s*s)
+							local norm = 1--math.sqrt(c*c + s*s)
 							local cameraRelativeMoveVector = controlmodule:GetMoveVector()
                             local divvalue = 3
 							vec = Vector3.new(
