@@ -765,10 +765,11 @@ run(function()
 							end
 							local norm = math.sqrt(c*c + s*s)
 							local cameraRelativeMoveVector = controlmodule:GetMoveVector()
+                            local divvalue = 1.5
 							vec = Vector3.new(
-								(c*cameraRelativeMoveVector.X + s*cameraRelativeMoveVector.Z)/norm,
+								(c*(cameraRelativeMoveVector.X/divvalue) + s*(cameraRelativeMoveVector.Z/divvalue))/norm,
 								0,
-								(c*cameraRelativeMoveVector.Z - s*cameraRelativeMoveVector.X)/norm
+								(c*(cameraRelativeMoveVector.Z/divvalue) - s*(cameraRelativeMoveVector.X/divvalue))/norm
 							)
 						end
 					end
