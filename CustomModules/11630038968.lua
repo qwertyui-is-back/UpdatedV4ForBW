@@ -599,15 +599,15 @@ run(function()
 						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
-                        if boostDelay >= 2 and boostDelay <= 5 then
-                            boostedSpeed = 7
+                        if boostDelay >= 1 and boostDelay <= 3 then
+                            boostedSpeed = 11
                             entityLibrary.character.Humanoid.WalkSpeed = 17.5
-                        elseif boostDelay >= 5 and boostDelay <= 7 then
-                            boostedSpeed = 4
+                        elseif boostDelay >= 3 and boostDelay <= 5 then
+                            boostedSpeed = 7
                             entityLibrary.character.Humanoid.WalkSpeed = 17
-                        elseif boostDelay >= 7 and boostDelay <= 10 then
-                            boostedSpeed = 2
-                        elseif boostDelay >= 10 then
+                        elseif boostDelay >= 5 and boostDelay <= 9 then
+                            boostedSpeed = 5
+                        elseif boostDelay >= 9 then
                             boostedSpeed = 0
                             entityLibrary.character.Humanoid.WalkSpeed = 13
                         end
@@ -622,7 +622,7 @@ run(function()
                         entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-                                boostedSpeed = 10
+                                boostedSpeed = 16
                                 boostDelay = 0
                                 entityLibrary.character.Humanoid.WalkSpeed = 18.5
 								if SpeedJumpVanilla.Enabled then
