@@ -751,7 +751,7 @@ run(function()
 							AimPart = "RootPart"
 						})
 						if plr then
-							facecam = false
+							facecam = true
 							--code stolen from roblox since the way I tried to make it apparently sucks
 							local c, s
 							local plrCFrame = CFrame.lookAt(entityLibrary.character.HumanoidRootPart.Position, Vector3.new(plr.RootPart.Position.X, 0, plr.RootPart.Position.Z))
