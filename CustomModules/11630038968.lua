@@ -342,9 +342,9 @@ run(function()
 			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(115), math.rad(150), math.rad(350)), Time = 0.25},
 			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(60), math.rad(100), math.rad(360)), Time = 0.25}
 		},
-        Smooth = {
-            {CFrame = CFrame.new(0,-0.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(160)), Time = 0.15},
-            {CFrame = CFrame.new(0, 0.65, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.1}
+        Slide = {
+            {CFrame = CFrame.new(0,-0.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(160)), Time = 0.11},
+            {CFrame = CFrame.new(0, 0.65, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.16}
         },
         Leaked = {
             {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0},
