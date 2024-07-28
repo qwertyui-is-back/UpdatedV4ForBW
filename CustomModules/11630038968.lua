@@ -520,8 +520,8 @@ run(function()
     })
 end)
 
+local Speed = {Enabled = false}
 run(function()
-	local Speed = {Enabled = false}
 	local SpeedValue = {Value = 1}
 	local SpeedMethod = {Value = "AntiCheat A"}
 	local SpeedMoveMethod = {Value = "MoveDirection"}
@@ -601,15 +601,13 @@ run(function()
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
                         if boostDelay >= 1 and boostDelay <= 3 then
                             boostedSpeed = 11
-                            entityLibrary.character.Humanoid.WalkSpeed = 16.5
+                            entityLibrary.character.Humanoid.WalkSpeed = 15.5
                         elseif boostDelay >= 3 and boostDelay <= 5 then
                             boostedSpeed = 8
-                            entityLibrary.character.Humanoid.WalkSpeed = 16
                         elseif boostDelay >= 5 and boostDelay <= 9 then
                             boostedSpeed = 6
                         elseif boostDelay >= 9 and boostDelay <= 12 then
                             boostedSpeed = 0.005
-                            entityLibrary.character.Humanoid.WalkSpeed = 13
                         elseif boostDelay >= 12 then
                             boostedSpeed = 0
                             entityLibrary.character.Humanoid.WalkSpeed = SpeedValue.Value
@@ -627,7 +625,6 @@ run(function()
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
                                 boostedSpeed = 13
                                 boostDelay = 0
-                                entityLibrary.character.Humanoid.WalkSpeed = 18.5
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 								else
@@ -801,7 +798,7 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToRenderStep("NoSlow",1,function()
-                    if NoSlowMethod.Value == "Spoof" then
+                    if NoSlowMethod.Value == "Spoof" and not Speed.Enabled then
                         if store.isBlocking() or store.isEating() or store.isSlow() then
                             lplr.Character.Humanoid.WalkSpeed = 16.83
                         end
