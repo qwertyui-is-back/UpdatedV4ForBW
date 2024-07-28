@@ -446,7 +446,7 @@ run(function()
                                 killauranear = true
                                 --print("there are players")
                                 killauranear = true
-                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
+                                functions.Attack(v.Player, lplr.Character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
                                 if Autoblock.Enabled and (not store.isBlocking()) then
                                     block()
                                 end
@@ -594,14 +594,14 @@ run(function()
 					until (not Speed.Enabled)
 				end)
 				BindToRenderStep("Speed", 1, function(delta)
-					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
+					if entityLibrary.isAlive and (typeof(lplr.Character.HumanoidRootPart) ~= "Instance" or isnetworkowner(lplr.Character.HumanoidRootPart)) then
                         boostDelay += 1
-						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or entityLibrary.character.Humanoid.MoveDirection).Unit
+						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or lplr.Character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
                         if boostDelay >= 1 and boostDelay <= 3 then
                             boostedSpeed = 10
-                            entityLibrary.character.Humanoid.WalkSpeed = 6
+                            lplr.Character.Humanoid.WalkSpeed = 6
                         elseif boostDelay >= 3 and boostDelay <= 5 then
                             boostedSpeed = 8
                         elseif boostDelay >= 5 and boostDelay <= 9 then
@@ -610,25 +610,25 @@ run(function()
                             boostedSpeed = 0.005
                         elseif boostDelay >= 12 then
                             boostedSpeed = 0
-                            entityLibrary.character.Humanoid.WalkSpeed = SpeedValue.Value
+                            lplr.Character.Humanoid.WalkSpeed = SpeedValue.Value
                         end
                         if SpeedAnimation.Enabled then
-                            for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
+                            for i,v in pairs(lplr.Character.Humanoid:GetPlayingAnimationTracks()) do
                                 if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-                                    v:AdjustSpeed(entityLibrary.character.Humanoid.WalkSpeed / 16)
+                                    v:AdjustSpeed(lplr.Character.Humanoid.WalkSpeed / 16)
                                 end
                             end
                         end
                         local newvelo = movevec * (SpeedValue.Value + boostedSpeed)
-                        entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
+                        lplr.Character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, lplr.Character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
-							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
+							if (lplr.Character.Humanoid.FloorMaterial ~= Enum.Material.Air) and lplr.Character.Humanoid.MoveDirection ~= Vector3.zero then
                                 boostedSpeed = 11
                                 boostDelay = 0
 								if SpeedJumpVanilla.Enabled then
-									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+									lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 								else
-									entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(entityLibrary.character.HumanoidRootPart.Velocity.X, SpeedJumpHeight.Value, entityLibrary.character.HumanoidRootPart.Velocity.Z)
+									lplr.Character.HumanoidRootPart.Velocity = Vector3.new(lplr.Character.HumanoidRootPart.Velocity.X, SpeedJumpHeight.Value, lplr.Character.HumanoidRootPart.Velocity.Z)
 								end
 							end
 						end
@@ -636,7 +636,7 @@ run(function()
 				end)
 			else
 				SpeedDelayTick = 0
-                entityLibrary.character.Humanoid.WalkSpeed = 16.83
+                lplr.Character.Humanoid.WalkSpeed = 16.83
 				UnbindFromRenderStep("Speed")
 			end
 		end,
@@ -652,7 +652,7 @@ run(function()
 		List = {"Velocity", "Boost"},
 		Function = function(val)
 			if oldWalkSpeed then
-				entityLibrary.character.Humanoid.WalkSpeed = oldWalkSpeed
+				lplr.Character.Humanoid.WalkSpeed = oldWalkSpeed
 				oldWalkSpeed = nil
 			end
 			SpeedDelay.Object.Visible = val == "TP" or val == "Pulse"
@@ -870,18 +870,18 @@ run(function()
 						FlyUp = jumpButton.ImageRectOffset.X == 146
 					end)
 				end
-                YCFrame = entityLibrary.character.HumanoidRootPart.CFrame.Y
+                YCFrame = lplr.Character.HumanoidRootPart.CFrame.Y
                 BindToStepped("fly",1,function()
                     if FlyUp then
                         YCFrame += VerticalSpeed.Value
                     elseif FlyDown then
                         YCFrame -= VerticalSpeed.Value
                     end
-                    local cframe = {entityLibrary.character.HumanoidRootPart.CFrame:GetComponents()}
+                    local cframe = {lplr.Character.HumanoidRootPart.CFrame:GetComponents()}
                     cframe[2] = YCFrame
-                    entityLibrary.character.HumanoidRootPart.CFrame = CFrame.new(unpack(cframe))
-                    local velo = entityLibrary.character.HumanoidRootPart.Velocity
-                    entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(velo.X, 0, velo.Z)
+                    lplr.Character.HumanoidRootPart.CFrame = CFrame.new(unpack(cframe))
+                    local velo = lplr.Character.HumanoidRootPart.Velocity
+                    lplr.Character.HumanoidRootPart.Velocity = Vector3.new(velo.X, 0, velo.Z)
                 end)
             else
 				FlyUp = false
@@ -923,7 +923,7 @@ run(function()
 		lplr.Character.PrimaryPart = NewRoot
 		lplr.Character.Parent = workspace
 		OldRoot.Transparency = ShowPart.Enabled and 0.35 or 1
-		entityLibrary.character.HumanoidRootPart = NewRoot
+		lplr.Character.HumanoidRootPart = NewRoot
 	end
 
 	local function RemoveClonedCharacter()
@@ -933,7 +933,7 @@ run(function()
 		NewRoot.Parent = workspace
 		lplr.Character.PrimaryPart = OldRoot
 		lplr.Character.Parent = workspace
-		entityLibrary.character.HumanoidRootPart = OldRoot
+		lplr.Character.HumanoidRootPart = OldRoot
 		NewRoot:Remove()
 		NewRoot = {} 
 		OldRoot = {}
