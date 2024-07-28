@@ -19,7 +19,6 @@
 ]]--
 
 
-
 -- Cat V.. Source Code --
 local catver = "V5"
 -- Cat V.. Source Code --
@@ -424,7 +423,6 @@ local function getSpeed()
 	if lplr.Character then
 		local SpeedDamageBoost = lplr.Character:GetAttribute("SpeedBoost")
 		if SpeedDamageBoost and SpeedDamageBoost > 1 then
-			speed = speed * 1.6
 			speed = speed * 1.15
 		end
 		if store.grapple > tick() then
@@ -2043,6 +2041,8 @@ run(function()
 	})
 end)
 
+local AnticheatBypass = {Enabled = false}
+
 run(function()
 	local Velocity = {Enabled = false}
 	local VelocityHorizontal = {Value = 100}
@@ -2832,6 +2832,7 @@ run(function()
 	local InfiniteFlySpeed = {Value = 23}
 	local InfiniteFlyVerticalSpeed = {Value = 40}
 	local InfiniteFlyVertical = {Enabled = true}
+	local InfiniteFlyNotifs = {Enabled = true}
 	local InfiniteFlyUp = false
 	local InfiniteFlyDown = false
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
@@ -2841,6 +2842,7 @@ run(function()
 	local cloned
 	local clone
 	local bodyvelo
+	local usedPingSpoof = false
 	local FlyOverlap = OverlapParams.new()
 	FlyOverlap.MaxParts = 9e9
 	FlyOverlap.FilterDescendantsInstances = {}
@@ -2880,13 +2882,25 @@ run(function()
 		origcf[2] = oldclonepos
 		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
 		oldcloneroot = nil
-		warningNotification("InfiniteFly", "Landed!", 3)
+		if InfiniteFlyNotifs.Enabled then
+			warningNotification("InfiniteFly", "Landed!", 3)
+		end
+		if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
+			task.wait(0.075)
+			GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
+			usedPingSpoof = false
+		end
 	end
 
 	InfiniteFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "InfiniteFly",
 		Function = function(callback)
 			if callback then
+				usedPingSpoof = false
+				if GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled then 
+					GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
+					usedPingSpoof = true
+				end
 				if not entityLibrary.isAlive then
 					disabledproper = true
 				end
@@ -2981,7 +2995,9 @@ run(function()
 							local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
 							speedCFrame[1] = clone.CFrame.X
 							if speedCFrame[2] < 1000 or (not goneup) then
-								task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
+								if InfiniteFlyNotifs.Enabled then
+									task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
+								end
 								speedCFrame[2] = 100000
 								goneup = true
 							end
@@ -3033,7 +3049,9 @@ run(function()
 					entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
 					disabledproper = false
 					if isnetworkowner(oldcloneroot) then
-						warningNotification("InfiniteFly", "Waiting 1.1s to not flag", 3)
+						if InfiniteFlyNotifs.Enabled then
+							warningNotification("InfiniteFly", "Waiting 1.1s to not flag", 3)
+						end
 						task.delay(1.1, disablefunc)
 					else
 						disablefunc()
@@ -3064,6 +3082,11 @@ run(function()
 	})
 	InfiniteFlyVertical = InfiniteFly.CreateToggle({
 		Name = "Y Level",
+		Function = function() end,
+		Default = true
+	})
+	InfiniteFlyNotifs = InfiniteFly.CreateToggle({
+		Name = "Notifications",
 		Function = function() end,
 		Default = true
 	})
@@ -3804,6 +3827,7 @@ run(function()
 		Function = function() end,
 		HoverText = "no hit vape user"
 	})
+	killauranovape.Object.Visible = false
 end)
 
 local LongJump = {Enabled = false}
@@ -9346,84 +9370,105 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 	})
 end)
 
-
-
 run(function()
-	local tws = game:GetService("TweenService")
-	local PingSpoof = {Enabled = false}
-	local PingSpoofDelay = {Value = 50}
-	local PingSpoofPart = {Enabled = true}
-	local clonepos
-	local bticks = 0
-	local Blinking = false
-	local show = false
+	local AnticheatBypass = {Enabled = false}
 
-	local function roundup(num)
-		return math.ceil(num)
+	local ACBDelay = {Value = 35}
+	local ACBSpeed = {Value = 10}
+	local ACBShowPart = {Enabled = false}
+
+	local DelayTicks = 0
+	local OldRoot
+	local NewRoot
+
+	local function CreateClonedCharacter()
+		lplr.Character.Parent = game
+        lplr.Character.HumanoidRootPart.Archivable = true
+		OldRoot = lplr.Character.HumanoidRootPart 
+		NewRoot = OldRoot:Clone()
+		NewRoot.Parent = lplr.Character
+		OldRoot.Parent = workspace
+		lplr.Character.PrimaryPart = NewRoot
+		lplr.Character.Parent = workspace
+		OldRoot.Transparency = ACBShowPart and 0 or 1
+		entityLibrary.character.HumanoidRootPart = NewRoot
 	end
 
-	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "PingSpoof",
-		Function = function(callback)
-			if callback then 
-				bticks = 0
-				clonepos = Instance.new("Part",workspace)
-				clonepos.Position = lplr.Character.HumanoidRootPart.Position
-				clonepos.CanCollide = false
-				clonepos.Anchored = true
-				clonepos.Size = Vector3.new(3.9,5,3.9)
-				clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
-				clonepos.Name = "SkibidiPing"
-				RunLoops:BindToHeartbeat("PingSpoof",function()
-					clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
-					bticks = bticks + 1
-					if entityLibrary.isAlive then
-						if bticks >= (PingSpoofDelay.Value) then
-							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
-							bticks = 0
-							Blinking = false
-							show = true
-						elseif bticks >= (roundup(PingSpoofDelay.Value / 50)) then
-							show = true
-						else
-							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
-							Blinking = true
-							show = false
-						end
-					end
-					if clonepos and show then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
-						local twsp = (PingSpoofDelay.Value / 1000)
-						local tweenInfo = TweenInfo.new(twsp)
+	local function RemoveClonedCharacter()
+		OldRoot.Transparency = 1
+		lplr.Character.Parent = game
+		OldRoot.Parent = lplr.Character
+		NewRoot.Parent = workspace
+		lplr.Character.PrimaryPart = OldRoot
+		lplr.Character.Parent = workspace
+		entityLibrary.character.HumanoidRootPart = OldRoot
+		NewRoot:Remove()
+		NewRoot = {} 
+		OldRoot = {}
+		OldRoot.CFrame = NewRoot.CFrame
+	end
 
-						local tween = tws:Create(clonepos, tweenInfo, {Position = lplr.Character.HumanoidRootPart.Position})
-						tween:Play()
-					end
+	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "AnticheatBypass",
+		Function = function(callback)
+			if callback then
+				task.spawn(function()
+					DelayTicks = 0
+					if store.matchState == 0 then
+						repeat task.wait() until store.matchState ~= 0  
+						task.wait(1.5)
+					end	
+					CreateClonedCharacter()
+					table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
+						task.wait(1.5)
+						CreateClonedCharacter()
+					end))
+					repeat task.wait()
+						DelayTicks += 1
+						OldRoot.Transparency = ACBShowPart.Enabled and 0.35 or 1
+						local RealHRP = OldRoot
+						local FakeChar = NewRoot
+						RealHRP.Velocity = Vector3.zero
+						if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
+							RealHRP.Velocity = Vector3.zero
+							local info = TweenInfo.new(ACBSpeed.Value / 100)
+							local cf = FakeChar.CFrame
+							if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
+								cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
+							end
+							local data = {
+								CFrame = cf
+							}
+							game:GetService("TweenService"):Create(RealHRP, info, data):Play()
+							DelayTicks = 0
+						end
+					until (not AnticheatBypass.Enabled)
 				end)
-			else 
-				RunLoops:UnbindFromHeartbeat("PingSpoof")
-				if clonepos then
-					clonepos:Destroy()
-					clonepos = nil
-				end
+			else
+				RemoveClonedCharacter()
 			end
 		end,
-		HoverText = "Helps PingSpoof the anticheat",
-		ExtraText = function()
-			return PingSpoofDelay.Value
-		end
+		HoverText = "Helps bypass the AntiCheat"
 	})
-	PingSpoofDelay = PingSpoof.CreateSlider({
+	ACBDelay = AnticheatBypass.CreateSlider({
 		Name = "Delay",
 		Min = 0,
 		Max = 300,
 		Default = 50,
 		Function = function() end
 	})
-	PingSpoofPart = PingSpoof.CreateToggle({
+	ACBSpeed = AnticheatBypass.CreateSlider({
+		Name = "TP Speed",
+		Min = 0,
+		Max = 100,
+		Default = 10,
+		Function = function() end
+	})
+	ACBShowPart = AnticheatBypass.CreateToggle({
 		Name = "Show Part",
 		Function = function(callback)
-			if clonepos then
-				clonepos.Transparency = callback and 0.65 or 1
+			if OldRoot then
+				OldRoot.Transparency = callback and 0.35 or 1
 			end
 		end
 	})
@@ -9444,7 +9489,7 @@ run(function()
 							}
 						}
 	
-						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args))
+						pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args)) end)
 					end
 				end)
 			else
@@ -9563,7 +9608,6 @@ run(function()
 				end)
 				if csd then
 					DeleteClientSidedAnticheat()
-					warningNotification("Cat "..catver, "Disabled Client", 3)
 				end
 			else
 				disablerZephyr = false

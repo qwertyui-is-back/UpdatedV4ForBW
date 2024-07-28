@@ -1082,6 +1082,10 @@ local function TextGUIUpdate()
 
 		GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value)
 	end
+	if shared.sigma then
+		VapeText.Font = Enum.Font.Roboto
+		VapeTextExtra.Font = Enum.Font.Roboto
+	end
 end
 
 TextGUI.GetCustomChildren().Parent:GetPropertyChangedSignal("Position"):Connect(TextGUIUpdate)
@@ -1245,8 +1249,13 @@ TextGUI.CreateDropdown({
 	Name = "Font",
 	List = TextGUIFonts,
 	Function = function(val)
-		VapeText.Font = Enum.Font[val]
-		VapeTextExtra.Font = Enum.Font[val]
+		if shared.sigma then
+			VapeText.Font = Enum.Font.Roboto
+			VapeTextExtra.Font = Enum.Font.Roboto
+		else
+			VapeText.Font = Enum.Font[val]
+			VapeTextExtra.Font = Enum.Font[val]
+		end
 		GuiLibrary.UpdateHudEvent:Fire()
 	end
 })
@@ -1801,7 +1810,7 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 			if shared.VapeDeveloper then
 				loadstring(readfile("vape/NewMainScript.lua"))()
 			else
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/NewMainScript.lua", true))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/NewMainScript.lua", true))()
 			end
 		]]
 		if shared.sigma then
@@ -1981,7 +1990,8 @@ local function loadVape()
 	ProfilesTextList.RefreshValues(profiles)
 	GUIbind.Reload()
 	TextGUIUpdate()
-	GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value, true)
+	--GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value, true)
+	GuiLibrary.UpdateUI(320/360, 1, 1, true)
 	if not shared.VapeSwitchServers then
 		if BlatantModeToggle.Enabled then
 			pcall(function()
