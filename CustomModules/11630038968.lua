@@ -280,27 +280,6 @@ local store = {
 run(function()
     store.update = function()
         task.spawn(function()
-            for i,v in cam.Viewmodel:GetChildren() do
-                if i == 10 and store.viewmodel ~= v then
-                    store.viewmodel = v
-                    break
-                end		
-            end
-            local sword = "WoodenSword"
-            if lplr.Character:FindFirstChild("WoodenSword") then
-                sword = "WoodenSword"
-            elseif lplr.Character:FindFirstChild("Sword") then
-                sword = "Sword"
-            end
-            if store.sword ~= sword then
-                store.sword = sword
-            end
-            local health = lplr.Character.Humanoid.Health
-            if store.health ~= health then
-                store.health = health
-            end
-            local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
-            if store.ping ~= ping then store.ping = ping end
         end)
     end
     store.getViewmodel = function()
@@ -310,7 +289,7 @@ run(function()
         return store.sword
     end
 end)
-runcode(function()
+run(function()
     BindToRenderStep("Update", 1, function()
         store.update()
     end)
