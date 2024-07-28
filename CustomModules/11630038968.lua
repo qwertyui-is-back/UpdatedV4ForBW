@@ -600,8 +600,8 @@ run(function()
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
                         if boostDelay >= 1 and boostDelay <= 3 then
-                            boostedSpeed = 11
-                            entityLibrary.character.Humanoid.WalkSpeed = 15.5
+                            boostedSpeed = 10
+                            entityLibrary.character.Humanoid.WalkSpeed = 6
                         elseif boostDelay >= 3 and boostDelay <= 5 then
                             boostedSpeed = 8
                         elseif boostDelay >= 5 and boostDelay <= 9 then
@@ -623,7 +623,7 @@ run(function()
                         entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-                                boostedSpeed = 13
+                                boostedSpeed = 11
                                 boostDelay = 0
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
