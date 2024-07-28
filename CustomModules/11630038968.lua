@@ -942,7 +942,7 @@ run(function()
 
     AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
         Name = "SpeedDisabler",
-        HoverText = "Allows you to use 35+ speed",
+        HoverText = "Fakes high lag",
         Function = function(callback)
             if callback then
 				task.spawn(function()
@@ -959,7 +959,7 @@ run(function()
                         local RealHRP = OldRoot
                         local FakeChar = NewRoot
                         RealHRP.Velocity = Vector3.zero
-                        if isAlive(lplr) and dt >= (math.ceil(DelayValue.Value * 10)) then
+                        if isAlive(lplr) and dt >= (math.ceil(DelayValue.Value)) then
                             RealHRP.Velocity = Vector3.zero
                             local info = TweenInfo.new(SpeedVal.Value)
                             local cf = FakeChar.CFrame
@@ -983,18 +983,14 @@ run(function()
         Min = 1,
         Max = 100,
         Default = 35,
-        Function = function(val)
-            DelayValue.Value = val / 10
-        end
+        Function = function(val) end
     })
     SpeedVal = AnticheatBypass.CreateSlider({
         Name = "Send Speed",
         Min = 0,
         Max = 50,
         Default = 10,
-        Function = function(val)
-            SpeedVal.Value = val / 100
-        end
+        Function = function(val) end
     })
 	ShowPart = AnticheatBypass.CreateToggle({
 		Name = "Show Part",
