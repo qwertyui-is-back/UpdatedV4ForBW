@@ -277,7 +277,45 @@ local store = {
     health = 100,
     ping = 0
 }
-
+run(function()
+    store.update = function()
+        task.spawn(function()
+            for i,v in cam.Viewmodel:GetChildren() do
+                if i == 10 and store.viewmodel ~= v then
+                    store.viewmodel = v
+                end		
+            end
+            local sword = "WoodenSword"
+            if lplr.Character:FindFirstChild("WoodenSword") then
+                sword = "WoodenSword"
+            elseif lplr.Character:FindFirstChild("Sword") then
+                sword = "Sword"
+            end
+            if store.sword ~= sword then
+                store.sword = sword
+            end
+            local health = lplr.Character.Humanoid.Health
+            if store.health ~= health then
+                store.health = health
+            end
+            local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
+            if store.ping ~= ping then
+                store.ping = ping
+            end
+        end)
+    end
+    store.getViewmodel = function()
+        return store.viewmodel
+    end
+    store.getSword = function()
+        return store.sword
+    end
+end)
+run(function()
+    BindToRenderStep("Update", 1, function()
+        store.update()
+    end)
+end)
 GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("KillauraOptionsButton")
 GuiLibrary.RemoveObject("FlyOptionsButton")
@@ -312,209 +350,7 @@ local functions = {
     end
 }
 
-local killauranear = false
-run(function()
-    local Killaura = {Enabled = false}
-    local blockanim = {Value = "Test"}
-    local Autoblock = {Enabled = false}
-    local Criticals = {Enabled = false}
-    local range = {Value = 20}
-    local blocking = false
-    local killauraplaying = false
-    local oldNearPlayer = false
-    local firstPlayerNear = false
-    local function block()
-        local shouldBlock = true
-        functions.Block(true, store.getSword())
-        blocking = shouldBlock
-    end
-    local function unblock()
-        local shouldBlock = false
-        functions.Block(false, store.getSword())
-        blocking = shouldBlock
-    end
-	local anims = {
-		Test = {
-			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(115), math.rad(150), math.rad(350)), Time = 0.25},
-			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(60), math.rad(100), math.rad(360)), Time = 0.25}
-		},
-        Slide = {
-            {CFrame = CFrame.new(0,-0.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(160)), Time = 0.11},
-            {CFrame = CFrame.new(0, 0.65, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.16}
-        },
-        Leaked = {
-            {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0},
-            {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(10), math.rad(90), math.rad(45)), Time = 0.156},
-            {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0.075}
-        },
-        Slide2 = {
-            {CFrame = CFrame.new(0, 0.25, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.08},
-            {CFrame =  CFrame.new(0,-1.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(170)), Time = 0.16}
-        }
-    }
-    Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-        Name = "Killaura",
-        Function = function(callback)
-            if callback then
-                local viewmodel
-				task.spawn(function()
-                    BindToStepped("anim",1,function()
-                        pcall(function()
-                            viewmodel = cam:FindFirstChild("Viewmodel"):FindFirstChild(store.getSword())
-                        end)
-                    end)
-					local oldNearPlayer
-					repeat
-						task.wait()
-                        if viewmodel then
-                            if killauranear then
-                                pcall(function()
-                                    if originalArmC0 == nil then
-                                        originalArmC0 = viewmodel.Handle.MainPart.C0
-                                    end
-                                    if killauraplaying == false then
-                                        killauraplaying = true
-                                        for i,v in pairs(anims[blockanim.Value]) do
-                                            if (not Killaura.Enabled) or (not killauranear) then break end
-                                            if not oldNearPlayer then
-                                                viewmodel.Handle.MainPart.C0 = originalArmC0 * v.CFrame
-                                                continue
-                                            end
-                                            killauracurrentanim = game:GetService("TweenService"):Create(viewmodel.Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
-                                            killauracurrentanim:Play()
-                                            task.wait(v.Time - 0.01)
-                                        end
-                                        killauraplaying = false
-                                    end
-                                end)
-                            end
-                        end
-                        oldNearPlayer = killauranear
-					until Killaura.Enabled == false
-				end)
-                table.insert(Killaura.Connections, lplr.CharacterAdded:Connect(function()
-                    task.wait(0.5)
-                    task.spawn(function()
-                        local oldNearPlayer
-                        repeat
-                            task.wait()
-                            if viewmodel then
-                                if killauranear then
-                                    pcall(function()
-                                        if originalArmC0 == nil then
-                                            originalArmC0 = viewmodel.Handle.MainPart.C0
-                                        end
-                                        if killauraplaying == false then
-                                            killauraplaying = true
-                                            for i,v in pairs(anims[blockanim.Value]) do
-                                                if (not Killaura.Enabled) or (not killauranear) then break end
-                                                if not oldNearPlayer then
-                                                    viewmodel.Handle.MainPart.C0 = originalArmC0 * v.CFrame
-                                                    continue
-                                                end
-                                                killauracurrentanim = game:GetService("TweenService"):Create(viewmodel.Handle.MainPart, TweenInfo.new(v.Time), {C0 = originalArmC0 * v.CFrame})
-                                                killauracurrentanim:Play()
-                                                task.wait(v.Time - 0.01)
-                                            end
-                                            killauraplaying = false
-                                        end
-                                    end)
-                                end
-                            end
-                            oldNearPlayer = killauranear
-                        until Killaura.Enabled == false
-                    end)
-                end))
-                BindToRenderStep("aura",1,function()
-                    killauranear = false
-                    firstPlayerNear = false
-                    pcall(function()
-                        if isAlive() then
-                            --print("alive")
-                            local plr = GetAllTargets(range.Value)
-                            local targettable = {}
-                            local targetsize = 0
-                            for i,v in next, plr do
-                                targetsize += 1
-                                if not firstPlayerNear then
-                                    firstPlayerNear = true
-                                end
-                                killauranear = true
-                                --print("there are players")
-                                killauranear = true
-                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, store.getSword())
-                                if Autoblock.Enabled and (not store.isBlocking()) then
-                                    block()
-                                end
-                                --print("attacked")
-                            end
-                        end
-                    end)
-                    if not firstPlayerNear then
-                        targetedPlayer = nil
-                        killauranear = false
-                        if Autoblock.Enabled then unblock() end
-                        pcall(function()
-                            if originalArmC0 == nil then
-                                originalArmC0 = viewmodel.Handle.MainPart.C0
-                            end
-                            if viewmodel.Handle.MainPart.C0 ~= originalArmC0 then
-                                pcall(function()
-                                    killauracurrentanim:Cancel()
-                                end)
-                                killauracurrentanim = game:GetService("TweenService"):Create(viewmodel.Handle.MainPart, TweenInfo.new(0), {C0 = originalArmC0})
-                                killauracurrentanim:Play()
-                            end
-                        end)
-                    end
-                end)
-            else
-                UnbindFromRenderStep("aura")
-                UnbindFromStepped("anim")
-                if originalArmC0 == nil then
-                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(store.getSword()).Handle.MainPart.C0
-                end
-                if cam:WaitForChild("Viewmodel"):WaitForChild(store.getSword()).Handle.MainPart.C0 ~= originalArmC0 then
-                    pcall(function()
-                        killauracurrentanim:Cancel()
-                    end)
-                    killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(store.getSword()).Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
-                    killauracurrentanim:Play()
-                end
-                oldNearPlayer = false
-                firstPlayerNear = false
-                killauranear = false
-            end
-        end,
-        ExtraText = function()
-            return blockanim.Value
-        end
-    })
-	local animmeth = {}
-	for i,v in pairs(anims) do table.insert(animmeth, i) end
-	blockanim = Killaura.CreateDropdown({
-		Name = "Animation",
-		List = animmeth,
-		Function = function(val) end
-	})
-	range = Killaura.CreateSlider({
-		["Name"] = "Attack range",
-		["Min"] = 1,
-		["Max"] = 25,
-        ["Default"] = 25, 
-		["Function"] = function(val) end
-	})
-    Criticals = Killaura.CreateToggle({
-        Name = "Criticals",
-        Default = true,
-        Function = function() end
-    })
-    Autoblock = Killaura.CreateToggle({
-        Name = "Autoblock",
-        Default = true,
-        Function = function() end
-    })
-end)
+
 
 run(function()
 	local Speed = {Enabled = false}
