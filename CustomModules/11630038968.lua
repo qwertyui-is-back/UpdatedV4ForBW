@@ -277,23 +277,7 @@ local store = {
     health = 100,
     ping = 0
 }
-run(function()
-    store.update = function()
-        task.spawn(function()
-        end)
-    end
-    store.getViewmodel = function()
-        return store.viewmodel
-    end
-    store.getSword = function()
-        return store.sword
-    end
-end)
-run(function()
-    BindToRenderStep("Update", 1, function()
-        store.update()
-    end)
-end)
+
 GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("KillauraOptionsButton")
 GuiLibrary.RemoveObject("FlyOptionsButton")
