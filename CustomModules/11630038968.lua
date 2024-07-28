@@ -351,10 +351,6 @@ run(function()
             {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(10), math.rad(90), math.rad(45)), Time = 0.156},
             {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0.075}
         },
-        Slide2 = {
-            {CFrame = CFrame.new(0, 0.25, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.08},
-            {CFrame =  CFrame.new(0,-1.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(170)), Time = 0.16}
-        }
     }
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         Name = "Killaura",
@@ -601,15 +597,17 @@ run(function()
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
                         if boostDelay >= 1 and boostDelay <= 3 then
                             boostedSpeed = 11
-                            entityLibrary.character.Humanoid.WalkSpeed = 16.5
+                            entityLibrary.character.Humanoid.WalkSpeed = 17
                         elseif boostDelay >= 3 and boostDelay <= 5 then
                             boostedSpeed = 8
                             entityLibrary.character.Humanoid.WalkSpeed = 16
                         elseif boostDelay >= 5 and boostDelay <= 9 then
                             boostedSpeed = 6
-                        elseif boostDelay >= 9 then
-                            boostedSpeed = 0.005
+                        elseif boostDelay >= 9 and <= 12 then
+                            boostedSpeed = 0
                             entityLibrary.character.Humanoid.WalkSpeed = 13
+                        elseif boostDelay >= 12 then
+                            entityLibrary.character.Humanoid.WalkSpeed = SpeedValue.Value
                         end
                         if SpeedAnimation.Enabled then
                             for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
@@ -622,9 +620,9 @@ run(function()
                         entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-                                boostedSpeed = 16
+                                boostedSpeed = 13.5
                                 boostDelay = 0
-                                entityLibrary.character.Humanoid.WalkSpeed = 18.5
+                                entityLibrary.character.Humanoid.WalkSpeed = 18
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 								else
