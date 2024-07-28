@@ -1,5 +1,4 @@
 local GuiLibrary = shared.GuiLibrary
-local catver = "V5"
 local playersService = game:GetService("Players")
 local coreGui = game:GetService("CoreGui")
 local textService = game:GetService("TextService")
@@ -397,15 +396,15 @@ run(function()
 		if plr == lplr and msg == 'helloimusinginhaler' then return true end
 		if self.localprio > 0 and self.said[plr.Name] == nil and msg == 'helloimusinginhaler' and plr ~= lplr then
 			self.said[plr.Name] = true
-			warningNotification('Vape', plr.Name..' is using cat v5!', 60)
+			notif('Vape', plr.Name..' is using cat v5!', 60)
 			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true
 		elseif self.localprio > 1 and self.said[plr.Name] == nil and msg == 'helloimusingv6' and plr ~= lplr then
 			self.said[plr.Name] = true
-			warningNotification('Vape', plr.Name..' is using cat v6!', 60)
-			self.customtags[plr.Name] = {{text = 'CAT V6 USER', color = Color3.new(0.8, 1, 0)}}
+			notif('Vape', plr.Name..' is using cat v5!', 60)
+			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true
@@ -664,12 +663,10 @@ run(function()
 		end,
 		reveal = function(args)
 			task.delay(0.1, function()
-				local text = "cat v5 client"
-				if self.localprio > 1 then text = "cat v6 client" end
 				if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the '..text)
+                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the inhaler client')
                 else
-                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler '..text, 'All')
+                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler client', 'All')
                 end
 			end)
 		end,
