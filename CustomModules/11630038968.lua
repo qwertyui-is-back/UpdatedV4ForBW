@@ -601,16 +601,17 @@ run(function()
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
                         if boostDelay >= 1 and boostDelay <= 3 then
                             boostedSpeed = 11
-                            entityLibrary.character.Humanoid.WalkSpeed = 17
+                            entityLibrary.character.Humanoid.WalkSpeed = 16.5
                         elseif boostDelay >= 3 and boostDelay <= 5 then
                             boostedSpeed = 8
                             entityLibrary.character.Humanoid.WalkSpeed = 16
                         elseif boostDelay >= 5 and boostDelay <= 9 then
                             boostedSpeed = 6
-                        elseif boostDelay >= 9 and <= 12 then
-                            boostedSpeed = 0
+                        elseif boostDelay >= 9 and boostDealy <= 12 then
+                            boostedSpeed = 0.005
                             entityLibrary.character.Humanoid.WalkSpeed = 13
                         elseif boostDelay >= 12 then
+                            boostedSpeed = 0
                             entityLibrary.character.Humanoid.WalkSpeed = SpeedValue.Value
                         end
                         if SpeedAnimation.Enabled then
@@ -624,9 +625,9 @@ run(function()
                         entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air) and entityLibrary.character.Humanoid.MoveDirection ~= Vector3.zero then
-                                boostedSpeed = 13.5
+                                boostedSpeed = 13
                                 boostDelay = 0
-                                entityLibrary.character.Humanoid.WalkSpeed = 18
+                                entityLibrary.character.Humanoid.WalkSpeed = 18.5
 								if SpeedJumpVanilla.Enabled then
 									entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 								else
@@ -901,7 +902,7 @@ run(function()
 	})
 end)
 
---[[run(function()
+run(function()
     local AnticheatBypass = {Enabled = false}
     local ShowPart = {Enabled = false}
     local funnynumbers = {
@@ -1006,7 +1007,7 @@ end)
 			end
 		end
 	})
-end)]]-- not the best tbh, especially with the fps issue bridge duels has
+end)-- not the best tbh, especially with the fps issue bridge duels has
 
 run(function()
     local SecurityFeatures = {Enabled = false}
