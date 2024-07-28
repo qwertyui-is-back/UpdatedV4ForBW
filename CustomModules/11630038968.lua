@@ -607,7 +607,7 @@ run(function()
                             entityLibrary.character.Humanoid.WalkSpeed = 16
                         elseif boostDelay >= 5 and boostDelay <= 9 then
                             boostedSpeed = 6
-                        elseif boostDelay >= 9 and boostDealy <= 12 then
+                        elseif boostDelay >= 9 and boostDelay <= 12 then
                             boostedSpeed = 0.005
                             entityLibrary.character.Humanoid.WalkSpeed = 13
                         elseif boostDelay >= 12 then
