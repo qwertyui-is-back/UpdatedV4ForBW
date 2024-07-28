@@ -271,8 +271,50 @@ local store = {
     end,
     isSlow = function()
         return lplr.Character.Humanoid.WalkSpeed <= 15 and true or false
-    end
+    end,
+    viewmodel = nil,
+    sword = nil,
+    health = 100,
+    ping = 0
 }
+run(function()
+    store.update = function()
+        task.spawn(function()
+            for i,v in cam.Viewmodel:GetChildren() do
+                if i == 10 and store.viewmodel ~= v then
+                    store.viewmodel = v
+                    break
+                end		
+            end
+            local sword = "WoodenSword"
+            if lplr.Character:FindFirstChild("WoodenSword") then
+                sword = "WoodenSword"
+            elseif lplr.Character:FindFirstChild("Sword") then
+                sword = "Sword"
+            end
+            if store.sword ~= sword then
+                store.sword = sword
+            end
+            local health = lplr.Character.Humanoid.Health
+            if store.health ~= health then
+                store.health = health
+            end
+            local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
+            if store.ping ~= ping then store.ping = ping end
+        end)
+    end
+    store.getViewmodel = function()
+        return store.viewmodel
+    end
+    store.getSword = function()
+        return store.sword
+    end
+end)
+runcode(function()
+    BindToRenderStep("Update", 1, function()
+        store.update()
+    end)
+end)
 GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("KillauraOptionsButton")
 GuiLibrary.RemoveObject("FlyOptionsButton")
@@ -295,15 +337,6 @@ local GetAllTargets = function(distance, sort)
         table.sort(targets, sort)
     end
     return targets
-end
-local function getSword()
-    local sword = "WoodenSword"
-    if lplr.Character:FindFirstChild("WoodenSword") then
-        sword = "WoodenSword"
-    elseif lplr.Character:FindFirstChild("Sword") then
-        sword = "Sword"
-    end
-    return sword
 end
 local functions = {
     Attack = function(ent, bool, item)
@@ -329,12 +362,12 @@ run(function()
     local firstPlayerNear = false
     local function block()
         local shouldBlock = true
-        functions.Block(true, getSword())
+        functions.Block(true, store.getSword())
         blocking = shouldBlock
     end
     local function unblock()
         local shouldBlock = false
-        functions.Block(false, getSword())
+        functions.Block(false, store.getSword())
         blocking = shouldBlock
     end
 	local anims = {
@@ -351,6 +384,10 @@ run(function()
             {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(10), math.rad(90), math.rad(45)), Time = 0.156},
             {CFrame = CFrame.new(0.4, 0.4, 2) * CFrame.Angles(math.rad(80), math.rad(60), math.rad(-20)), Time = 0.075}
         },
+        Slide2 = {
+            {CFrame = CFrame.new(0, 0.25, 2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(110)), Time = 0.08},
+            {CFrame =  CFrame.new(0,-1.25,2.5) * CFrame.Angles(math.rad(-40), math.rad(60), math.rad(170)), Time = 0.16}
+        }
     }
     Killaura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
         Name = "Killaura",
@@ -360,7 +397,7 @@ run(function()
 				task.spawn(function()
                     BindToStepped("anim",1,function()
                         pcall(function()
-                            viewmodel = cam:FindFirstChild("Viewmodel"):FindFirstChild(getSword())
+                            viewmodel = cam:FindFirstChild("Viewmodel"):FindFirstChild(store.getSword())
                         end)
                     end)
 					local oldNearPlayer
@@ -442,7 +479,7 @@ run(function()
                                 killauranear = true
                                 --print("there are players")
                                 killauranear = true
-                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, getSword())
+                                functions.Attack(v.Player, entityLibrary.character.Humanoid.FloorMaterial == Enum.Material.Air and true or Criticals.Enabled and true or false, store.getSword())
                                 if Autoblock.Enabled and (not store.isBlocking()) then
                                     block()
                                 end
@@ -472,13 +509,13 @@ run(function()
                 UnbindFromRenderStep("aura")
                 UnbindFromStepped("anim")
                 if originalArmC0 == nil then
-                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0
+                    originalArmC0 = cam:WaitForChild("Viewmodel"):WaitForChild(store.getSword()).Handle.MainPart.C0
                 end
-                if cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart.C0 ~= originalArmC0 then
+                if cam:WaitForChild("Viewmodel"):WaitForChild(store.getSword()).Handle.MainPart.C0 ~= originalArmC0 then
                     pcall(function()
                         killauracurrentanim:Cancel()
                     end)
-                    killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(getSword()).Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
+                    killauracurrentanim = game:GetService("TweenService"):Create(cam:WaitForChild("Viewmodel"):WaitForChild(store.getSword()).Handle.MainPart, TweenInfo.new(0.1), {C0 = originalArmC0})
                     killauracurrentanim:Play()
                 end
                 oldNearPlayer = false
