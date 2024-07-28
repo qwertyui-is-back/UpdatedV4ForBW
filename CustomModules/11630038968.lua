@@ -923,7 +923,7 @@ run(function()
 		lplr.Character.PrimaryPart = NewRoot
 		lplr.Character.Parent = workspace
 		OldRoot.Transparency = ShowPart.Enabled and 0.35 or 1
-		lplr.Character.HumanoidRootPart = NewRoot
+		entityLibrary.character.HumanoidRootPart = NewRoot
 	end
 
 	local function RemoveClonedCharacter()
@@ -933,7 +933,7 @@ run(function()
 		NewRoot.Parent = workspace
 		lplr.Character.PrimaryPart = OldRoot
 		lplr.Character.Parent = workspace
-		lplr.Character.HumanoidRootPart = OldRoot
+		entityLibrary.character.HumanoidRootPart = OldRoot
 		NewRoot:Remove()
 		NewRoot = {} 
 		OldRoot = {}
