@@ -340,7 +340,7 @@ run(function()
 	local anims = {
         Vanilla = {
             {CFrame = CFrame.new(-1, 0.45, 3) * CFrame.Angles(math.rad(-246), math.rad(145), math.rad(-40)), Time = 0.25},
-            {CFrame = CFrame.new(0, -0.75, 3) * CFrame.Angles(math.rad(-240), math.rad(160), math.rad(-10)), time = 0.185}
+            {CFrame = CFrame.new(0, -0.75, 3) * CFrame.Angles(math.rad(-240), math.rad(160), math.rad(-10)), Time = 0.185}
         },
 		Test = {
 			{CFrame = CFrame.new(0,0,3) * CFrame.Angles(math.rad(115), math.rad(150), math.rad(350)), Time = 0.25},
