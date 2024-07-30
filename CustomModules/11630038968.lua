@@ -271,8 +271,18 @@ local store = {
     end,
     isSlow = function()
         return lplr.Character.Humanoid.WalkSpeed <= 15 and true or false
-    end
+    end,
+    data = {
+        viewmodel = cam.Viewmodel
+    }
 }
+
+local updateViewmodel= function()
+    for i,v in cam.Viewmodel:GetChildren() do
+        if i == 10 then store.data.viewmodel = v break end
+    end
+end
+
 GuiLibrary.RemoveObject("SpeedOptionsButton")
 GuiLibrary.RemoveObject("KillauraOptionsButton")
 GuiLibrary.RemoveObject("FlyOptionsButton")
@@ -1044,7 +1054,8 @@ run(function()
         end
     })
 end)
-runcode(function()
+
+run(function()
 	local transformed = false
 	local OldBedwars = {["Enabled"] = false}
 	local themeselected = {["Value"] = "OldBedwars"}
@@ -1187,4 +1198,49 @@ runcode(function()
 		["Function"] = function() end,
 		["List"] = {"Winter", "Halloween", "Valentines"}
 	})
+end)
+
+run(function()
+    local ViewmodelEditor = {Enabled = false}
+    local posX = {Value = 0}
+    local posY = {Value = 0}
+    local posZ = {Value = 0}
+
+    ViewmodelEditor = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        Name = "ViewmodelEditor",
+        Function = function(callback)
+            if callback then
+				BindToStepped("vme",1,function()
+                    updateViewmodel()
+					store.data.viewmodel.MainPart.Mesh.Offset = Vector3.new(posX.Value/10, posY.Value/10, posZ.Value/10) -- currenthold
+                end)
+            else
+                UnbindFromStepped("vme")
+                updateViewmodel()
+				store.data.viewmodel.MainPart.Mesh.Offset = Vector3.new(0,0,0)
+            end
+        end,
+        HoverText = "Edits the viewmodel."
+    })
+    posX = ViewmodelEditor.CreateSlider({
+        Name = "X",
+        Min = -30,
+        Max = 30,
+        Default = 0,
+        Function = function(val) end
+    })
+    posY = ViewmodelEditor.CreateSlider({
+        Name = "Y",
+        Min = -30,
+        Max = 30,
+        Default = 0,
+        Function = function(val) end
+    })
+    posZ = ViewmodelEditor.CreateSlider({
+        Name = "Z",
+        Min = -30,
+        Max = 30,
+        Default = 0,
+        Function = function(val) end
+    })
 end)
