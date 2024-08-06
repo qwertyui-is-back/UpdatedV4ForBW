@@ -9516,7 +9516,7 @@ run(function() -- credits to maxlasertech for rewriting
 		end
 		local part = Instance.new("Part", entity.Character)
 		part.CanCollide = false
-		part.Name 
+		part.Name = "PlayerModel"
 
 		local mesh = Instance.new("SpecialMesh", part)
 		mesh.MeshId = viewmodelMode.Value == 'Among Us' and 'http://www.roblox.com/asset/?id=6235963214' or 'http://www.roblox.com/asset/?id=13004256866'
