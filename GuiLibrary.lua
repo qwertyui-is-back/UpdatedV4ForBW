@@ -1,5 +1,5 @@
 if shared.VapeExecuted then
-	local VERSION = "1.0.0 (Updated Vape V4)"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
+	local VERSION = "4.10"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
 	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 	local vapeAssetTable = {
 		["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
@@ -65,10 +65,10 @@ if shared.VapeExecuted then
 		["vape/assets/WorldIcon.png"] = "rbxassetid://13350796199",
 		["vape/assets/VapeIcon.png"] = "rbxassetid://13350808582",
 		["vape/assets/RenderIcon.png"] = "rbxassetid://13350832775",
-		["vape/assets/VapeLogo1.png"] = "rbxassetid://13950366075",
-		["vape/assets/VapeLogo3.png"] = "rbxassetid://13950367398",
-		["vape/assets/VapeLogo2.png"] = "rbxassetid://13950369460",
-		["vape/assets/VapeLogo4.png"] = "rbxassetid://13950372177"
+		["vape/assets/VapeLogo1.png"] = "rbxassetid://13350860863",
+		["vape/assets/VapeLogo3.png"] = "rbxassetid://13350872035",
+		["vape/assets/VapeLogo2.png"] = "rbxassetid://13350876307",
+		["vape/assets/VapeLogo4.png"] = "rbxassetid://13350877564"
 	}
 	local getcustomasset = getsynasset or getcustomasset or function(location) return vapeAssetTable[location] or "" end
 	local customassetcheck = (getsynasset or getcustomasset) and true
@@ -138,13 +138,13 @@ if shared.VapeExecuted then
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 	gui.OnTopOfCoreBlur = true
 	gui.ResetOnSpawn = false
-	gui.Parent = game.CoreGui -- game:GetService("Players").LocalPlayer.PlayerGui
+	gui.Parent = game:GetService("Players").LocalPlayer.PlayerGui
 	GuiLibrary["MainGui"] = gui
 
 	local vapeCachedAssets = {}
 	local function vapeGithubRequest(scripturl)
 		if not isfile("vape/"..scripturl) then
-			local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/"..scripturl, true) end)
+			local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
 			assert(suc, res)
 			assert(res ~= "404: Not Found", res)
 			if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
@@ -3898,9 +3898,6 @@ if shared.VapeExecuted then
 			buttonapi["Name"] = argstablemain["Name"]
 			buttonapi["HasExtraText"] = type(argstablemain["ExtraText"]) == "function"
 			buttonapi["GetExtraText"] = (buttonapi["HasExtraText"] and argstablemain["ExtraText"] or function() return "" end)
-			if shared.sigma then
-				buttonapi["GetExtraText"] = function() return "" end
-			end
 			buttonapi.Connections = {}
 			local newsize = UDim2.new(0, 20, 0, 21)
 

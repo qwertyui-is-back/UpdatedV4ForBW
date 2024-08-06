@@ -1,5 +1,4 @@
 local GuiLibrary = shared.GuiLibrary
-local catver = "V5 BETA"
 local playersService = game:GetService("Players")
 local coreGui = game:GetService("CoreGui")
 local textService = game:GetService("TextService")
@@ -52,7 +51,7 @@ end
 
 local function vapeGithubRequest(scripturl)
 	if not isfile("vape/"..scripturl) then
-		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/"..scripturl, true) end)
+		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
 		assert(suc, res)
 		assert(res ~= "404: Not Found", res)
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
@@ -353,8 +352,7 @@ run(function()
 
 	function whitelist:getplayer(arg)
 		if arg == 'default' and self.localprio == 0 then return true end
-		if arg == 'special' and self.localprio == 1 then return true end
-		if arg == 'private' and self.localprio == 2 then return true end
+		if arg == 'private' and self.localprio == 1 then return true end
 		if arg and lplr.Name:lower():sub(1, arg:len()) == arg:lower() then return true end
 		return false
 	end
@@ -376,18 +374,6 @@ run(function()
 				elseif replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
 					replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('/w '..v.Name..' helloimusinginhaler', 'All')
 				end
-			elseif self.localprio >= 1 and self.localprio ~= 3 then
-				olduninject = GuiLibrary.SelfDestruct
-				GuiLibrary.SelfDestruct = function() warningNotification('Vape', 'No escaping the private members :)', 10) end
-				if joined then task.wait(10) end
-				if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-					local oldchannel = textChatService.ChatInputBarConfiguration.TargetTextChannel
-					local newchannel = cloneref(game:GetService('RobloxReplicatedStorage')).ExperienceChat.WhisperChat:InvokeServer(v.UserId)
-					if newchannel then newchannel:SendAsync('helloimusingv6') end
-					textChatService.ChatInputBarConfiguration.TargetTextChannel = oldchannel
-				elseif replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
-					replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('/w '..v.Name..' helloimusingv6', 'All')
-				end
 			end
 		end
 	end
@@ -397,15 +383,8 @@ run(function()
 		if plr == lplr and msg == 'helloimusinginhaler' then return true end
 		if self.localprio > 0 and self.said[plr.Name] == nil and msg == 'helloimusinginhaler' and plr ~= lplr then
 			self.said[plr.Name] = true
-			warningNotification('Vape', plr.Name..' is using cat v5!', 60)
-			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
-			local newent = entityLibrary.getEntity(plr)
-			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
-			return true
-		elseif self.localprio > 1 and self.said[plr.Name] == nil and msg == 'helloimusingv6' and plr ~= lplr then
-			self.said[plr.Name] = true
-			warningNotification('Vape', plr.Name..' is using cat v6!', 60)
-			self.customtags[plr.Name] = {{text = 'CAT V6 USER', color = Color3.new(0.8, 1, 0)}}
+			notif('Vape', plr.Name..' is using vape!', 60)
+			self.customtags[plr.Name] = {{text = 'VAPE USER', color = Color3.new(1, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true
@@ -514,7 +493,7 @@ run(function()
 			local commit = subbed:find('spoofed_commit_check')
 			commit = commit and subbed:sub(commit + 21, commit + 60) or nil
 			commit = commit and #commit == 40 and commit or 'main'
-			whitelist.textdata = game:HttpGet('https://raw.githubusercontent.com/qwertyui-is-back/Whitelist/'..commit..'/PlayerWhitelist.json', true)
+			whitelist.textdata = game:HttpGet('https://raw.githubusercontent.com/7GrandDadPGN/Whitelist/'..commit..'/PlayerWhitelist.json', true)
 		end)
 		if not whitelistloaded or not sha or not whitelist.get then return true end
 		whitelist.loaded = true
@@ -664,12 +643,10 @@ run(function()
 		end,
 		reveal = function(args)
 			task.delay(0.1, function()
-				local text = "cat v5 client"
-				if self.localprio > 1 then text = "cat v6 client" end
 				if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the '..text)
+                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the inhaler client')
                 else
-                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler '..text, 'All')
+                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler client', 'All')
                 end
 			end)
 		end,
@@ -2571,11 +2548,6 @@ run(function()
 							local newvelo = movevec * SpeedValue.Value
 							entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, entityLibrary.character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						elseif SpeedMethod.Value == "CFrame" then
-							for i,v in pairs(entityLibrary.character.Humanoid:GetPlayingAnimationTracks()) do
-								if v.Name == "WalkAnim" or v.Name == "RunAnim" then
-									v:AdjustSpeed(SpeedValue.Value / 15)
-								end
-							end
 							local newpos = (movevec * (math.max(SpeedValue.Value - entityLibrary.character.Humanoid.WalkSpeed, 0) * delta))
 							if SpeedWallCheck.Enabled then
 								local ray = workspace:Raycast(entityLibrary.character.HumanoidRootPart.Position, newpos, SpeedRaycast)
@@ -5633,80 +5605,6 @@ run(function()
 		Min = 1,
 		Max = 20,
 		Double = 10
-	})
-end)
-
-run(function()
-	local Watermark = {Enabled = false}
-	local tt
-	local bb
-	local toptext = "Cat"
-	local bottomtext = "V5"
-	local SigmasClient = Instance.new("ScreenGui")
-	local Sigmas = Instance.new("TextLabel")
-	local Jello = Instance.new("TextLabel")
-	--Properties:
-	SigmasClient.Name = "TitleOverlay"
-	SigmasClient.Parent = game.CoreGui
-	SigmasClient.ResetOnSpawn = false
-
-	Sigmas.Name = "Sigma"
-	Sigmas.Parent = SigmasClient
-	Sigmas.AnchorPoint = Vector2.new(0.100000001, 0.600000024)
-	Sigmas.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Sigmas.BackgroundTransparency = 1.000
-	Sigmas.BorderSizePixel = 0
-	Sigmas.Position = UDim2.new(0.00865922309, 0, 0.0567473955, 0)
-	Sigmas.Size = UDim2.new(0, 162, 0, 64)
-	Sigmas.Font = Enum.Font.Roboto
-	Sigmas.Text = toptext
-	Sigmas.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Sigmas.TextSize = 50.000
-	Sigmas.TextTransparency = Watermark.Enabled and 0 or 1
-	
-	Jello.Name = "Jello"
-	Jello.Parent = Sigmas
-	Jello.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Jello.BackgroundTransparency = 1.000
-	Jello.BorderSizePixel = 0
-	Jello.Position = UDim2.new(0.00865922309, 0, 0.475067473955, 0)
-	Jello.Size = UDim2.new(0, 162, 0, 64)
-	Jello.Font = Enum.Font.Roboto
-	Jello.Text = bottomtext
-	Jello.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Jello.TextSize = 24.85
-	Jello.TextTransparency = Watermark.Enabled and 0 or 1
-
-	Watermark = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		Name = "Watermark",
-		Function = function(callback)
-			if callback then
-				RunLoops:BindToStepped("sigma",function()
-					Sigmas.TextTransparency = 0
-					Jello.TextTransparency = 0
-					Sigmas.Text = tt.Value == "" and "Cat" or tt.Value
-					Jello.Text = bb.Value == "" and "V5" or bb.Value
-				end)
-			else
-				RunLoops:UnbindFromStepped("sigma")
-				Sigmas.TextTransparency = 1
-				Jello.TextTransparency = 1
-			end
-		end
-	})
-	tt = Watermark.CreateTextBox({
-		Name = "Top Text",
-		TempText = "Top Text of Watermark",
-		FocusLost = function(enter)
-			
-		end
-	})
-	bb = Watermark.CreateTextBox({
-		Name = "Bottom Text",
-		TempText = "Bottom Text of Watermark",
-		FocusLost = function(enter)
-			
-		end
 	})
 end)
 
