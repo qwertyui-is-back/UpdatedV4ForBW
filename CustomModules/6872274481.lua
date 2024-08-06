@@ -1,3 +1,24 @@
+--[[                                              
+     ________________________________________________________________
+   / ________________________________________________________________ \
+  / /                                 .-.              _             \ \ 
+ / /                                  .' `.            :_;            \ \ 
+| |         .---..-..-..-. .--. .--. `. .'.-..-..-..-..-.              | |
+| |        ' .; :: `; `; :' '_.': ..' : : : :; :: :; :: :              | |
+| |        `._. ;`.__.__.'`.__.':_;   :_; `._. ;`.__.':_;              | |
+| |           : :                          .-. :                       | |   
+| |           :_:                          `._.'                       | |   
+| |     .--.         .-.   .-..-..----.  .---.  .--. .---.   .-.       | |
+| |    : .--'       .' `.  : :: :: .--'  `--. :: ,. :`--. : .'.'       | |
+| |    : :    .--.  `. .'  : :: :`. `.     ,',': :: :  ,','.'.'_       | |
+| |    : :__ ' .; ;  : :   : `' ;.-`, :  .'.'_ : :; :.'.'_ :_ ` :      | |
+ \ \   `.__.'`.__,_; :_;    `.,' `.__.'  :____;`.__.':____;  :_:      / /
+  \ \________________________________________________________________/ /    
+   \__________________________________________________________________/     
+                                                                        
+]]--
+
+
 
 -- Cat V.. Source Code --
 local catver = "V5 BETA"
@@ -180,6 +201,15 @@ end
 
 local function isVulnerable(plr)
 	return plr.Humanoid.Health > 0 and not plr.Character.FindFirstChildWhichIsA(plr.Character, "ForceField")
+end
+
+function isAlive(plr)
+    plr = plr or lplr
+    if not plr.Character then return false end
+    if not plr.Character:FindFirstChild("Head") then return false end
+    if not plr.Character:FindFirstChild("Humanoid") then return false end
+    if plr.Character:FindFirstChild("Humanoid").Health < 0.11 then return false end
+    return true
 end
 
 local function getPlayerColor(plr)
@@ -1228,7 +1258,7 @@ run(function()
 		KillEffectMeta = require(replicatedStorage.TS.locker["kill-effect"]["kill-effect-meta"]).KillEffectMeta,
 		KnockbackUtil = require(replicatedStorage.TS.damage["knockback-util"]).KnockbackUtil,
 		MatchEndScreenController = Flamework.resolveDependency("client/controllers/game/match/match-end-screen-controller@MatchEndScreenController"),
-		MinerRemote = dumpRemote(debug.getconstants(debug.getproto(KnitClient.Controllers.MinerController.onKitEnabled, 1))),
+	--	MinerRemote = dumpRemote(debug.getconstants(debug.getproto(KnitClient.Controllers.MinerController.onKitEnabled, 1))),
 		MageRemote = dumpRemote(debug.getconstants(debug.getproto(KnitClient.Controllers.MageController.registerTomeInteraction, 1))),
 		MageKitUtil = require(replicatedStorage.TS.games.bedwars.kit.kits.mage["mage-kit-util"]).MageKitUtil,
 		PickupMetalRemote = dumpRemote(debug.getconstants(debug.getproto(debug.getproto(KnitClient.Controllers.MetalDetectorController.KnitStart, 1), 2))),
@@ -2018,94 +2048,6 @@ run(function()
 			end
 		end,
 		HoverText = "Sets your sprinting to true."
-	})
-end)
-
-local AnticheatBypass = {Enabled = false}
-run(function()
-	local OldRoot
-	local NewRoot
-
-	local function CreateClonedCharacter()
-		lplr.Character.Parent = game
-        lplr.Character.HumanoidRootPart.Archivable = true
-		OldRoot = lplr.Character.HumanoidRootPart 
-		NewRoot = OldRoot:Clone()
-		NewRoot.Parent = lplr.Character
-		OldRoot.Parent = workspace
-		lplr.Character.PrimaryPart = NewRoot
-		lplr.Character.Parent = workspace
-		OldRoot.Transparency = 1
-		entityLibrary.character.HumanoidRootPart = NewRoot
-	end
-
-	local function RemoveClonedCharacter(bool)
-		bool = bool or true
-		OldRoot.Transparency = 1
-		lplr.Character.Parent = game
-		OldRoot.Parent = lplr.Character
-		NewRoot.Parent = workspace
-		lplr.Character.PrimaryPart = OldRoot
-		lplr.Character.Parent = workspace
-		entityLibrary.character.HumanoidRootPart = OldRoot
-		NewRoot:Remove()
-		if bool then
-			OldRoot.CFrame = NewRoot.CFrame
-		end
-		NewRoot = nil
-		OldRoot = nil
-	end
-
-	local isFlagged = false
-
-	local function onLagback()
-		if not isnetworkowner(OldRoot) then
-			if not isFlagged then
-				isFlagged = true
-				RemoveClonedCharacter(false)
-				local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
-				warningNotification("Cat "..catver, "Detected lagback! (Ping: "..ping..")")
-			end
-		else
-			if isFlagged then
-				isFlagged = false
-				CreateClonedCharacter()
-			end
-		end
-	end
-
-	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "HumanoidRootPartFix",
-		Function = function(callback)
-			if callback then
-				task.spawn(function()
-					if store.matchState == 0 then
-						repeat task.wait() until store.matchState ~= 0  
-						task.wait(1.5)
-					end	
-					CreateClonedCharacter()
-					table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
-						task.wait(1.5)
-						CreateClonedCharacter()
-					end))
-					RunLoops:BindToHeartbeat("hrpf",function()
-						onLagback()
-						if not isFlagged then
-							if OldRoot ~= nil and NewRoot ~= nil then
-								local RealHRP = OldRoot
-								local FakeChar = NewRoot
-								local cf = FakeChar.CFrame
-								RealHRP.CFrame = cf
-							end
-						end
-					end)
-				end)
-			else
-				RunLoops:UnbindFromHeartbeat("hrpf")
-				RemoveClonedCharacter(false)
-			end
-		end,
-		HoverText = "Helps bypass the AntiCheat"
 	})
 end)
 
@@ -2908,7 +2850,6 @@ run(function()
 	local cloned
 	local clone
 	local bodyvelo
-	local usedPingSpoof = false
 	local FlyOverlap = OverlapParams.new()
 	FlyOverlap.MaxParts = 9e9
 	FlyOverlap.FilterDescendantsInstances = {}
@@ -2951,22 +2892,12 @@ run(function()
 		if InfiniteFlyNotifs.Enabled then
 			warningNotification("InfiniteFly", "Landed!", 3)
 		end
-		if not GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled and usedPingSpoof then 
-			task.wait(0.075)
-			GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
-			usedPingSpoof = false
-		end
 	end
 
 	InfiniteFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "InfiniteFly",
 		Function = function(callback)
 			if callback then
-				usedPingSpoof = false
-				if GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.Enabled then 
-					GuiLibrary.ObjectsThatCanBeSaved.AnticheatBypassOptionsButton.Api.ToggleButton()
-					usedPingSpoof = true
-				end
 				if not entityLibrary.isAlive then
 					disabledproper = true
 				end
@@ -6632,7 +6563,7 @@ run(function()
 	local rotationz = {Value = 0}
 	local oldc1
 	local oldfunc
-	local nobob = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	local nobob = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "Bob",
 		Function = function(callback)
 			local viewmodel = gameCamera:FindFirstChild("Viewmodel")
@@ -6651,7 +6582,7 @@ run(function()
 				end
 			end
 		end,
-		HoverText = "Further sword"
+		HoverText = "NoBob but the sword still does the bobbing effect"
 	})
 	nobobdepth = nobob.CreateSlider({
 		Name = "Depth",
@@ -9266,155 +9197,10 @@ run(function()
 	})
 end)
 
-run(function()
-	local JellyfishExploit = {Enabled = false}
-
-	JellyfishExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "JellyfishExploit",
-		Function = function(callback)
-			if callback then -- thank you whoever gave me this
-                task.spawn(function()
-                    repeat task.wait(0.2)
-                        local args = {
-                            [1] = "electrify_jellyfish"
-                        }
-
-                        game:GetService("ReplicatedStorage"):WaitForChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"):WaitForChild("useAbility"):FireServer(unpack(args))
-                    until (not JellyfishExploit.Enabled)
-                end)
-            end
-        end, 
-		HovorText = "Requires Marina kit to use"
-	})
-end)
-
-run(function() -- thank you SystemXVoid for letting me use this
-	local invis = {};
-	local invisbaseparts = {};
-	local invisroot = {};
-	local invisrootcolor = {};
-	local invisanim = Instance.new('Animation');
-	local invisrenderstep;
-	local invistask;
-	local invshumanim;
-	local invisFunction = function()
-		pcall(task.wait(1))
-		pcall(task.cancel, invistask);
-		table.clear(invisbaseparts);
-		pcall(function() invisrenderstep:Disconnect() end);
-		repeat task.wait() until entityLibrary.isAlive;
-		for i,v in lplr.Character:GetDescendants() do 
-			if v.ClassName:lower():find('part') and v.CanCollide and v ~= lplr.Character.PrimaryPart then 
-				v.CanCollide = false;
-				table.insert(invisbaseparts, v);
-			end 
-		end
-		invisrenderstep = runService.Stepped:Connect(function()
-			for i,v in invisbaseparts do 
-				v.CanCollide = false;
-			end
-		end);
-		table.insert(invis.Connections, invisrenderstep);
-		invisanim.AnimationId = 'rbxassetid://11335949902';
-		local anim = lplr.Character.Humanoid.Animator:LoadAnimation(invisanim);
-		invishumanim = anim;
-		repeat 
-			task.wait()
-			if GuiLibrary.ObjectsThatCanBeSaved.AnimationPlayerOptionsButton.Api.Enabled then 
-				GuiLibrary.ObjectsThatCanBeSaved.AnimationPlayerOptionsButton.Api.ToggleButton();
-			end
-			if entityLibrary.isAlive == false or not isnetworkowner(lplr.Character.PrimaryPart) or not invis.Enabled then 
-				pcall(function() 
-					anim:AdjustSpeed(0);
-					anim:Stop() 
-				end);
-				continue
-			end
-			lplr.Character.PrimaryPart.Transparency = 0.6;
-			anim:Play(0.1, 9e9, 0.1);
-		until (not invis.Enabled)
-	end;
-	invis = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		Name = 'Invisibility',
-		HoverText = 'Plays an animation which makes it harder\nfor targets to see you.',
-		Function = function(calling)
-			if calling then 
-				invistask = task.spawn(invisFunction);
-				table.insert(invis.Connections, lplr.CharacterAdded:Connect(invisFunction))
-			else 
-				pcall(function()
-					invishumanim:AdjustSpeed(0);
-					invishumanim:Stop();
-				end);
-				pcall(task.cancel, invistask)
-			end
-		end
-	})
-end) -- thank you SystemXVoid for letting me use this
-
-run(function() -- thank you SystemXVoid for letting me use this
-    local RichExploit = {};
-	local ftick = 0
-    RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-        Name = "FortuneExploit",
-        HoverText = "Makes you rich with fortune enchant :money:, CREDITS TO SYSTEMXVOID!",
-        Function = function(calling)
-            if calling then 
-				RunLoops:BindToStepped("fortune", function(testing)
-					ftick = ftick + 1
-					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
-					:FireServer({
-						statusEffectType = "fortune_1",
-						fortuneStacks = 9e9
-					})
-					ftick = 0
-				end)
-			else
-				RunLoops:UnbindFromRenderStep('fortune')
-            end
-        end
-    })
-end) -- thank you SystemXVoid for letting me use this
-
-run(function() -- thank you SystemXVoid for letting me use this
-    local enchantexploit = {};
-    local enchantexploit = {}
-	local enchantnum = 0
-	local et = 0
-    local effects = {
-        "fire_3", "forest_3", "void_3", "static_3", "updraft_2", 
-        "shield_gen_3", "anti_knockback_2", "rapid_regen_3", "execute_3", 
-        "wind_3", "plunder_2", "critical_strike_3", "volley_3", 
-        "grounded_3", "clingy_3", "life_steal_3", "fortune_1", "fortune_2", "fortune_3"
-	   }
-	local function addEnchants()
-	end
-    enchantexploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-        Name = 'EnchantExploit',
-        HoverText = 'Gives you most enchants.',
-        Function = function(calling)
-            if calling then 
-				et = 0
-				RunLoops:BindToStepped("enchant",function()
-					et = et + 1
-					if et == 45 then
-						for i,v in effects do 
-							bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
-						end
-						et = 0
-					end
-				end)
-			else
-				RunLoops:UnbindFromStepped("enchant")
-            end
-        end
-    })
-end) -- thank you SystemXVoid for letting me use this
-
 run(function() -- i dont know why bedwars hasnt patched it but they havent (ive had this for a month i believe by now)
 	local MelodyExploit = {Enabled = false}
 
-	MelodyExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({ -- how does this work? idk honestly
+	MelodyExploit = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({ -- how does this work? idk honestly
 		Name = "MelodyExploit",
 		Function = function(callback)
 			if callback then
@@ -9436,105 +9222,84 @@ run(function() -- i dont know why bedwars hasnt patched it but they havent (ive 
 	})
 end)
 
+
+
 run(function()
-	local AnticheatBypass = {Enabled = false}
+	local tws = game:GetService("TweenService")
+	local PingSpoof = {Enabled = false}
+	local PingSpoofDelay = {Value = 50}
+	local PingSpoofPart = {Enabled = true}
+	local clonepos
+	local bticks = 0
+	local Blinking = false
+	local show = false
 
-	local ACBDelay = {Value = 35}
-	local ACBSpeed = {Value = 10}
-	local ACBShowPart = {Enabled = false}
-
-	local DelayTicks = 0
-	local OldRoot
-	local NewRoot
-
-	local function CreateClonedCharacter()
-		lplr.Character.Parent = game
-        lplr.Character.HumanoidRootPart.Archivable = true
-		OldRoot = lplr.Character.HumanoidRootPart 
-		NewRoot = OldRoot:Clone()
-		NewRoot.Parent = lplr.Character
-		OldRoot.Parent = workspace
-		lplr.Character.PrimaryPart = NewRoot
-		lplr.Character.Parent = workspace
-		OldRoot.Transparency = ACBShowPart and 0 or 1
-		entityLibrary.character.HumanoidRootPart = NewRoot
+	local function roundup(num)
+		return math.ceil(num)
 	end
 
-	local function RemoveClonedCharacter()
-		OldRoot.Transparency = 1
-		lplr.Character.Parent = game
-		OldRoot.Parent = lplr.Character
-		NewRoot.Parent = workspace
-		lplr.Character.PrimaryPart = OldRoot
-		lplr.Character.Parent = workspace
-		entityLibrary.character.HumanoidRootPart = OldRoot
-		NewRoot:Remove()
-		NewRoot = {} 
-		OldRoot = {}
-		OldRoot.CFrame = NewRoot.CFrame
-	end
-
-	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "AnticheatBypass",
+	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = "PingSpoof",
 		Function = function(callback)
-			if callback then
-				task.spawn(function()
-					DelayTicks = 0
-					if store.matchState == 0 then
-						repeat task.wait() until store.matchState ~= 0  
-						task.wait(1.5)
-					end	
-					CreateClonedCharacter()
-					table.insert(AnticheatBypass.Connections, lplr.CharacterAdded:Connect(function()
-						task.wait(1.5)
-						CreateClonedCharacter()
-					end))
-					repeat task.wait()
-						DelayTicks += 1
-						OldRoot.Transparency = ACBShowPart.Enabled and 0.35 or 1
-						local RealHRP = OldRoot
-						local FakeChar = NewRoot
-						RealHRP.Velocity = Vector3.zero
-						if entityLibrary.isAlive and DelayTicks >= ( ACBDelay.Value / 4.5) then
-							RealHRP.Velocity = Vector3.zero
-							local info = TweenInfo.new(ACBSpeed.Value / 100)
-							local cf = FakeChar.CFrame
-							if GuiLibrary.ObjectsThatCanBeSaved.InfiniteFlyOptionsButton.Api.Enabled then
-								cf = CFrame.new(FakeChar.CFrame.X, RealHRP.CFrame.Y, FakeChar.CFrame.Z)
-							end
-							local data = {
-								CFrame = cf
-							}
-							game:GetService("TweenService"):Create(RealHRP, info, data):Play()
-							DelayTicks = 0
+			if callback then 
+				bticks = 0
+				clonepos = Instance.new("Part",workspace)
+				clonepos.Position = lplr.Character.HumanoidRootPart.Position
+				clonepos.CanCollide = false
+				clonepos.Anchored = true
+				clonepos.Size = Vector3.new(3.9,5,3.9)
+				clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
+				clonepos.Name = "SkibidiPing"
+				RunLoops:BindToHeartbeat("PingSpoof",function()
+					clonepos.Transparency = PingSpoofPart.Enabled and 0.65 or 1
+					bticks = bticks + 1
+					if entityLibrary.isAlive then
+						if bticks >= (PingSpoofDelay.Value) then
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
+							bticks = 0
+							Blinking = false
+							show = true
+						elseif bticks >= (roundup(PingSpoofDelay.Value / 50)) then
+							show = true
+						else
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
+							Blinking = true
+							show = false
 						end
-					until (not AnticheatBypass.Enabled)
+					end
+					if clonepos and show then -- bticks == (roundup(PingSpoofDelay.Value / 1000))
+						local twsp = (PingSpoofDelay.Value / 1000)
+						local tweenInfo = TweenInfo.new(twsp)
+
+						local tween = tws:Create(clonepos, tweenInfo, {Position = lplr.Character.HumanoidRootPart.Position})
+						tween:Play()
+					end
 				end)
-			else
-				RemoveClonedCharacter()
+			else 
+				RunLoops:UnbindFromHeartbeat("PingSpoof")
+				if clonepos then
+					clonepos:Destroy()
+					clonepos = nil
+				end
 			end
 		end,
-		HoverText = "Helps bypass the AntiCheat"
+		HoverText = "Helps PingSpoof the anticheat",
+		ExtraText = function()
+			return PingSpoofDelay.Value
+		end
 	})
-	ACBDelay = AnticheatBypass.CreateSlider({
+	PingSpoofDelay = PingSpoof.CreateSlider({
 		Name = "Delay",
 		Min = 0,
 		Max = 300,
 		Default = 50,
 		Function = function() end
 	})
-	ACBSpeed = AnticheatBypass.CreateSlider({
-		Name = "TP Speed",
-		Min = 0,
-		Max = 100,
-		Default = 10,
-		Function = function() end
-	})
-	ACBShowPart = AnticheatBypass.CreateToggle({
+	PingSpoofPart = PingSpoof.CreateToggle({
 		Name = "Show Part",
 		Function = function(callback)
-			if OldRoot then
-				OldRoot.Transparency = callback and 0.35 or 1
+			if clonepos then
+				clonepos.Transparency = callback and 0.65 or 1
 			end
 		end
 	})
@@ -9542,7 +9307,7 @@ end)
 
 run(function()
 	local HannahExploit = {Enabled = false}
-	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "HannahExploit",
 		Function = function(callback)
 			if callback then
@@ -9574,7 +9339,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 	local testing = false
 	local partthingy
 	local pos9 = 0
-	BoostSilentFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+	BoostSilentFly = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "BoostSilentFly",
 		Function = function(callback)
 			if callback then
@@ -9645,7 +9410,7 @@ run(function()
 			game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat"):Destroy()
 		end
 	end
-	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	Disabler = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "Disabler",
 		Function = function(callback)
 			if callback then
@@ -9674,6 +9439,7 @@ run(function()
 				end)
 				if csd then
 					DeleteClientSidedAnticheat()
+					warningNotification("Cat "..catver, "Disabled Client", 3)
 				end
 			else
 				disablerZephyr = false
@@ -9733,74 +9499,95 @@ run(function()
 	})
 end)
 
-run(function()
-	local AmongUs = {Enabled = false}
-
-	local function camu(ent)
-		local asset = "http://www.roblox.com/asset/?id=6235963214"
-		local text = "http://www.roblox.com/asset/?id=6235963270"
-		local part = Instance.new("Part",ent.Character)
-		local mesh = Instance.new("SpecialMesh",part)
-		local weld = Instance.new("Weld",part)
-		part.Name = "amogus"
-		mesh.MeshId = asset
-		mesh.TextureId = text
+run(function() -- credits to maxlasertech for rewriting
+	local PlayerViewModel = {};
+    local viewmodelMode = {};
+	local viewmodel = {};
+	reModel = function(entity)
+		for i,v in entity.Character:GetChildren() do
+			if v:IsA('BasePart') or v:IsA('Accessory') then
+				pcall(function()
+					if v.Name ~= "PlayerModel" then
+						v.Transparency = 1
+						v.Handle.Transparency = 1
+					end
+				end)
+			end
+		end
+		local part = Instance.new("Part", entity.Character)
 		part.CanCollide = false
-		mesh.Offset = Vector3.new(0,-0.3,0)
-		mesh.Scale = Vector3.new(0.11,0.11,0.11)
+		part.Name 
+
+		local mesh = Instance.new("SpecialMesh", part)
+		mesh.MeshId = viewmodelMode.Value == 'Among Us' and 'http://www.roblox.com/asset/?id=6235963214' or 'http://www.roblox.com/asset/?id=13004256866'
+		mesh.TextureId = viewmodelMode.Value == 'Among Us' and 'http://www.roblox.com/asset/?id=6235963270' or 'http://www.roblox.com/asset/?id=13004256905'
+		mesh.Offset = viewmodelMode.Value == 'Rabbit' and Vector3.new(0,1.6,0) or Vector3.new(0,0.3,0)
+		mesh.Scale = viewmodelMode.Value == 'Rabbit' and Vector3.new(10, 8, 10) or Vector3.new(0.11, 0.11, 0.11)
+
+		local weld = Instance.new("Weld", part)
 		weld.Part0 = part
 		weld.Part1 = part.Parent.UpperTorso
+		
+		table.insert(viewmodel, task.spawn(function()
+			viewmodel[entity.Name] = part
+		end))
+	end;
+	removeModel = function(ent)
+        viewmodel[ent.Name]:Remove()
+        for i,v in ent.Character:GetChildren() do
+            if v:IsA('BasePart') or v:IsA('Accessory') then
+                pcall(function() 
+                    if v ~= ent.Character.PrimaryPart then 
+                        v.Transparency = 0 
+                    end 
+                end)
+            end
+        end
+        viewmodel[ent.Name] = nil
+		task.wait(1)
 	end
-
-	AmongUs = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		Name = "AmongUs",
-		Function = function(callback)
-			if callback then
-				RunLoops:BindToHeartbeat("amogus",function()
-					for i,v in pairs(game.Players:GetChildren()) do
-						if v.Character:FindFirstChild("Humanoid") ~= nil then
-							if v.Character.Humanoid.Health == 0 and v.Character:FindFirstChild("amogus") then
-								v.Character:FindFirstChild("amogus"):Destroy()
-							end
-							if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
-								for o,b in pairs(v.Character:GetChildren()) do
-									if b.Name == "SkibidiPing" then
-										return
-									elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
-										b.Transparency = 1
-									elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
-										b.Handle.Transparency = 1
-									end
-								end
-								if v.Character:FindFirstChild("amogus") == nil then
-									camu(v)
-								end
-							end
+	PlayerViewModel = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = 'PlayerModel',
+		Function = function(call)
+			if call then
+				for i,v in players:GetPlayers() do
+					table.insert(PlayerViewModel.Connections, v.CharacterAdded:Connect(function(health)
+						pcall(function() removeModel(v) end)
+						reModel(v)
+					end))
+				end
+				RunLoops:BindToHeartbeat('PlayerVM', function()
+					for i,v in players:GetPlayers() do
+						if isAlive(v) and not viewmodel[v.Name] then
+                            if not PlayerViewModel.Enabled then break end
+							reModel(v)
 						end
 					end
 				end)
 			else
-				RunLoops:UnbindFromHeartbeat("amogus")
-				for i,v in pairs(game.Players:GetChildren()) do
-					for o,b in pairs(v.Character:GetChildren()) do
-						if b.Name == "SkibidiPing" then
-							return
-						elseif b:IsA("MeshPart") then
-							b.Transparency = 0
-						elseif b:IsA("Accessory") then
-							b.Handle.Transparency = 0
-						end
-					end
-				end
-				lplr.Character:FindFirstChild("amogus"):Destroy()
+                RunLoops:UnbindFromHeartbeat('PlayerVM')
+                for i,v in players:GetPlayers() do
+                    task.spawn(removeModel, v)
+                end
 			end
 		end,
-		HoverText = "Turns you into Among Us"
+		HoverText = 'Turns you into Among Us'
 	})
+    viewmodelMode = PlayerViewModel.CreateDropdown({
+        Name = 'Model',
+        List = {'Among Us', 'Rabbit'},
+        Function = function()
+			if PlayerViewModel.Enabled then
+            	PlayerViewModel.ToggleButton()
+            	PlayerViewModel.ToggleButton()
+			end
+        end,
+        Default = 'Among Us'
+    })
 end)
 
 run(function()
-	InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+	InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "InfiniteJump",
 		Function = function(callback)
 			if callback then
@@ -9816,8 +9603,9 @@ run(function()
 		end
 	end)         
 end)
+
 run(function()
-    local coolpack = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+    local coolpack = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
         Name = "TexturePack",
         HoverText = "nebula sent me this, idk if its skidded but it looks cool",
         Function = function(callback)
