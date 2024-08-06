@@ -9148,6 +9148,13 @@ run(function()
 						end
 						if Scythe.Enabled then
 							shouldDoScythe = true
+							local item = getItemNear("scythe")
+							if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then
+								bedwars.Client:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
+								if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
+									store.scythe = tick() + 1
+								end
+							end
 						else
 							shouldDoScythe = false
 						end
