@@ -1,3 +1,10 @@
+local cat = {
+	data = {
+		Version = 5
+	}
+}
+
+
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
 local textService = game:GetService("TextService")
@@ -386,6 +393,8 @@ local function attackValue(vec)
 	return {value = vec}
 end
 
+local shouldDoZephyr = false
+local shouldDoScythe = false
 local function getSpeed()
 	local speed = 0
 	if lplr.Character then
@@ -396,8 +405,8 @@ local function getSpeed()
 		if store.grapple > tick() then
 			speed = speed + 90
 		end
-		if store.scythe > tick() then
-			speed = speed + 5
+		if store.scythe > tick() and shouldDoScythe then
+			speed = speed + 15
 		end
 		if lplr.Character:GetAttribute("GrimReaperChannel") then
 			speed = speed + 20
@@ -407,8 +416,8 @@ local function getSpeed()
 		if armor.itemType == "speed_boots" then
 			speed = speed + 12
 		end
-		if store.zephyrOrb ~= 0 then
-			speed = speed + 12
+		if store.zephyrOrb ~= 0 and shouldDoZephyr then
+			speed = speed + 20
 		end
 	end
 	return speed
@@ -9115,4 +9124,47 @@ task.spawn(function()
 	if not AutoLeave.Enabled then
 		AutoLeave.ToggleButton(false)
 	end
+end)
+
+-- new cat v5 source!!
+
+run(function()
+	local Bypass = {Enabled = false}
+	local Zephyr = {Enabled = false}
+	local Client = {Enabled = false}
+	local Scythe = {Enabled = false}
+	local Ping = {Enabled = false}
+
+	Bypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "Bypass",
+		Function = function(callback)
+			if callback then
+				task.spawn(function()
+					RunLoops:BindToStepped("Bypass",function()
+						if Zephyr.Enabled then
+							shouldDoZephyr = true
+						else
+							shouldDoZephyr = false
+						end
+						if Scythe.Enabled then
+							shouldDoScythe = true
+						else
+							shouldDoScythe = false
+						end
+						if Ping.Enabled then
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", true)
+						else
+							sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
+						end
+					end)
+				end)
+			else
+				RunLoops:UnbindFromStepped("Bypass")
+				sethiddenproperty(entityLibrary.character.HumanoidRootPart, "NetworkIsSleeping", false)
+				shouldDoScythe = false
+				shouldDoZephyr = false
+			end
+		end
+	})
 end)
