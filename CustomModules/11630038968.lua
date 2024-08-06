@@ -306,6 +306,8 @@ local GetAllTargets = function(distance, sort)
     end
     return targets
 end
+local acben = false
+local AnticheatBypassHRP
 local function getSword()
     local sword = "WoodenSword"
     if lplr.Character:FindFirstChild("WoodenSword") then
@@ -608,7 +610,7 @@ run(function()
 					until (not Speed.Enabled)
 				end)
 				BindToRenderStep("Speed", 1, function(delta)
-					if entityLibrary.isAlive and (typeof(lplr.Character.HumanoidRootPart) ~= "Instance" or isnetworkowner(lplr.Character.HumanoidRootPart)) then
+					if entityLibrary.isAlive and (isnetworkowner(lplr.Character.HumanoidRootPart) or acben) then
                         boostDelay += 1
 						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or lplr.Character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
@@ -634,7 +636,7 @@ run(function()
                             end
                         end
                         local newvelo = movevec * (SpeedValue.Value + boostedSpeed)
-                        lplr.Character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, lplr.Character.HumanoidRootPart.Velocity.Y, newvelo.Z)
+                        entityLibrary.character.HumanoidRootPart.Velocity = Vector3.new(newvelo.X, lplr.Character.HumanoidRootPart.Velocity.Y, newvelo.Z)
 						if SpeedJump.Enabled and (SpeedJumpAlways.Enabled or killauranear) then
 							if (lplr.Character.Humanoid.FloorMaterial ~= Enum.Material.Air) and lplr.Character.Humanoid.MoveDirection ~= Vector3.zero then
                                 boostedSpeed = 11
@@ -914,6 +916,7 @@ run(function()
 end)
 
 run(function()
+    local AntiHit = {Enabled = true}
     local AnticheatBypass = {Enabled = false}
     local ShowPart = {Enabled = false}
     local funnynumbers = {
@@ -925,6 +928,7 @@ run(function()
     local SpeedVal = {Value = funnynumbers.speed}
 	local OldRoot
 	local NewRoot
+    local doTP = false
     local dt = 0
     
 	local function CreateClonedCharacter()
@@ -938,6 +942,7 @@ run(function()
 		lplr.Character.Parent = workspace
 		OldRoot.Transparency = ShowPart.Enabled and 0.35 or 1
 		entityLibrary.character.HumanoidRootPart = NewRoot
+        AnticheatBypassHRP = NewRoot
 	end
 
 	local function RemoveClonedCharacter()
@@ -948,6 +953,7 @@ run(function()
 		lplr.Character.PrimaryPart = OldRoot
 		lplr.Character.Parent = workspace
 		entityLibrary.character.HumanoidRootPart = OldRoot
+        AnticheatBypassHRP = OldRoot
 		NewRoot:Remove()
 		NewRoot = {} 
 		OldRoot = {}
@@ -955,10 +961,11 @@ run(function()
 	end
 
     AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-        Name = "SpeedDisabler",
-        HoverText = "Fakes high lag",
+        Name = "PingSpoof",
+        HoverText = "Simulates high ping",
         Function = function(callback)
             if callback then
+                acben = true
 				task.spawn(function()
                     dt = 0
                     CreateClonedCharacter()
@@ -977,6 +984,11 @@ run(function()
                             RealHRP.Velocity = Vector3.zero
                             local info = TweenInfo.new(SpeedVal.Value)
                             local cf = FakeChar.CFrame
+                            local cframe = {FakeChar.CFrame:GetComponents()}
+                            if AntiHit.Enabled and doTP then
+                                cframe[2] = 2500
+                            end
+                            cf = CFrame.new(unpack(cframe))
                             local data = {
                                 CFrame = cf
                             }
@@ -986,6 +998,7 @@ run(function()
                     end)
                 end)
             else
+                acben = false
                 UnbindFromRenderStep("acb")
                 print("removed")
                 RemoveClonedCharacter()
@@ -1014,7 +1027,47 @@ run(function()
 			end
 		end
 	})
+
+    -- antihit
+
+    local delay = 10
+    local hitdelay = 0
+
+    AntiHit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "AntiHit",
+        Function = function(callback)
+            if callback then
+                if not acben then
+                    AntiHit.ToggleButton(false)
+                    warningNotification("Cat "..catver, "Enable PingSpoof for this to work!")
+                else
+                    BindToStepped("antihit",1,function()
+                            hitdelay += 1
+                        if killauranear then
+                            if hitdelay == delay then
+                                doTP = true
+                            elseif hitdelay == delay*2 then
+                                doTP = false
+                                hitdelay = 0
+                            end
+                        else
+                            if hitdelay >= delay*2 then
+                                hitdelay = 0
+                                doTP = false
+                            end
+                        end
+                    end)
+                end
+            else
+                UnbindFromStepped("antihit")
+                doTP = false
+            end
+        end
+    })
 end)-- not the best tbh, especially with the fps issue bridge duels has
+
+run(function()
+end)
 
 run(function()
     local SecurityFeatures = {Enabled = false}
