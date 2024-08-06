@@ -355,7 +355,6 @@ GUI.CreateButton({
 	Icon = "vape/assets/WorldIcon.png",
 	IconSize = 16
 })
-GUI.CreateDivider("CUSTOM")
 GUI.CreateButton({
 	Name = "CatV5",
 	Function = function(callback) CatV5.SetVisible(callback) end,
