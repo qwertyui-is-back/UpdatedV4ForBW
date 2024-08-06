@@ -96,4 +96,5 @@ if not shared.VapeDeveloper then
 	end
 end
 if shared.beta then writefile("vape/commithash.txt", "beta") end
+
 return loadstring(vapeGithubRequest("MainScript.lua"))()
