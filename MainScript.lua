@@ -138,6 +138,9 @@ local function displayErrorPopup(text, funclist)
 end
 
 local function vapeGithubRequest(scripturl)
+	if shared.beta then
+		writefile("vape/commithash.txt","beta")
+	end
 	if not isfile("vape/"..scripturl) then
 		local suc, res
 		task.delay(15, function()
@@ -146,7 +149,7 @@ local function vapeGithubRequest(scripturl)
 				displayErrorPopup("The connection to github is taking a while, Please be patient.")
 			end
 		end)
-		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/"..scripturl, true) end)
 		if not suc or res == "404: Not Found" then
 			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
 			error(res)
@@ -230,7 +233,7 @@ if not isfile("vape/CustomModules/cachechecked.txt") then
 				if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
 					local last = v:split('\\')
 					last = last[#last]
-					local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/CustomModules/"..last) end)
+					local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/CustomModules/"..last) end)
 					if suc and publicrepo and publicrepo ~= "404: Not Found" then
 						writefile("vape/CustomModules/"..last, "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
 					end
@@ -883,7 +886,7 @@ VapeText.TextXAlignment = Enum.TextXAlignment.Left
 VapeText.TextYAlignment = Enum.TextYAlignment.Top
 VapeText.BorderSizePixel = 0
 VapeText.BackgroundColor3 = Color3.new()
-VapeText.Font = Enum.Font.SourceSans
+VapeText.Font = Enum.Font.Roboto
 VapeText.Text = ""
 VapeText.TextSize = 19
 local VapeTextExtra = Instance.new("TextLabel")
@@ -901,7 +904,7 @@ VapeTextExtra.TextTransparency = 0.5
 VapeTextExtra.TextXAlignment = Enum.TextXAlignment.Left
 VapeTextExtra.TextYAlignment = Enum.TextYAlignment.Top
 VapeTextExtra.TextColor3 = Color3.new()
-VapeTextExtra.Font = Enum.Font.SourceSans
+VapeTextExtra.Font = Enum.Font.Roboto
 VapeTextExtra.TextSize = 19
 local VapeCustomText = Instance.new("TextLabel")
 VapeCustomText.TextSize = 30
@@ -1091,6 +1094,10 @@ local function TextGUIUpdate()
 
 		GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value)
 	end
+	if shared.sigma then
+		VapeText.Font = Enum.Font.Roboto
+		VapeTextExtra.Font = Enum.Font.Roboto
+	end
 end
 
 TextGUI.GetCustomChildren().Parent:GetPropertyChangedSignal("Position"):Connect(TextGUIUpdate)
@@ -1254,8 +1261,13 @@ TextGUI.CreateDropdown({
 	Name = "Font",
 	List = TextGUIFonts,
 	Function = function(val)
-		VapeText.Font = Enum.Font[val]
-		VapeTextExtra.Font = Enum.Font[val]
+		if shared.sigma then
+			VapeText.Font = Enum.Font.Roboto
+			VapeTextExtra.Font = Enum.Font.Roboto
+		else
+			VapeText.Font = Enum.Font[val]
+			VapeTextExtra.Font = Enum.Font[val]
+		end
 		GuiLibrary.UpdateHudEvent:Fire()
 	end
 })
@@ -1810,9 +1822,12 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 			if shared.VapeDeveloper then
 				loadstring(readfile("vape/NewMainScript.lua"))()
 			else
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/NewMainScript.lua", true))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/NewMainScript.lua", true))()
 			end
 		]]
+		if shared.sigma then
+			teleportScript = 'shared.sigma = true\n'..teleportScript
+		end
 		if shared.VapeDeveloper then
 			teleportScript = 'shared.VapeDeveloper = true\n'..teleportScript
 		end
@@ -1959,7 +1974,7 @@ local function loadVape()
 			loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
 		else
 			if not shared.VapeDeveloper then
-				local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/CustomModules/"..game.PlaceId..".lua") end)
+				local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/CustomModules/"..game.PlaceId..".lua") end)
 				if suc and publicrepo and publicrepo ~= "404: Not Found" then
 					writefile("vape/CustomModules/"..game.PlaceId..".lua", "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
 					loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
@@ -1987,7 +2002,8 @@ local function loadVape()
 	ProfilesTextList.RefreshValues(profiles)
 	GUIbind.Reload()
 	TextGUIUpdate()
-	GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value, true)
+	--GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value, true)
+	GuiLibrary.UpdateUI(320/360, 1, 1, true)
 	if not shared.VapeSwitchServers then
 		if BlatantModeToggle.Enabled then
 			pcall(function()
