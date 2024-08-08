@@ -183,7 +183,7 @@ end
 
 local store = {
     beast = nil,
-    map = ""
+    map = "nil"
 }
 
 local run = runcode
@@ -315,4 +315,52 @@ run(function()
         Default = "25",
         Function = function(val) end
     })
+end)
+
+run(function()
+	local ChamsFolder = Instance.new("Folder")
+	ChamsFolder.Name = "ChamsPCFolder"
+	ChamsFolder.Parent = GuiLibrary.MainGui
+	local chamstable = {}
+	local ChamsColor = {Value = 0.44}
+	local ChamsOutlineColor = {Value = 0.44}
+	local ChamsTransparency = {Value = 1}
+	local ChamsOutlineTransparency = {Value = 1}
+	local ChamsOnTop = {Enabled = true}
+	local ChamsTeammates = {Enabled = true}
+
+	local function addfunc(ent)
+		local hl = Instance.new("Highlight")
+		hl.Parent = ent
+		hl.FillColor = BrickColor.new("Bright green")
+		hl.OutlineColor = Color3.fromRGB(255,255,255)
+		h1.FullTransparency = 0.4
+	end
+
+	local function removefunc(ent)
+		ent.Highlight:Destroy()
+	end
+
+	local Chams = {Enabled = false}
+	Chams = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "ComputerESP",
+		Function = function(callback)
+			if callback then
+                BindToStepped("ce",1,function()
+                    pcall(function()
+                        for i,v in pairs(workspace[store.map]:GetChildren()) do
+                            if v.Name == "ComputerTable" then
+                                if v:FindFirstChild("Highlight") == nil then
+                                    addfunc(v)
+                                end
+                            end
+                        end
+                    end)
+                end)
+			else
+				UnbindFromStepped("ce")
+			end
+		end,
+		HoverText = "Render computers through walls"
+	})
 end)
