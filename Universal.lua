@@ -3701,6 +3701,7 @@ run(function()
 	})
 	ChamsOnTop = Chams.CreateToggle({
 		Name = "Bypass Walls",
+		Default = true,
 		Function = function(callback) if Chams.Enabled then Chams.ToggleButton(true) Chams.ToggleButton(true) end end
 	})
 end)

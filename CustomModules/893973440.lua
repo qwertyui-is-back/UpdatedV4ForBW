@@ -312,3 +312,94 @@ run(function()
         Function = function(val) end
     })
 end)
+
+run(function()
+	local ChamsFolder = Instance.new("Folder")
+	ChamsFolder.Name = "ChamsPCFolder"
+	ChamsFolder.Parent = GuiLibrary.MainGui
+	local chamstable = {}
+	local ChamsColor = {Value = 0.44}
+	local ChamsOutlineColor = {Value = 0.44}
+	local ChamsTransparency = {Value = 1}
+	local ChamsOutlineTransparency = {Value = 1}
+	local ChamsOnTop = {Enabled = true}
+	local ChamsTeammates = {Enabled = true}
+
+	local function addfunc(ent)
+		local chamfolder = Instance.new("Highlight")
+		chamfolder.Name = ent.Name
+		chamfolder.Enabled = true
+		chamfolder.Adornee = ent
+		chamfolder.OutlineTransparency = ChamsOutlineTransparency.Value / 100
+		chamfolder.DepthMode = Enum.HighlightDepthMode[(ChamsOnTop.Enabled and "AlwaysOnTop" or "Occluded")]
+		chamfolder.FillColor = Color3.fromHSV(ChamsColor.Hue, ChamsColor.Sat, ChamsColor.Value)
+		chamfolder.OutlineColor = Color3.fromHSV(ChamsOutlineColor.Hue, ChamsOutlineColor.Sat, ChamsOutlineColor.Value)
+		chamfolder.FillTransparency = ChamsTransparency.Value / 100
+		chamfolder.Parent = ChamsPCFolder
+		chamstable[ent.Name] = {Main = chamfolder, entity = ent}
+	end
+
+	local function removefunc(ent)
+		local v = chamstable[ent]
+		chamstable[ent] = nil
+		if v then
+			v.Main:Destroy()
+		end
+	end
+
+	local Chams = {Enabled = false}
+	Chams = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "ComputerESP",
+		Function = function(callback)
+			if callback then
+				table.insert(Chams.Connections, workspace.ChildRemoved:Connect(removefunc))
+				for i,v in pairs(workspace:GetDescendants()) do
+                    if v.Name == "ComputerTable" then
+                        if chamstable[v.Name] then removefunc(v) end
+                        addfunc(v)
+                    end
+				end
+				table.insert(Chams.Connections, workspace.ChildAdded:Connect(function(ent)
+                    if ent.Name ~= "ComputerTable" then return end
+					if chamstable[ent.Name] then removefunc(ent) end
+					addfunc(ent)
+				end))
+			else
+				for i,v in pairs(chamstable) do
+					removefunc(i)
+				end
+			end
+		end,
+		HoverText = "Render computers through walls"
+	})
+	ChamsColor = Chams.CreateColorSlider({
+		Name = "Player Color",
+		Function = function(val)
+			for i,v in pairs(chamstable) do
+				v.Main.FillColor = getPlayerColor(i) or Color3.fromHSV(ChamsColor.Hue, ChamsColor.Sat, ChamsColor.Value)
+			end
+		end
+	})
+	ChamsOutlineColor = Chams.CreateColorSlider({
+		Name = "Outline Player Color",
+		Function = function(val)
+			for i,v in pairs(chamstable) do
+				v.Main.OutlineColor = getPlayerColor(i) or Color3.fromHSV(ChamsOutlineColor.Hue, ChamsOutlineColor.Sat, ChamsOutlineColor.Value)
+			end
+		end
+	})
+	ChamsTransparency = Chams.CreateSlider({
+		Name = "Transparency",
+		Min = 1,
+		Max = 100,
+		Function = function(callback) if Chams.Enabled then Chams.ToggleButton(true) Chams.ToggleButton(true) end end,
+		Default = 50
+	})
+	ChamsOutlineTransparency = Chams.CreateSlider({
+		Name = "Outline Transparency",
+		Min = 1,
+		Max = 100,
+		Function = function(callback) if Chams.Enabled then Chams.ToggleButton(true) Chams.ToggleButton(true) end end,
+		Default = 1
+	})
+end)
