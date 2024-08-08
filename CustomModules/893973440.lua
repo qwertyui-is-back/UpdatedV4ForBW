@@ -263,11 +263,13 @@ task.spawn(function()
         task.wait()
         for i,v in players:GetPlayers() do
             if v.Character == nil then return end
-            if v.Character:FindFirstChild("BeastPowers") ~= nil then
-                v.Team = beast
-            else
-                v.Team = survivor
-            end
+            pcall(function()
+                if v.Character:FindFirstChild("BeastPowers") ~= nil then
+                    v.Team = beast
+                else
+                    v.Team = survivor
+                end
+            end)
         end
     end
 end)
