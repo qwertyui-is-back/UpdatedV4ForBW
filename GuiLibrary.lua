@@ -6902,7 +6902,7 @@ if shared.VapeExecuted then
 	if inputService.TouchEnabled then
 		local button = Instance.new("TextButton")
 		button.Position = UDim2.new(1, -30, 0, 0)
-		button.Text = "Cat"
+		button.Text = "CatV5"
 		button.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
 		button.TextColor3 = Color3.new(1, 1, 1)
 		button.Size = UDim2.new(0, 30, 0, 20)

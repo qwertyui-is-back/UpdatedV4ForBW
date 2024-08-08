@@ -1822,7 +1822,7 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 			if shared.VapeDeveloper then
 				loadstring(readfile("vape/NewMainScript.lua"))()
 			else
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/NewMainScript.lua", true))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/beta/loader.lua", true))()
 			end
 		]]
 		if shared.sigma then
