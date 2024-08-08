@@ -100,4 +100,5 @@ if not shared.VapeDeveloper then
 	end
 end
 
+print("NewMainScript - catv5")
 return loadstring(vapeGithubRequest("MainScript.lua"))()
