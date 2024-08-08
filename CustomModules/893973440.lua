@@ -353,6 +353,7 @@ run(function()
                                 if v:FindFirstChild("Highlight") == nil then
                                     addfunc(v)
                                 end
+                                v.Highlight.FillColor = v.Screen.Color
                             end
                         end
                     end)
