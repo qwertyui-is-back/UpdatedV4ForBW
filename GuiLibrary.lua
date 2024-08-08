@@ -91,7 +91,7 @@ if shared.VapeExecuted then
 		ToggleNotifications = false,
 		Notifications = false,
 		ToggleTooltips = false,
-		ObjectsThatCanBeSaved = {["Gui ColorSliderColor"] = {Api = {Hue = 0.44, Sat = 1, Value = 1}}},
+		ObjectsThatCanBeSaved = {["Gui ColorSliderColor"] = {Api = {Hue = 0.74, Sat = 0.92, Value = 0.52}}},
 		MobileButtons = {},
 		RainbowSliders = {}
 	}
