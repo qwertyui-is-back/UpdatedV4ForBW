@@ -8,6 +8,7 @@ local lighting = game:GetService("Lighting")
 local cam = workspace.CurrentCamera
 local targetinfo = shared.VapeTargetInfo
 local uis = game:GetService("UserInputService")
+local repstorage = game:GetService("ReplicatedStorage")
 local localmouse = lplr:GetMouse()
 local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or getgenv().request or request
 local getasset = getsynasset or getcustomasset
@@ -191,11 +192,82 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToStepped("ah",1,function()
-                    game.ReplicatedStorage.RemoteEvent:FireServer("SetPlayerMinigameResult",true)
+                    repstorage.RemoteEvent:FireServer("SetPlayerMinigameResult",true)
                 end)
             else
                 UnbindFromStepped("ah")
             end
         end
     })
+end)
+
+run(function()
+    local AutoInteract = {Enabled = false}
+
+    AutoInteract = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "AutoInteract",
+        HoverText = "Automatically interact with anything",
+        Function = function(callback)
+            if callback then
+                BindToStepped("ai",1,function()
+                    repstorage.RemoteEvent:FireServer("Input", "Action", true)
+                end)
+            else
+                UnbindFromStepped("ai")
+            end
+        end
+    })
+end)
+
+run(function()
+    local NoSlowdown = {Enabled = false}
+
+    NoSlowdown = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+        Name = "NoSlowdown",
+        Function = function(callback)
+            if callback then
+                BindToStepped("nh",1,function()
+                    pcall(function()
+                        if lplr.Character.Humanoid.WalkSpeed < 16 then
+                            lplr.Character.Humanoid.WalkSpeed = 16
+                        end
+                    end)
+                end)
+            else
+                UnbindFromStepped("nh")
+            end
+        end
+    })
+end)
+
+task.spawn(function()
+    local teams = game:GetService("Teams")
+    if not teams:FindFirstChild("Survivors") then
+        local Survivors = Instance.new("Team", teams)
+        Survivors.Name = "Survivors"
+        Survivors.TeamColor = BrickColor.new("Bright blue")
+        Survivors.AutoAssignable = true
+    end
+    if not teams:FindFirstChild("Beast") then
+        local Beast = Instance.new("Team", teams)
+        Beast.Name = "Beast"
+        Beast.TeamColor = BrickColor.new("Bright red")
+        Beast.AutoAssignable = true
+    end
+    local survivor = teams.Survivors
+    local beast = teams.Beast
+    players.PlayerAdded:Connect(function(p)
+        p.Team = survivor
+    end)
+    while shared.VapeExecuted do
+        task.wait()
+        for i,v in players:GetPlayers() do
+            if v.Character == nil then return end
+            if v.Character["BeastPowers"] ~= nil then
+                v.Team = beast
+            else
+                v.Team = survivor
+            end
+        end
+    end
 end)
