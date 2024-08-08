@@ -289,7 +289,7 @@ run(function()
         Function = function()
             if callback then
                 BindToStepped("bn",1,function()
-                    pcall(function()
+                    --pcall(function()
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         if mag <= Range.Value then
                             if math.floor(tick() - hasNotified) > 10 then
@@ -297,10 +297,10 @@ run(function()
                                 hasNotified = tick()
                             end
                         end
-                    end)
+                    --end)
                 end)
             else
-
+                UnbindFromStepped("bn")
             end
         end
     })
