@@ -365,3 +365,41 @@ run(function()
 		HoverText = "Render computers through walls"
 	})
 end)
+
+run(function()
+
+	local function addfunc(ent)
+		local hl = Instance.new("Highlight")
+		hl.Parent = ent
+		hl.FillColor = BrickColor.new("Bright green")
+		hl.OutlineColor = Color3.fromRGB(255,255,255)
+		h1.FullTransparency = 0.4
+	end
+
+	local function removefunc(ent)
+		ent.Highlight:Destroy()
+	end
+
+	local Chams = {Enabled = false}
+	Chams = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "PodESP",
+		Function = function(callback)
+			if callback then
+                BindToStepped("pe",1,function()
+                    pcall(function()
+                        for i,v in pairs(workspace[store.map]:GetChildren()) do
+                            if v.Name == "FreezePod" then
+                                if v:FindFirstChild("Highlight") == nil then
+                                    addfunc(v)
+                                end
+                            end
+                        end
+                    end)
+                end)
+			else
+				UnbindFromStepped("pe")
+			end
+		end,
+		HoverText = "Render computers through walls"
+	})
+end)
