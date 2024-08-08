@@ -40,7 +40,7 @@ local function UnbindFromStepped(name)
 	end
 end
 
-local function createwarning(title, text, delay)
+local function warningNotification(title, text, delay)
 	pcall(function()
 		local frame = GuiLibrary["CreateNotification"](title, text, delay, "assets/WarningNotification.png")
 		frame.Frame.BackgroundColor3 = Color3.fromRGB(236, 129, 44)
@@ -181,7 +181,47 @@ local function findTouchInterest(tool)
 	return nil
 end
 
+local store = {
+    beast = nil
+}
+
 local run = runcode
+
+task.spawn(function()
+    local teams = game:GetService("Teams")
+    if not teams:FindFirstChild("Survivors") then
+        local Survivors = Instance.new("Team", teams)
+        Survivors.Name = "Survivors"
+        Survivors.TeamColor = BrickColor.new("Bright blue")
+        Survivors.AutoAssignable = true
+    end
+    if not teams:FindFirstChild("Beast") then
+        local Beast = Instance.new("Team", teams)
+        Beast.Name = "Beast"
+        Beast.TeamColor = BrickColor.new("Bright red")
+        Beast.AutoAssignable = true
+    end
+    local survivor = teams.Survivors
+    local beast = teams.Beast
+    players.PlayerAdded:Connect(function(p)
+        p.Team = survivor
+    end)
+    while shared.VapeExecuted do
+        task.wait()
+        for i,v in players:GetPlayers() do
+            if v.Character == nil then return end
+            pcall(function()
+                if v.Character:FindFirstChild("BeastPowers") ~= nil then
+                    v.Team = beast
+                    store.beast = v
+                else
+                    v.Team = survivor
+                    if store.beast == v then store.beast = nil end
+                end
+            end)
+        end
+    end
+end)
 
 run(function()
     local AutoHack = {Enabled = false}
@@ -240,36 +280,36 @@ run(function()
     })
 end)
 
-task.spawn(function()
-    local teams = game:GetService("Teams")
-    if not teams:FindFirstChild("Survivors") then
-        local Survivors = Instance.new("Team", teams)
-        Survivors.Name = "Survivors"
-        Survivors.TeamColor = BrickColor.new("Bright blue")
-        Survivors.AutoAssignable = true
-    end
-    if not teams:FindFirstChild("Beast") then
-        local Beast = Instance.new("Team", teams)
-        Beast.Name = "Beast"
-        Beast.TeamColor = BrickColor.new("Bright red")
-        Beast.AutoAssignable = true
-    end
-    local survivor = teams.Survivors
-    local beast = teams.Beast
-    players.PlayerAdded:Connect(function(p)
-        p.Team = survivor
-    end)
-    while shared.VapeExecuted do
-        task.wait()
-        for i,v in players:GetPlayers() do
-            if v.Character == nil then return end
-            pcall(function()
-                if v.Character:FindFirstChild("BeastPowers") ~= nil then
-                    v.Team = beast
-                else
-                    v.Team = survivor
-                end
-            end)
+run(function()
+    local BeastNotifier = {Enabled = false}
+    local Range = {Value = 25}
+    local hasNotified = tick()
+
+    BeastNotifier = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "BeastNotifier",
+        Function = function()
+            if callback then
+                BindToStepped("bn",1,function()
+                    pcall(function()
+                        local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
+                        if mag <= Range.Value then
+                            if math.floor(tick() - hasNotified) > 10 then
+                                task.spawn(warningNotification, "Cat V5", "The beast is near you!", 10)
+                                hasNotified = tick()
+                            end
+                        end
+                    end)
+                end)
+            else
+
+            end
         end
-    end
+    })
+    Range = BeastNotifier.CreateSlider({
+        Name = "Range",
+        Min = 5,
+        Max = 30,
+        Default = "25",
+        Function = function(val) end
+    })
 end)
