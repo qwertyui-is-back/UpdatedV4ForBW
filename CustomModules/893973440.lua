@@ -182,7 +182,8 @@ local function findTouchInterest(tool)
 end
 
 local store = {
-    beast = nil
+    beast = nil,
+    map = ""
 }
 
 local run = runcode
@@ -206,20 +207,21 @@ task.spawn(function()
     players.PlayerAdded:Connect(function(p)
         p.Team = survivor
     end)
-    while shared.VapeExecuted do
-        task.wait()
+    BindToStepped("Update",1,function()
+        if not shared.VapeExecuted then UnbindFromStepped("Update")
         for i,v in players:GetPlayers() do
             if v.Character == nil then return end
             pcall(function()
-                if v.Character:FindFirstChild("BeastPowers") ~= nil then
+                if v.Character:FindFirstChild("BeastPowers") == nil then
+                    v.Team = survivor
+                else
                     v.Team = beast
                     store.beast = v
-                else
-                    v.Team = survivor
                 end
             end)
         end
-    end
+        store.map = tostring(repstorage.CurrentMap.Value)
+    end)
 end)
 
 run(function()
@@ -353,13 +355,13 @@ run(function()
 		Function = function(callback)
 			if callback then
 				table.insert(Chams.Connections, workspace.ChildRemoved:Connect(removefunc))
-				for i,v in pairs(workspace:GetDescendants()) do
+				for i,v in pairs(workspace[store.map]:GetDescendants()) do
                     if v.Name == "ComputerTable" then
                         if chamstable[v.Name] then removefunc(v) end
                         addfunc(v)
                     end
 				end
-				table.insert(Chams.Connections, workspace.ChildAdded:Connect(function(ent)
+				table.insert(Chams.Connections, workspace[store.map]:ChildAdded:Connect(function(ent)
                     if ent.Name ~= "ComputerTable" then return end
 					if chamstable[ent.Name] then removefunc(ent) end
 					addfunc(ent)
