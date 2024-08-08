@@ -208,7 +208,7 @@ task.spawn(function()
         p.Team = survivor
     end)
     BindToStepped("Update",1,function()
-        if not shared.VapeExecuted then UnbindFromStepped("Update")
+        if not shared.VapeExecuted then UnbindFromStepped("Update") end
         for i,v in players:GetPlayers() do
             if v.Character == nil then return end
             pcall(function()
