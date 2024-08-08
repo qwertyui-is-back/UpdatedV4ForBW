@@ -216,7 +216,6 @@ task.spawn(function()
                     store.beast = v
                 else
                     v.Team = survivor
-                    if store.beast == v then store.beast = nil end
                 end
             end)
         end
@@ -291,10 +290,10 @@ run(function()
             if callback then
                 BindToStepped("bn",1,function()
                     pcall(function()
-                        local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).Magnitude
+                        local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         if mag <= Range.Value then
                             if math.floor(tick() - hasNotified) > 10 then
-                                task.spawn(warningNotification, "Cat V5", "The beast is near you!", 10)
+                                warningNotification("Cat V5", "The beast is near you!", 10)
                                 hasNotified = tick()
                             end
                         end
