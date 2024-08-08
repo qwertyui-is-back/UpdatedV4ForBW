@@ -371,7 +371,7 @@ run(function()
 	local function addfunc(ent)
 		local hl = Instance.new("Highlight")
 		hl.Parent = ent
-		hl.FillColor = BrickColor.new("Bright green")
+		hl.FillColor = Color3.new(121,121,255)
 		hl.OutlineColor = Color3.fromRGB(255,255,255)
 		h1.FullTransparency = 0.4
 	end
