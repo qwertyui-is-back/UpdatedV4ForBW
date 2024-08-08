@@ -5677,7 +5677,7 @@ run(function()
 	Jello.TextSize = 24.85
 	Jello.TextTransparency = Watermark.Enabled and 0 or 1
 
-	Watermark = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Watermark = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "Watermark",
 		Function = function(callback)
 			if callback then
@@ -5686,6 +5686,9 @@ run(function()
 					Jello.TextTransparency = 0
 					Sigmas.Text = tt.Value == "" and "Cat" or tt.Value
 					Jello.Text = bb.Value == "" and "V5" or bb.Value
+					local color = GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api
+					Sigmas.TextColor3 = Color3.fromHSV(color.Hue, color.Sat, color.Value)
+					Jello.TextColor3 = Color3.fromHSV(color.Hue, color.Sat, color.Value)
 				end)
 			else
 				RunLoops:UnbindFromStepped("sigma")
