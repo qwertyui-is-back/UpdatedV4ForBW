@@ -778,9 +778,9 @@ if shared.VapeExecuted then
 						--obj.Object.Slider.FillSlider.Size = UDim2.new((v["Value"] < obj["Api"]["Max"] and v["Value"] or obj["Api"]["Max"]) / obj["Api"]["Max"], 0, 1, 0)
 					end
 					if v.Type == "ColorSlider" then
-						v["Hue"] = v["Hue"] or 0.44
-						v["Sat"] = v["Sat"] or 1
-						v["Value"] = v["Value"] or 1
+						v["Hue"] = v["Hue"] or 0.71
+						v["Sat"] = v["Sat"] or 0.61
+						v["Value"] = v["Value"] or 0.85
 						obj["Api"]["SetValue"](v["Hue"], v["Sat"], v["Value"])
 						if v["RainbowValue"] then obj["Api"]["SetRainbow"](v["RainbowValue"]) end
 						obj.Object.Slider.ButtonSlider.Position = UDim2.new(math.clamp(v["Hue"], 0.02, 0.95), -9, 0, -7)
@@ -3426,7 +3426,7 @@ if shared.VapeExecuted then
 			slider3.Position = UDim2.new(0.44, -11, 0, -7)
 			slider3.Parent = slider1
 			slider3.Name = "ButtonSlider"
-			sliderapi["Value"] = 0.44
+			sliderapi["Value"] = 0.71
 			sliderapi["RainbowValue"] = false
 			sliderapi["Object"] = frame
 			sliderapi["SetValue"] = function(val)
@@ -6150,7 +6150,7 @@ if shared.VapeExecuted then
 				sliderval.Visible = val
 				sliderexpand.Rotation = (val and 180 or 0)
 			end)
-			sliderapi["Hue"] = 0.44
+			sliderapi["Hue"] = 0.71
 			sliderapi["Sat"] = 1
 			sliderapi["Value"] = 1
 			sliderapi["Object"] = frame
@@ -6902,7 +6902,7 @@ if shared.VapeExecuted then
 	if inputService.TouchEnabled then
 		local button = Instance.new("TextButton")
 		button.Position = UDim2.new(1, -30, 0, 0)
-		button.Text = "Vape"
+		button.Text = "Cat"
 		button.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
 		button.TextColor3 = Color3.new(1, 1, 1)
 		button.Size = UDim2.new(0, 30, 0, 20)
