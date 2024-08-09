@@ -249,6 +249,7 @@ shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
 	if not writefile then return end
+	-- WAS if userInput.TouchEnabled then return end FUCK YOU XYLEX :rage: :rage:
 	repeat
 		GuiLibrary.SaveSettings()
         task.wait(10)
