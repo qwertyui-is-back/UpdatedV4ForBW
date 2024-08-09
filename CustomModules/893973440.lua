@@ -478,7 +478,7 @@ run(function()
                     if not tweening then
                         local computer = getComputer()
                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                        tweenToCFrame(computer[1].CFrame, 2)
+                        tweenToCFrame(computer.ComputerTrigger3.CFrame, 2)
                     end
                 end)
             else
