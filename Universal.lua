@@ -3737,7 +3737,7 @@ run(function()
 		Function = function(callback)
 			if callback then
 				for i, v in pairs(lightingService:GetChildren()) do
-					if v then
+					if v and v.Name ~= "DepthOfField" then
 						v:Destroy()
 					end
 				end
