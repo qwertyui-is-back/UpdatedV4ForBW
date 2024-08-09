@@ -472,7 +472,7 @@ run(function()
         Name = "AutoWin",
         Function = function(callback)
             if callback then
-                RunLoops:BindToHeartbeat("aw",1,function()
+                BindToStepped("aw",1,function()
                     if not isAlive() then return end
                     if tostring(store.map) == "Nil" then return end
                     if not tweening then
@@ -482,7 +482,7 @@ run(function()
                     end
                 end)
             else
-                RunLoops:UnbindFromHeartbeat("aw")
+                UnbindFromStepped("aw")
             end
         end,
         HoverText = "Automatically win the game"
