@@ -238,7 +238,7 @@ run(function()
 
     ZoomUnlocker = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
         Name = "ZoomUnlocker",
-        function = function(callback)
+        Function = function(callback)
             if callback then
                 BindToStepped("zu",1,function()
                     lplr.CameraMaxZoomDistance = 10
