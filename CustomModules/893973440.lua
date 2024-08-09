@@ -229,7 +229,7 @@ task.spawn(function()
                 end
             end)
         end
-        store.map = tostring(repstorage.CurrentMap.Value)
+        store.map = repstorage.CurrentMap.Value
     end)
 end)
 
@@ -372,7 +372,7 @@ run(function()
 			if callback then
                 BindToStepped("ce",1,function()
                     pcall(function()
-                        for i,v in pairs(workspace[store.map]:GetChildren()) do
+                        for i,v in pairs(store.map:GetChildren()) do
                             if v.Name == "ComputerTable" then
                                 if v:FindFirstChild("Highlight") == nil then
                                     addfunc(v)
@@ -411,7 +411,7 @@ run(function()
 			if callback then
                 BindToStepped("pe",1,function()
                     pcall(function()
-                        for i,v in pairs(workspace[store.map]:GetChildren()) do
+                        for i,v in pairs(store.map:GetChildren()) do
                             if v.Name == "FreezePod" then
                                 if v:FindFirstChild("Highlight") == nil then
                                     addfunc(v)
@@ -426,4 +426,65 @@ run(function()
 		end,
 		HoverText = "Render computers through walls"
 	})
+end)
+
+run(function()
+    local AutoWin = {Enabled = false}
+    local SaveCaptured = {Enabled = false}
+
+    local function getComputer()
+        for i,v in pairs(store.map:GetChildren()) do
+            if v.Name == "ComputerTable" then
+                if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
+                    if not v.ComputerTrigger1.Value.Value and not v.ComputerTrigger2.Value.Value and not v.ComputerTrigger3.Value.Value then
+                        return v
+                    end
+                end
+            end
+        end
+        return nil
+    end
+
+    local function getAvailableSlot(computer)
+        if not computer.ComputerTrigger1.Value.Value then
+            return "1"
+        elseif not computer.ComputerTrigger2.Value.Value then
+            return "2"
+        elseif not computer.ComputerTrigger3.Value.Value then
+            return "3"
+        end
+        return error("No slot available, maybe the values are bugged?")
+    end
+
+    local tweening = false
+    local function tweenToCFrame(cf,time)
+        local tweenservice = game:GetService("TweenService")
+        local info = TweenInfo.new(time)
+        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
+        tween:Play()
+        tweening = true
+        tween.Completed:Connect(function()
+            tweening = false
+        end)
+    end
+
+    AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
+        Name = "AutoWin",
+        Function = function(callback)
+            if callback then
+                RunLoops:BindToHeartbeat("aw",1,function()
+                    if not isAlive() then return end
+                    if tostring(store.map) == "Nil" then return end
+                    if not tweening then
+                        local computer = getComputer()
+                        local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                        tweenToCFrame(computer[slot].CFrame, 2)
+                    end
+                end)
+            else
+                RunLoops:UnbindFromHeartbeat("aw")
+            end
+        end,
+        HoverText = "Automatically win the game"
+    })
 end)

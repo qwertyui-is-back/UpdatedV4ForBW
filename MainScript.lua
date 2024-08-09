@@ -310,6 +310,11 @@ local CatV5 = GuiLibrary.CreateWindow({
 	Icon = "vape/assets/UtilityIcon.png",
 	IconSize = 17
 })
+local AFK = GuiLibrary.CreateWindow({
+	Name = "AFK",
+	Icon = "vape/assets/BlatantIcon.png",
+	IconSize = 16
+})
 local Friends = GuiLibrary.CreateWindow2({
 	Name = "Friends",
 	Icon = "vape/assets/FriendsIcon.png",
@@ -360,6 +365,12 @@ GUI.CreateDivider("CUSTOM")
 GUI.CreateButton({
 	Name = "CatV5",
 	Function = function(callback) CatV5.SetVisible(callback) end,
+	Icon = "vape/assets/UtilityIcon.png",
+	IconSize = 17
+})
+GUI.CreateButton({
+	Name = "AFK",
+	Function = function(callback) AFK.SetVisible(callback) end,
 	Icon = "vape/assets/UtilityIcon.png",
 	IconSize = 17
 })
