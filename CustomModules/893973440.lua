@@ -436,9 +436,7 @@ run(function()
         for i,v in pairs(store.map:GetChildren()) do
             if v.Name == "ComputerTable" then
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
-                    if not v.ComputerTrigger1.Value.Value and not v.ComputerTrigger2.Value.Value and not v.ComputerTrigger3.Value.Value then
-                        return v
-                    end
+                    return v
                 end
             end
         end
