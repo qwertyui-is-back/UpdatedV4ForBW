@@ -248,7 +248,7 @@ GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
-	if inputService.TouchEnabled then return end
+	--if inputService.TouchEnabled then return end
 	repeat
 		GuiLibrary.SaveSettings()
         task.wait(10)
