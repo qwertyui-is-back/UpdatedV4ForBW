@@ -3707,6 +3707,31 @@ run(function()
 end)
 
 run(function()
+	local betterfp = {Enabled = false}
+
+	betterfp = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = "BetterFirstPerson",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToStepped("betterfp",function()
+					pcall(function()
+						lplr.Character.Humanoid.CameraOffset = Vector3.new(0,0,-1)
+						for i,v in pairs(lplr.Character:GetChildren()) do
+							if v:IsA("BasePart") and v.Name ~= "Head" then
+								v.LocalTransparencyModifier = v.Transparency
+							end
+						end
+					end)
+				end)
+			else
+				RunLoops:UnbindFromStepped("betterfp")
+				pcall(function() lplr.Character.Humanoid.CameraOffset = Vector3.new(0,0,0) end)
+			end
+		end
+	})
+end)
+
+run(function()
 	local lightingsettings = {}
 	local lightingchanged = false
 	local Fullbright = {Enabled = false}

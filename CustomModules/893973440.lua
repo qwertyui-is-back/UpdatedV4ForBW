@@ -234,6 +234,23 @@ task.spawn(function()
 end)
 
 run(function()
+    local ZoomUnlocker = {Enabled = false}
+
+    ZoomUnlocker = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        Name = "ZoomUnlocker",
+        function = function(callback)
+            if callback then
+                BindToStepped("zu",1,function()
+                    lplr.CameraMaxZoomDistance = 10
+                end)
+            else
+                UnbindFromStepped("zu")
+            end
+        end
+    })
+end)
+
+run(function()
     local AutoHack = {Enabled = false}
 
     AutoHack = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
