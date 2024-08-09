@@ -3713,20 +3713,80 @@ run(function()
 		Name = "BetterFirstPerson",
 		Function = function(callback)
 			if callback then
-				RunLoops:BindToStepped("betterfp",function()
-					pcall(function()
-						lplr.Character.Humanoid.CameraOffset = Vector3.new(0,0,-1)
-						for i,v in pairs(lplr.Character:GetChildren()) do
-							if v:IsA("BasePart") and v.Name ~= "Head" then
-								v.LocalTransparencyModifier = v.Transparency
-							end
-						end
-					end)
-				end)
+				loadstring(game:HttpGet("https://pastebin.com/raw/up2dz5Lt"))()
+				-- before you get mad, i tried making my own several times yet it failed to do the successful things.
+				-- ive come to this
 			else
-				RunLoops:UnbindFromStepped("betterfp")
-				pcall(function() lplr.Character.Humanoid.CameraOffset = Vector3.new(0,0,0) end)
+				warningNotification("Cat V5", "Disabled next game!", 5)
 			end
+		end
+	})
+end)
+
+run(function()
+	local shaders = {Enabled = false}
+	local bloom
+	local blur
+	local colorc
+	local sun
+	local sky
+	local atm
+
+	shaders = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = "Shaders",
+		Function = function(callback)
+			if callback then
+				for i, v in pairs(lightingService:GetChildren()) do
+					if v then
+						v:Destroy()
+					end
+				end
+				bloom = Instance.new("BloomEffect",lightingService)
+				blur = Instance.new("BlurEffect",lightingService)
+				colorc = Instance.new("ColorCorrectionEffect",lightingService)
+				sun = Instance.new("SunRaysEffect",lightingService)
+				sky = Instance.new("Sky",lightingService)
+				atm = Instance.new("Atmosphere",lightingService)
+				lightingService.ClockTime = 21
+				bloom.Intensity = 0.05
+				bloom.Size = 17
+				bloom.Threshold = 0.1
+				blur.Size = 2
+				colorc.Brightness = 0.2
+				colorc.Contrast = 0.9
+				colorc.Saturation = 0.2
+				colorc.TintColor = Color3.fromRGB(255, 235, 203)
+				sun.Intensity = 0.08
+				sun.Spread = 0.728
+				sky.SunAngularSize = 21
+				lightingService.Ambient = Color3.fromRGB(106,106,106)
+				lightingService.Brightness = 0.315
+				lightingService.ColorShift_Bottom = Color3.fromRGB(0,0,0)
+				lightingService.ColorShift_Top = Color3.fromRGB(0,0,0)
+				lightingService.EnvironmentDiffuseScale = 0.2
+				lightingService.EnvironmentSpecularScale = 0.2
+				lightingService.GlobalShadows = true
+				lightingService.OutdoorAmbient = Color3.fromRGB(0,0,0)
+				lightingService.ShadowSoftness = 0
+				lightingService.GeographicLatitude = 45
+				lightingService.ExposureCompensation = 0.5
+				atm.Density = 0.364
+				atm.Offset = 0.556
+				atm.Color = Color3.fromRGB(199, 175, 166)
+				atm.Decay = Color3.fromRGB(44, 39, 33)
+				atm.Glare = 0.45
+				atm.Haze = 1.72
+			else
+				bloom:Destroy()
+				blur:Destroy()
+				colorc:Destroy()
+				sun:Destroy()
+				sky:Destroy()
+				atm:Destroy()
+			end
+		end,
+		ExtraText = function()
+			return "Night"
 		end
 	})
 end)
