@@ -1983,6 +1983,18 @@ GeneralSettings.CreateButton2({
 })
 
 local function loadVape()
+	local reinject
+	reinject = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "Reinject",
+		Function = function(c)
+			if c then
+				reinject.ToggleButton(false)
+				GuiLibrary.SelfDestruct()
+				task.wait(1)
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/main/loader.lua"))()
+			end
+		end
+	})
 	if not shared.VapeIndependent then
 		loadstring(vapeGithubRequest("Universal.lua"))()
 		if isfile("vape/CustomModules/"..game.PlaceId..".lua") then
