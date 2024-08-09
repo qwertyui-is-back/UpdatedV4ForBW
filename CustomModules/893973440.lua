@@ -477,8 +477,8 @@ run(function()
                     if tostring(store.map) == "Nil" then return end
                     if not tweening then
                         local computer = getComputer()
-                        local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                        tweenToCFrame(computer[slot].CFrame, 2)
+                        --local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                        tweenToCFrame(computer[1].CFrame, 2)
                     end
                 end)
             else
