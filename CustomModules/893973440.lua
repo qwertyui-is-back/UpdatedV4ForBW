@@ -219,6 +219,13 @@ task.spawn(function()
                 else
                     v.Team = beast
                     store.beast = v
+                    if v.Name ~= lplr.Name then
+                        if v.Character:FindFirstChild("WarningNotifDetector") == nil then
+                            local p = Instance.new("Part", v.Character)
+                            p.Name = "WarningNotifDetector"
+                            warningNotification("Cat V5", v.Name.." is the beast!",10)
+                        end
+                    end
                 end
             end)
         end
