@@ -1,5 +1,5 @@
 if shared.VapeExecuted then
-	local VERSION = "1.0.0 (Updated Vape V4)"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
+	local VERSION = "5.0.2 (Cat V5)"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
 	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 	local vapeAssetTable = {
 		["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
@@ -91,7 +91,7 @@ if shared.VapeExecuted then
 		ToggleNotifications = false,
 		Notifications = false,
 		ToggleTooltips = false,
-		ObjectsThatCanBeSaved = {["Gui ColorSliderColor"] = {Api = {Hue = 0.71, Sat = 0.61, Value = 0.85}}},
+		ObjectsThatCanBeSaved = {["Gui ColorSliderColor"] = {Api = {Hue = 0.44, Sat = 1, Value = 1}}},
 		MobileButtons = {},
 		RainbowSliders = {}
 	}
@@ -778,9 +778,9 @@ if shared.VapeExecuted then
 						--obj.Object.Slider.FillSlider.Size = UDim2.new((v["Value"] < obj["Api"]["Max"] and v["Value"] or obj["Api"]["Max"]) / obj["Api"]["Max"], 0, 1, 0)
 					end
 					if v.Type == "ColorSlider" then
-						v["Hue"] = v["Hue"] or 0.71
-						v["Sat"] = v["Sat"] or 0.61
-						v["Value"] = v["Value"] or 0.85
+						v["Hue"] = v["Hue"] or 0.44
+						v["Sat"] = v["Sat"] or 1
+						v["Value"] = v["Value"] or 1
 						obj["Api"]["SetValue"](v["Hue"], v["Sat"], v["Value"])
 						if v["RainbowValue"] then obj["Api"]["SetRainbow"](v["RainbowValue"]) end
 						obj.Object.Slider.ButtonSlider.Position = UDim2.new(math.clamp(v["Hue"], 0.02, 0.95), -9, 0, -7)
@@ -3426,7 +3426,7 @@ if shared.VapeExecuted then
 			slider3.Position = UDim2.new(0.44, -11, 0, -7)
 			slider3.Parent = slider1
 			slider3.Name = "ButtonSlider"
-			sliderapi["Value"] = 0.71
+			sliderapi["Value"] = 0.44
 			sliderapi["RainbowValue"] = false
 			sliderapi["Object"] = frame
 			sliderapi["SetValue"] = function(val)
@@ -6150,7 +6150,7 @@ if shared.VapeExecuted then
 				sliderval.Visible = val
 				sliderexpand.Rotation = (val and 180 or 0)
 			end)
-			sliderapi["Hue"] = 0.71
+			sliderapi["Hue"] = 0.44
 			sliderapi["Sat"] = 1
 			sliderapi["Value"] = 1
 			sliderapi["Object"] = frame

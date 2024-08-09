@@ -21,7 +21,7 @@
 
 
 -- Cat V.. Source Code --
-local catver = "V5 BETA"
+local catver = "V5"
 -- Cat V.. Source Code --
 
 --
@@ -201,15 +201,6 @@ end
 
 local function isVulnerable(plr)
 	return plr.Humanoid.Health > 0 and not plr.Character.FindFirstChildWhichIsA(plr.Character, "ForceField")
-end
-
-function isAlive(plr)
-    plr = plr or lplr
-    if not plr.Character then return false end
-    if not plr.Character:FindFirstChild("Head") then return false end
-    if not plr.Character:FindFirstChild("Humanoid") then return false end
-    if plr.Character:FindFirstChild("Humanoid").Health < 0.11 then return false end
-    return true
 end
 
 local function getPlayerColor(plr)
@@ -2840,7 +2831,6 @@ run(function()
 	local InfiniteFlySpeed = {Value = 23}
 	local InfiniteFlyVerticalSpeed = {Value = 40}
 	local InfiniteFlyVertical = {Enabled = true}
-	local InfiniteFlyNotifs = {Enabled = true}
 	local InfiniteFlyUp = false
 	local InfiniteFlyDown = false
 	local alternatelist = {"Normal", "AntiCheat A", "AntiCheat B"}
@@ -2889,9 +2879,7 @@ run(function()
 		origcf[2] = oldclonepos
 		oldcloneroot.CFrame = CFrame.new(unpack(origcf))
 		oldcloneroot = nil
-		if InfiniteFlyNotifs.Enabled then
-			warningNotification("InfiniteFly", "Landed!", 3)
-		end
+		warningNotification("InfiniteFly", "Landed!", 3)
 	end
 
 	InfiniteFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
@@ -2992,9 +2980,7 @@ run(function()
 							local speedCFrame = {oldcloneroot.CFrame:GetComponents()}
 							speedCFrame[1] = clone.CFrame.X
 							if speedCFrame[2] < 1000 or (not goneup) then
-								if InfiniteFlyNotifs.Enabled then
-									task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
-								end
+								task.spawn(warningNotification, "InfiniteFly", "Teleported Up", 3)
 								speedCFrame[2] = 100000
 								goneup = true
 							end
@@ -3046,9 +3032,7 @@ run(function()
 					entityLibrary.character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
 					disabledproper = false
 					if isnetworkowner(oldcloneroot) then
-						if InfiniteFlyNotifs.Enabled then
-							warningNotification("InfiniteFly", "Waiting 1.1s to not flag", 3)
-						end
+						warningNotification("InfiniteFly", "Waiting 1.1s to not flag", 3)
 						task.delay(1.1, disablefunc)
 					else
 						disablefunc()
@@ -3079,11 +3063,6 @@ run(function()
 	})
 	InfiniteFlyVertical = InfiniteFly.CreateToggle({
 		Name = "Y Level",
-		Function = function() end,
-		Default = true
-	})
-	InfiniteFlyNotifs = InfiniteFly.CreateToggle({
-		Name = "Notifications",
 		Function = function() end,
 		Default = true
 	})
@@ -3824,7 +3803,6 @@ run(function()
 		Function = function() end,
 		HoverText = "no hit vape user"
 	})
-	killauranovape.Object.Visible = false
 end)
 
 local LongJump = {Enabled = false}
@@ -6563,7 +6541,7 @@ run(function()
 	local rotationz = {Value = 0}
 	local oldc1
 	local oldfunc
-	local nobob = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+	local nobob = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = "Bob",
 		Function = function(callback)
 			local viewmodel = gameCamera:FindFirstChild("Viewmodel")
@@ -6582,7 +6560,7 @@ run(function()
 				end
 			end
 		end,
-		HoverText = "NoBob but the sword still does the bobbing effect"
+		HoverText = "Further sword"
 	})
 	nobobdepth = nobob.CreateSlider({
 		Name = "Depth",
@@ -9200,7 +9178,7 @@ end)
 run(function() -- i dont know why bedwars hasnt patched it but they havent (ive had this for a month i believe by now)
 	local MelodyExploit = {Enabled = false}
 
-	MelodyExploit = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({ -- how does this work? idk honestly
+	MelodyExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({ -- how does this work? idk honestly
 		Name = "MelodyExploit",
 		Function = function(callback)
 			if callback then
@@ -9238,7 +9216,7 @@ run(function()
 		return math.ceil(num)
 	end
 
-	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+	PingSpoof = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "PingSpoof",
 		Function = function(callback)
 			if callback then 
@@ -9307,7 +9285,7 @@ end)
 
 run(function()
 	local HannahExploit = {Enabled = false}
-	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+	HannahExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "HannahExploit",
 		Function = function(callback)
 			if callback then
@@ -9339,7 +9317,7 @@ run(function() -- Yes, this is old. I know. It isn't skidded, and it should work
 	local testing = false
 	local partthingy
 	local pos9 = 0
-	BoostSilentFly = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+	BoostSilentFly = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "BoostSilentFly",
 		Function = function(callback)
 			if callback then
@@ -9410,7 +9388,7 @@ run(function()
 			game:GetService("ReplicatedStorage").Modules:FindFirstChild("anticheat"):Destroy()
 		end
 	end
-	Disabler = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "Disabler",
 		Function = function(callback)
 			if callback then
@@ -9499,95 +9477,74 @@ run(function()
 	})
 end)
 
-run(function() -- credits to maxlasertech for rewriting
-	local PlayerViewModel = {};
-    local viewmodelMode = {};
-	local viewmodel = {};
-	reModel = function(entity)
-		for i,v in entity.Character:GetChildren() do
-			if v:IsA('BasePart') or v:IsA('Accessory') then
-				pcall(function()
-					if v.Name ~= "PlayerModel" then
-						v.Transparency = 1
-						v.Handle.Transparency = 1
-					end
-				end)
-			end
-		end
-		local part = Instance.new("Part", entity.Character)
+run(function()
+	local AmongUs = {Enabled = false}
+
+	local function camu(ent)
+		local asset = "http://www.roblox.com/asset/?id=6235963214"
+		local text = "http://www.roblox.com/asset/?id=6235963270"
+		local part = Instance.new("Part",ent.Character)
+		local mesh = Instance.new("SpecialMesh",part)
+		local weld = Instance.new("Weld",part)
+		part.Name = "amogus"
+		mesh.MeshId = asset
+		mesh.TextureId = text
 		part.CanCollide = false
-		part.Name 
-
-		local mesh = Instance.new("SpecialMesh", part)
-		mesh.MeshId = viewmodelMode.Value == 'Among Us' and 'http://www.roblox.com/asset/?id=6235963214' or 'http://www.roblox.com/asset/?id=13004256866'
-		mesh.TextureId = viewmodelMode.Value == 'Among Us' and 'http://www.roblox.com/asset/?id=6235963270' or 'http://www.roblox.com/asset/?id=13004256905'
-		mesh.Offset = viewmodelMode.Value == 'Rabbit' and Vector3.new(0,1.6,0) or Vector3.new(0,0.3,0)
-		mesh.Scale = viewmodelMode.Value == 'Rabbit' and Vector3.new(10, 8, 10) or Vector3.new(0.11, 0.11, 0.11)
-
-		local weld = Instance.new("Weld", part)
+		mesh.Offset = Vector3.new(0,-0.3,0)
+		mesh.Scale = Vector3.new(0.11,0.11,0.11)
 		weld.Part0 = part
 		weld.Part1 = part.Parent.UpperTorso
-		
-		table.insert(viewmodel, task.spawn(function()
-			viewmodel[entity.Name] = part
-		end))
-	end;
-	removeModel = function(ent)
-        viewmodel[ent.Name]:Remove()
-        for i,v in ent.Character:GetChildren() do
-            if v:IsA('BasePart') or v:IsA('Accessory') then
-                pcall(function() 
-                    if v ~= ent.Character.PrimaryPart then 
-                        v.Transparency = 0 
-                    end 
-                end)
-            end
-        end
-        viewmodel[ent.Name] = nil
-		task.wait(1)
 	end
-	PlayerViewModel = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
-		Name = 'PlayerModel',
-		Function = function(call)
-			if call then
-				for i,v in players:GetPlayers() do
-					table.insert(PlayerViewModel.Connections, v.CharacterAdded:Connect(function(health)
-						pcall(function() removeModel(v) end)
-						reModel(v)
-					end))
-				end
-				RunLoops:BindToHeartbeat('PlayerVM', function()
-					for i,v in players:GetPlayers() do
-						if isAlive(v) and not viewmodel[v.Name] then
-                            if not PlayerViewModel.Enabled then break end
-							reModel(v)
+
+	AmongUs = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "AmongUs",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("amogus",function()
+					for i,v in pairs(game.Players:GetChildren()) do
+						if v.Character:FindFirstChild("Humanoid") ~= nil then
+							if v.Character.Humanoid.Health == 0 and v.Character:FindFirstChild("amogus") then
+								v.Character:FindFirstChild("amogus"):Destroy()
+							end
+							if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
+								for o,b in pairs(v.Character:GetChildren()) do
+									if b.Name == "SkibidiPing" then
+										return
+									elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
+										b.Transparency = 1
+									elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
+										b.Handle.Transparency = 1
+									end
+								end
+								if v.Character:FindFirstChild("amogus") == nil then
+									camu(v)
+								end
+							end
 						end
 					end
 				end)
 			else
-                RunLoops:UnbindFromHeartbeat('PlayerVM')
-                for i,v in players:GetPlayers() do
-                    task.spawn(removeModel, v)
-                end
+				RunLoops:UnbindFromHeartbeat("amogus")
+				for i,v in pairs(game.Players:GetChildren()) do
+					for o,b in pairs(v.Character:GetChildren()) do
+						if b.Name == "SkibidiPing" then
+							return
+						elseif b:IsA("MeshPart") then
+							b.Transparency = 0
+						elseif b:IsA("Accessory") then
+							b.Handle.Transparency = 0
+						end
+					end
+				end
+				lplr.Character:FindFirstChild("amogus"):Destroy()
 			end
 		end,
-		HoverText = 'Turns you into Among Us'
+		HoverText = "Turns you into Among Us"
 	})
-    viewmodelMode = PlayerViewModel.CreateDropdown({
-        Name = 'Model',
-        List = {'Among Us', 'Rabbit'},
-        Function = function()
-			if PlayerViewModel.Enabled then
-            	PlayerViewModel.ToggleButton()
-            	PlayerViewModel.ToggleButton()
-			end
-        end,
-        Default = 'Among Us'
-    })
 end)
 
 run(function()
-	InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+	InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
 		Name = "InfiniteJump",
 		Function = function(callback)
 			if callback then
@@ -9603,9 +9560,8 @@ run(function()
 		end
 	end)         
 end)
-
 run(function()
-    local coolpack = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+    local coolpack = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
         Name = "TexturePack",
         HoverText = "nebula sent me this, idk if its skidded but it looks cool",
         Function = function(callback)
