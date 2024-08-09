@@ -396,15 +396,15 @@ run(function()
 		if plr == lplr and msg == 'helloimusinginhaler' then return true end
 		if self.localprio > 0 and self.said[plr.Name] == nil and msg == 'helloimusinginhaler' and plr ~= lplr then
 			self.said[plr.Name] = true
-			notif('Vape', plr.Name..' is using cat v5!', 60)
+			warningNotification('Vape', plr.Name..' is using cat v5!', 60)
 			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true
 		elseif self.localprio > 1 and self.said[plr.Name] == nil and msg == 'helloimusingv6' and plr ~= lplr then
 			self.said[plr.Name] = true
-			notif('Vape', plr.Name..' is using cat v5!', 60)
-			self.customtags[plr.Name] = {{text = 'CAT V5 USER', color = Color3.new(1, 1, 0)}}
+			warningNotification('Vape', plr.Name..' is using cat v6!', 60)
+			self.customtags[plr.Name] = {{text = 'CAT V6 USER', color = Color3.new(0.8, 1, 0)}}
 			local newent = entityLibrary.getEntity(plr)
 			if newent then entityLibrary.Events.EntityUpdated:Fire(newent) end
 			return true
@@ -663,10 +663,12 @@ run(function()
 		end,
 		reveal = function(args)
 			task.delay(0.1, function()
+				local text = "cat v5 client"
+				if self.localprio > 1 then text = "cat v6 client" end
 				if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the inhaler client')
+                    textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync('I am using the '..text)
                 else
-                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler client', 'All')
+                    replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer('I am using the inhaler '..text, 'All')
                 end
 			end)
 		end,
@@ -3698,7 +3700,93 @@ run(function()
 	})
 	ChamsOnTop = Chams.CreateToggle({
 		Name = "Bypass Walls",
+		Default = true,
 		Function = function(callback) if Chams.Enabled then Chams.ToggleButton(true) Chams.ToggleButton(true) end end
+	})
+end)
+
+run(function()
+	local betterfp = {Enabled = false}
+
+	betterfp = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = "BetterFirstPerson",
+		Function = function(callback)
+			if callback then
+				loadstring(game:HttpGet("https://pastebin.com/raw/up2dz5Lt"))()
+				-- before you get mad, i tried making my own several times yet it failed to do the successful things.
+				-- ive come to this
+			else
+				warningNotification("Cat V5", "Disabled next game!", 5)
+			end
+		end
+	})
+end)
+
+run(function()
+	local shaders = {Enabled = false}
+	local bloom
+	local blur
+	local colorc
+	local sun
+	local sky
+	local atm
+
+	shaders = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = "Shaders",
+		Function = function(callback)
+			if callback then
+				for i, v in pairs(lightingService:GetChildren()) do
+					if v and v.Name ~= "DepthOfField" then
+						v:Destroy()
+					end
+				end
+				bloom = Instance.new("BloomEffect",lightingService)
+				blur = Instance.new("BlurEffect",lightingService)
+				colorc = Instance.new("ColorCorrectionEffect",lightingService)
+				sun = Instance.new("SunRaysEffect",lightingService)
+				sky = Instance.new("Sky",lightingService)
+				atm = Instance.new("Atmosphere",lightingService)
+				lightingService.ClockTime = 21
+				bloom.Intensity = 0.05
+				bloom.Size = 17
+				bloom.Threshold = 0.1
+				blur.Size = 2
+				colorc.Brightness = 0.2
+				colorc.Contrast = 0.9
+				colorc.Saturation = 0.2
+				colorc.TintColor = Color3.fromRGB(255, 235, 203)
+				sun.Intensity = 0.08
+				sun.Spread = 0.728
+				sky.SunAngularSize = 21
+				lightingService.Ambient = Color3.fromRGB(106,106,106)
+				lightingService.Brightness = 0.315
+				lightingService.ColorShift_Bottom = Color3.fromRGB(0,0,0)
+				lightingService.ColorShift_Top = Color3.fromRGB(0,0,0)
+				lightingService.EnvironmentDiffuseScale = 0.2
+				lightingService.EnvironmentSpecularScale = 0.2
+				lightingService.GlobalShadows = true
+				lightingService.OutdoorAmbient = Color3.fromRGB(0,0,0)
+				lightingService.ShadowSoftness = 0
+				lightingService.GeographicLatitude = 45
+				lightingService.ExposureCompensation = 0.5
+				atm.Density = 0.364
+				atm.Offset = 0.556
+				atm.Color = Color3.fromRGB(199, 175, 166)
+				atm.Decay = Color3.fromRGB(44, 39, 33)
+				atm.Glare = 0.45
+				atm.Haze = 1.72
+			else
+				bloom:Destroy()
+				blur:Destroy()
+				colorc:Destroy()
+				sun:Destroy()
+				sky:Destroy()
+				atm:Destroy()
+			end
+		end,
+		ExtraText = function()
+			return "Night"
+		end
 	})
 end)
 
@@ -5674,7 +5762,7 @@ run(function()
 	Jello.TextSize = 24.85
 	Jello.TextTransparency = Watermark.Enabled and 0 or 1
 
-	Watermark = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Watermark = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "Watermark",
 		Function = function(callback)
 			if callback then
@@ -5683,6 +5771,9 @@ run(function()
 					Jello.TextTransparency = 0
 					Sigmas.Text = tt.Value == "" and "Cat" or tt.Value
 					Jello.Text = bb.Value == "" and "V5" or bb.Value
+					local color = GuiLibrary.ObjectsThatCanBeSaved["Gui ColorSliderColor"].Api
+					Sigmas.TextColor3 = Color3.fromHSV(color.Hue, color.Sat, color.Value)
+					Jello.TextColor3 = Color3.fromHSV(color.Hue, color.Sat, color.Value)
 				end)
 			else
 				RunLoops:UnbindFromStepped("sigma")
@@ -6312,3 +6403,5 @@ run(function()
 	createKeystroke(Enum.KeyCode.D, UDim2.new(0, 76, 0, 42), UDim2.new(0, 8, 0, 5))
 	createKeystroke(Enum.KeyCode.Space, UDim2.new(0, 0, 0, 83), UDim2.new(0, 25, 0, -10))
 end)
+
+print("Universal - catv5")

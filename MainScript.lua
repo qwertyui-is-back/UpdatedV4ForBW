@@ -248,7 +248,8 @@ GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
-	--if inputService.TouchEnabled then return end
+	if not writefile then return end
+	-- WAS if userInput.TouchEnabled then return end FUCK YOU XYLEX :rage: :rage:
 	repeat
 		GuiLibrary.SaveSettings()
         task.wait(10)
@@ -304,6 +305,11 @@ local World = GuiLibrary.CreateWindow({
 	Icon = "vape/assets/WorldIcon.png",
 	IconSize = 16
 })
+local CatV5 = GuiLibrary.CreateWindow({
+	Name = "CatV5",
+	Icon = "vape/assets/UtilityIcon.png",
+	IconSize = 17
+})
 local Friends = GuiLibrary.CreateWindow2({
 	Name = "Friends",
 	Icon = "vape/assets/FriendsIcon.png",
@@ -349,6 +355,13 @@ GUI.CreateButton({
 	Function = function(callback) World.SetVisible(callback) end,
 	Icon = "vape/assets/WorldIcon.png",
 	IconSize = 16
+})
+GUI.CreateDivider("CUSTOM")
+GUI.CreateButton({
+	Name = "CatV5",
+	Function = function(callback) CatV5.SetVisible(callback) end,
+	Icon = "vape/assets/UtilityIcon.png",
+	IconSize = 17
 })
 GUI.CreateDivider("MISC")
 GUI.CreateButton({
@@ -1082,6 +1095,10 @@ local function TextGUIUpdate()
 
 		GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value)
 	end
+	if shared.sigma then
+		VapeText.Font = Enum.Font.Roboto
+		VapeTextExtra.Font = Enum.Font.Roboto
+	end
 end
 
 TextGUI.GetCustomChildren().Parent:GetPropertyChangedSignal("Position"):Connect(TextGUIUpdate)
@@ -1245,8 +1262,13 @@ TextGUI.CreateDropdown({
 	Name = "Font",
 	List = TextGUIFonts,
 	Function = function(val)
-		VapeText.Font = Enum.Font[val]
-		VapeTextExtra.Font = Enum.Font[val]
+		if shared.sigma then
+			VapeText.Font = Enum.Font.Roboto
+			VapeTextExtra.Font = Enum.Font.Roboto
+		else
+			VapeText.Font = Enum.Font[val]
+			VapeTextExtra.Font = Enum.Font[val]
+		end
 		GuiLibrary.UpdateHudEvent:Fire()
 	end
 })
@@ -1801,9 +1823,12 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 			if shared.VapeDeveloper then
 				loadstring(readfile("vape/NewMainScript.lua"))()
 			else
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/NewMainScript.lua", true))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/main/loader.lua", true))()
 			end
 		]]
+		if shared.options then
+			teleportScript = 'shared.options = {\n	beta = '..tostring(shared.beta)..',\n	sigma = '..tostring(shared.sigma)..'\n}'..teleportScript
+		end
 		if shared.sigma then
 			teleportScript = 'shared.sigma = true\n'..teleportScript
 		end
@@ -1951,12 +1976,14 @@ local function loadVape()
 		loadstring(vapeGithubRequest("Universal.lua"))()
 		if isfile("vape/CustomModules/"..game.PlaceId..".lua") then
 			loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
+			print(game.PlaceId.." - catv5")
 		else
 			if not shared.VapeDeveloper then
 				local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/qwertyui-is-back/UpdatedV4ForBW/"..readfile("vape/commithash.txt").."/CustomModules/"..game.PlaceId..".lua") end)
 				if suc and publicrepo and publicrepo ~= "404: Not Found" then
 					writefile("vape/CustomModules/"..game.PlaceId..".lua", "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
 					loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
+					print(game.PlaceId.." - catv5")
 				end
 			end
 		end
@@ -1981,7 +2008,8 @@ local function loadVape()
 	ProfilesTextList.RefreshValues(profiles)
 	GUIbind.Reload()
 	TextGUIUpdate()
-	GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value, true)
+	--GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value, true)
+	GuiLibrary.UpdateUI(320/360, 1, 1, true)
 	if not shared.VapeSwitchServers then
 		if BlatantModeToggle.Enabled then
 			pcall(function()
@@ -2011,3 +2039,4 @@ if shared.VapeIndependent then
 else
 	loadVape()
 end
+print("MainScript - catv5")

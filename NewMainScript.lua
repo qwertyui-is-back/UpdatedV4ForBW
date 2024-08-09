@@ -2,6 +2,7 @@ if getgenv and not getgenv().shared then getgenv().shared = {} end
 if shared.beta then
 	writefile("vape/commithash.txt","beta")
 end
+print("NewMainScript - catv5")
 local errorPopupShown = false
 local setidentity = syn and syn.set_thread_identity or set_thread_identity or setidentity or setthreadidentity or function() end
 local getidentity = syn and syn.get_thread_identity or get_thread_identity or getidentity or getthreadidentity or function() return 8 end
