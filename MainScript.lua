@@ -1995,6 +1995,17 @@ local function loadVape()
 			end
 		end
 	})
+	local rejoin
+	rejoin = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "Rejoin",
+		Function = function(c)
+			if c then
+				rejoin.ToggleButton(false)
+				task.wait(0.5)
+				game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,lplr)
+			end
+		end
+	})
 	if not shared.VapeIndependent then
 		loadstring(vapeGithubRequest("Universal.lua"))()
 		if isfile("vape/CustomModules/"..game.PlaceId..".lua") then
