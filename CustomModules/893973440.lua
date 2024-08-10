@@ -491,12 +491,13 @@ run(function()
                                 --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                 tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(5.95, 9.95))
                             end
-                            repstorage.RemoteEvent:FireServer("Input","Crawl",true)
-                            repstorage.RemoteEvent:FireServer("Input","Crawl",false)
                         elseif store.status:lower():find("exit") then
                             local exit = getExit()
                             local partTP = exit.ExitArea
-                            if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 then
+                            if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
+                                partTP = exit.ExitDoorTrigger
+                            end
+                            if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
                                 partTP = exit.ExitDoorTrigger
                             end
                             lplr.Character.HumanoidRootPart.CFrame = partTP.CFrame
