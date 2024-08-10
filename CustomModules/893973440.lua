@@ -542,6 +542,8 @@ run(function()
     local function tweenToCFrame(cf,time)
         doInteract = false
         local tweenservice = game:GetService("TweenService")
+        local mag = (cf.Position - lplr.Character.HumanoidRootPart.CFrame.Position).magnitude
+        if mag < 7.5 then time = 0 end
         local info = TweenInfo.new(time)
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
         tween:Play()
@@ -592,28 +594,7 @@ run(function()
                                     computer = getComputer()
                                 end
                                 if not tweening and computer ~= nil then
-                                    local do1 = false
-                                    local do2 = false
-                                    local do3 = false
-                                    local mag2
-                                    local mag3
-                                    local mag4
-                                    for i,v in pairs(players:GetPlayers()) do
-                                        mag2 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
-                                        if mag2 >= 2 then
-                                            do3 = true
-                                        end
-                                        mag3 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger2.Position).magnitude
-                                        if mag3 >= 2 then
-                                            do2 = true
-                                        end
-                                        mag4 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger1.Position).magnitude
-                                        if mag4 >= 2 then
-                                            do1 = true
-                                        end
-                                    end
-                                    local slot = do1 and 1 or do2 and 2 or do3 and 3
-                                    tweenToCFrame(computer["ComputerTrigger"..tostring(slot)].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
+                                    tweenToCFrame(computer["ComputerTrigger"..math.random(1,3)].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                     --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
