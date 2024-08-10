@@ -496,7 +496,7 @@ run(function()
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
-                                if computer == nil or computer.Screen.Color == BrickColor.new("Dark green") or mag <= 30 then
+                                if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
                                     computer = getComputer()
                                 end
                                 if not tweening then
