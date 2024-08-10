@@ -502,12 +502,6 @@ run(function()
                                         tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(6.65, 9.95))
                                         warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
-                                    if cfTicks >= 30 then
-                                        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,computer.ComputerTrigger3.Position.Y + 1,0)
-                                    elseif cfTicks >= 60 then
-                                        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,computer.ComputerTrigger3.Position.Y,0)
-                                        cfTicks = 0
-                                    end
                                 end
                             elseif store.status:lower():find("exit") then
                                 local exit = getExit()
