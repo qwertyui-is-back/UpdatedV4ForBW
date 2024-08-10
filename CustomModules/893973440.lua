@@ -493,13 +493,13 @@ run(function()
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
                         else
                             cfTicks += 1
-                            lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,10,0)
+                            lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,2,0)
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
+                                if computer == nil or computer.Screen.Color == BrickColor.new("Dark green") or mag >= 30 then
+                                    computer = getComputer()
+                                end
                                 if not tweening then
-                                    if computer == nil or computer.Screen.Color == BrickColor.new("Dark green") or mag >= 30 then
-                                        computer = getComputer()
-                                    end
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                         tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(9,10))
