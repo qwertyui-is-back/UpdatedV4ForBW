@@ -497,6 +497,9 @@ run(function()
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
+                                    if computer.Screen.BrickColor == BrickColor.new("Dark green") then
+                                        warningNotification("Cat V5","Computer successfully hacked!",3)
+                                    end
                                     computer = getComputer()
                                 end
                                 if not tweening then
