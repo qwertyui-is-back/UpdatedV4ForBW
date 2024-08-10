@@ -448,17 +448,6 @@ run(function()
         return nil
     end
 
-    local function getAvailableSlot(computer)
-        if not computer.ComputerTrigger1.Value.Value then
-            return "1"
-        elseif not computer.ComputerTrigger2.Value.Value then
-            return "2"
-        elseif not computer.ComputerTrigger3.Value.Value then
-            return "3"
-        end
-        return error("No slot available, maybe the values are bugged?")
-    end
-
     local tweening = false
     local function tweenToCFrame(cf,time)
         local tweenservice = game:GetService("TweenService")
@@ -481,7 +470,7 @@ run(function()
                     if tostring(store.map) == "Nil" then return end
                     if store.status:lower():find("computer") then
                         local time = math.floor(tick() - DONTTP)
-                        if not tweening and DONTTP > 7.5 then
+                        if not tweening and time >= 7 then
                             local computer = getComputer()
                             --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                             tweenToCFrame(computer.ComputerTrigger3.CFrame, 3.85)
