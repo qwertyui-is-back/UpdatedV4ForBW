@@ -489,7 +489,7 @@ run(function()
                             if not tweening then
                                 local computer = getComputer()
                                 --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                tweenToCFrame(computer.ComputerTrigger3.CFrame, 5.95)
+                                tweenToCFrame(computer.ComputerTrigger3.CFrame, 6.95)
                             end
                         elseif store.status:lower():find("exit") then
                             local exit = getExit()
