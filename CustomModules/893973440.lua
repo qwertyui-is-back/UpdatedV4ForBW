@@ -273,8 +273,8 @@ run(function()
     })
 end)
 
+local AutoInteract = {Enabled = false}
 run(function()
-    local AutoInteract = {Enabled = false}
 
     AutoInteract = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
         Name = "AutoInteract",
@@ -507,6 +507,7 @@ run(function()
 
     local tweening = false
     local function tweenToCFrame(cf,time)
+        doInteract = false
         local tweenservice = game:GetService("TweenService")
         local info = TweenInfo.new(time)
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
@@ -515,11 +516,13 @@ run(function()
         tween.Completed:Connect(function()
             tweening = false
             DONTTP = tick()
+            doInteract = true
         end)
     end
     local cfTicks = 0
     local computer = nil
     local exit = nil
+    local doInteract = false
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -527,6 +530,7 @@ run(function()
             if callback then
                 BindToStepped("aw",1,function()
                     pcall(function()
+                        if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if not isAlive() then return end
                         if store.beast == lplr then return end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
@@ -554,6 +558,11 @@ run(function()
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                         tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(6.85,8.99))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
+                                    end
+                                    if doInteract then
+                                        repstorage.RemoteEvent:FireServer("Input", "Action", true)
+                                    else
+                                        repstorage.RemoteEvent:FireServer("Input", "Action", false)
                                     end
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
