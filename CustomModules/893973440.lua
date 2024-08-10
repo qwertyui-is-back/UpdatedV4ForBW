@@ -490,10 +490,10 @@ run(function()
     DONTTTP = tick()
 
     local function getComputer()
-        for i,v in pairs(store.map:GetChildren()) do
-            if v.Name == "ComputerTable" then
-                if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
-                    local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+        for i,comp in pairs(store.map:GetChildren()) do
+            if comp.Name == "ComputerTable" then
+                if comp.Screen.BrickColor ~= BrickColor.new("Dark green") then
+                    local mag = (store.beast.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
                     if mag >= 30 then
                         local do1 = false
                         local do2 = false
@@ -502,15 +502,15 @@ run(function()
                         local mag3
                         local mag4
                         for i,v in pairs(players:GetPlayers()) do
-                            mag2 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                            mag2 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
                             if mag2 >= 2 then
                                 do3 = true
                             end
-                            mag3 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                            mag3 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
                             if mag3 >= 2 then
                                 do2 = true
                             end
-                            mag4 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                            mag4 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
                             if mag4 >= 2 then
                                 do1 = true
                             end
@@ -600,15 +600,15 @@ run(function()
                                         local mag3
                                         local mag4
                                         for i,v in pairs(players:GetPlayers()) do
-                                            mag2 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                                            mag2 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
                                             if mag2 >= 2 then
                                                 do3 = true
                                             end
-                                            mag3 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                                            mag3 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
                                             if mag3 >= 2 then
                                                 do2 = true
                                             end
-                                            mag4 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                                            mag4 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
                                             if mag4 >= 2 then
                                                 do1 = true
                                             end
