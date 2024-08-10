@@ -186,7 +186,8 @@ local store = {
     map = "nil",
     computers = 0,
     status = "GAME OVER",
-    ingame = false
+    ingame = false,
+    timer = 0
 }
 
 local run = runcode
@@ -214,27 +215,34 @@ task.spawn(function()
         if not shared.VapeExecuted then
             UnbindFromStepped("Update")
         end
-        for i,v in players:GetPlayers() do
-            if v.Character == nil then return end
-            pcall(function()
-                if v.Character:FindFirstChild("BeastPowers") == nil then
-                    v.Team = survivor
-                else
-                    v.Team = beast
-                    store.beast = v
-                    if v.Name ~= lplr.Name then
-                        if v.Character:FindFirstChild("WarningNotifDetector") == nil then
-                            local p = Instance.new("Part", v.Character)
-                            p.Name = "WarningNotifDetector"
-                            warningNotification("Cat V5", v.Name.." is the beast!",10)
-                        end
-                    end
-                end
-            end)
-        end
         store.map = repstorage.CurrentMap.Value
         store.computers = repstorage.ComputersLeft.Value
         store.status = repstorage.GameStatus.Value
+        store.ingame = repstorage.IsGameActive.Value
+        store.timer = repstorage.GameTimer.Value
+        for i,v in players:GetPlayers() do
+            if v.Character == nil then return end
+            pcall(function()
+                if store.timer > 0 then
+                    if v.Character:FindFirstChild("BeastPowers") == nil then
+                        v.Team = survivor
+                    else
+                        v.Team = beast
+                        store.beast = v
+                        if v.Name ~= lplr.Name then
+                            if v.Character:FindFirstChild("WarningNotifDetector") == nil then
+                                local p = Instance.new("Part", v.Character)
+                                p.Name = "WarningNotifDetector"
+                                warningNotification("Cat V5", v.Name.." is the beast!",10)
+                            end
+                        end
+                    end
+                else
+                    v.Team = survivor
+                    store.beast = nil
+                end
+            end)
+        end
     end)
 end)
 
@@ -536,12 +544,12 @@ run(function()
                         if not isAlive() then return end
                         if store.beast == lplr then return end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+                        lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         if mag <= 25 then
+                            if store.timer == 0 then return end
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                         else
-                            if tostring(store.map) == "Nil" then return end
-                            cfTicks += 1
-                            lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
+                            if store.timer == 0 then return end
                             if doInteract then
                                 repstorage.RemoteEvent:FireServer("Input", "Action", true)
                             else
@@ -569,7 +577,7 @@ run(function()
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
-                                if tostring(store.map) == "Nil" then return end
+                                if store.timer == 0 then return end
                                 if exit == nil or mag <= 30 then
                                     if mag <= 30 then
                                         warningNotification("Cat V5","The beast is near!",3)
