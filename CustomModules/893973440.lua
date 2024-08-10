@@ -577,7 +577,7 @@ run(function()
                                     exit = getExit()
                                 end
                                 local partTP = exit.ExitArea
-                                speed = 1.65
+                                speed = 2.65
                                 if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
                                     partTP = exit.ExitDoorTrigger
                                     speed = 0.65
