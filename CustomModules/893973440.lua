@@ -498,7 +498,7 @@ run(function()
     local function getExit()
         for i,v in pairs(store.map:GetChildren()) do
             if v.Name == "ExitDoor" then
-                local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                local mag = (store.beast.Character.HumanoidRootPart.Position - v.ExitDoorTrigger.Position).magnitude
                 if mag >= 15 then
                     return v
                 end
@@ -580,11 +580,11 @@ run(function()
                                 speed = 1.65
                                 if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
                                     partTP = exit.ExitDoorTrigger
-                                    speed = 1
+                                    speed = 0.65
                                 end
                                 if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
                                     partTP = exit.ExitDoorTrigger
-                                    speed = 1
+                                    speed = 0.65
                                 end
                                 tweenToCFrame(partTP.CFrame, speed)
                             end
