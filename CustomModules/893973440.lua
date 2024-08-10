@@ -521,6 +521,12 @@ run(function()
         doInteract = false
         local tweenservice = game:GetService("TweenService")
         local info = TweenInfo.new(time)
+        local mag = (cf.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+        if not store.status:lower():find("exit") then
+            if mag >= 6.5 then
+                time = 0.1
+            end
+        end
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
         tween:Play()
         tweening = true
@@ -573,7 +579,7 @@ run(function()
                                 local slot = "3"
                                 for i,v in pairs(players:GetChildren()) do
                                     local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                    if mag2 < 3 then
+                                    if mag2 < 3 and v ~= lplr then
                                         slot = tostring(math.random(1,3))
                                     end
                                 end
