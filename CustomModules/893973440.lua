@@ -591,32 +591,30 @@ run(function()
                                     end
                                     computer = getComputer()
                                 end
-                                if not tweening then
-                                    if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
-                                        local do1 = false
-                                        local do2 = false
-                                        local do3 = false
-                                        local mag2
-                                        local mag3
-                                        local mag4
-                                        for i,v in pairs(players:GetPlayers()) do
-                                            mag2 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
-                                            if mag2 >= 2 then
-                                                do3 = true
-                                            end
-                                            mag3 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger2.Position).magnitude
-                                            if mag3 >= 2 then
-                                                do2 = true
-                                            end
-                                            mag4 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger1.Position).magnitude
-                                            if mag4 >= 2 then
-                                                do1 = true
-                                            end
+                                if not tweening and computer ~= nil then
+                                    local do1 = false
+                                    local do2 = false
+                                    local do3 = false
+                                    local mag2
+                                    local mag3
+                                    local mag4
+                                    for i,v in pairs(players:GetPlayers()) do
+                                        mag2 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
+                                        if mag2 >= 2 then
+                                            do3 = true
                                         end
-                                        local slot = do1 and 1 or do2 and 2 or do3 and 3
-                                        tweenToCFrame(computer["ComputerTrigger"..tostring(slot)].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
-                                        --warningNotification("Cat V5", "Teleporting to another computer..",5)
+                                        mag3 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger2.Position).magnitude
+                                        if mag3 >= 2 then
+                                            do2 = true
+                                        end
+                                        mag4 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger1.Position).magnitude
+                                        if mag4 >= 2 then
+                                            do1 = true
+                                        end
                                     end
+                                    local slot = do1 and 1 or do2 and 2 or do3 and 3
+                                    tweenToCFrame(computer["ComputerTrigger"..tostring(slot)].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
+                                    --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
