@@ -488,7 +488,6 @@ run(function()
     local SpeedValue1 = {Value = 9}
     local SpeedValue2 = {Value = 11}
     DONTTTP = tick()
-    local slot = "3"
 
     local function getComputer()
         for i,v in pairs(store.map:GetChildren()) do
@@ -496,15 +495,14 @@ run(function()
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
                     local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
                     if mag >= 30 then
-                        local s = 3
+                        local slot = 3
                         for i2,v2 in pairs(players:GetChildren()) do
                             local mag2 = (v2.Character.HumanoidRootPart.Position - v["ComputerTrigger"..slot].Position).magnitude
                             if mag2 < 3 and v2 ~= lplr then
-                                s -= 1
+                                slot -= 1
                             end
                         end
-                        slot = tostring(s)
-                        return s > 0 and v or nil
+                        return slot > 0 and v or nil
                     end
                 end
             end
@@ -548,6 +546,7 @@ run(function()
     local cfTicks = 0
     local computer = nil
     local exit = nil
+    local slot = "3"
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -587,9 +586,8 @@ run(function()
                                 end
                                 for i,v in pairs(players:GetChildren()) do
                                     local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                    if mag2 <= 2 and v ~= lplr then
-                                        local slot2 = tonumber(slot)
-                                        slot = tostring(slot2 -= 1)
+                                    if mag2 <= 3 and v ~= lplr then
+                                        slot = tostring(math.random(1,3))
                                     end
                                 end
                                 if not tweening then
