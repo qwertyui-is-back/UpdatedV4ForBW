@@ -490,7 +490,7 @@ run(function()
                         if store.beast == lplr then return end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         if mag <= 25 then
-                            lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
+                            lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                         else
                             cfTicks += 1
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
