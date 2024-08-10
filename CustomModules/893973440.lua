@@ -495,7 +495,27 @@ run(function()
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
                     local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
                     if mag >= 30 then
-                        return v
+                        local isCompGood = 3
+                        for i2,v2 in pairs(players:GetPlayers()) do
+                            mag2 = (v2.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position)
+                            if mag2 < 4 then
+                                slot = computer["ComputerTrigger2"]
+                                isCompGood -= 1
+                            end
+                            mag2 = (v2.Character.HumanoidRootPart.Position - v.ComputerTrigger2.Position)
+                            if mag2 < 4 then
+                                slot = computer["ComputerTrigger1"]
+                                isCompGood -= 1
+                            end
+                            mag2 = (v2.Character.HumanoidRootPart.Position - v.ComputerTrigger1.Position)
+                            if mag2 < 4 then
+                                slot = computer["ComputerTrigger3"]
+                                isCompGood -= 1
+                            end
+                        end
+                        if isCompGood > 0 then
+                            return v
+                        end
                     end
                 end
             end
@@ -570,10 +590,26 @@ run(function()
                                     end
                                     computer = getComputer()
                                 end
+                                local slot = computer["ComputerTrigger3"]
+                                local mag2
+                                for i,v in pairs(players:GetPlayers()) do
+                                    mag2 = (v.Character.HumanoidRootPart.Position - slot.Position)
+                                    if mag2 < 4 and slot == computer["ComputerTrigger3"] then
+                                        slot = computer["ComputerTrigger2"]
+                                    end
+                                    mag2 = (v.Character.HumanoidRootPart.Position - slot.Position)
+                                    if mag2 < 4 and slot == computer["ComputerTrigger2"] then
+                                        slot = computer["ComputerTrigger1"]
+                                    end
+                                    mag2 = (v.Character.HumanoidRootPart.Position - slot.Position)
+                                    if mag2 < 4 and slot == computer["ComputerTrigger2"] then
+                                        slot = computer["ComputerTrigger3"]
+                                    end
+                                end
                                 if not tweening then
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
+                                        tweenToCFrame(slot.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
