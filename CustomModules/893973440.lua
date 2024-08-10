@@ -495,7 +495,29 @@ run(function()
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
                     local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
                     if mag >= 30 then
-                        return v
+                        local do1 = false
+                        local do2 = false
+                        local do3 = false
+                        local mag2
+                        local mag3
+                        local mag4
+                        for i,v in pairs(players:GetPlayers()) do
+                            mag2 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                            if mag2 >= 2 then
+                                do3 = true
+                            end
+                            mag3 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                            if mag3 >= 2 then
+                                do2 = true
+                            end
+                            mag4 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                            if mag4 >= 2 then
+                                do1 = true
+                            end
+                        end
+                        if do1 or do2 or do3 then
+                            return v
+                        end
                     end
                 end
             end
@@ -541,11 +563,9 @@ run(function()
                 BindToStepped("aw",1,function()
                     pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
-                        if not isAlive() then return end
                         if store.timer == 0 then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
                         end
-                        if store.beast == lplr then return end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         if mag <= 25 then
@@ -573,8 +593,28 @@ run(function()
                                 end
                                 if not tweening then
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
-                                        --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
+                                        local do1 = false
+                                        local do2 = false
+                                        local do3 = false
+                                        local mag2
+                                        local mag3
+                                        local mag4
+                                        for i,v in pairs(players:GetPlayers()) do
+                                            mag2 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                                            if mag2 >= 2 then
+                                                do3 = true
+                                            end
+                                            mag3 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                                            if mag3 >= 2 then
+                                                do2 = true
+                                            end
+                                            mag4 = (v.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                                            if mag4 >= 2 then
+                                                do1 = true
+                                            end
+                                        end
+                                        local slot = do1 and 1 or do2 and 2 or do3 and 3
+                                        tweenToCFrame(computer["ComputerTrigger"..tostring(slot)].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
