@@ -496,15 +496,15 @@ run(function()
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
+                                if computer ~= nil then
+                                    if computer.Screen.BrickColor == BrickColor.new("Dark green") then
+                                        warningNotification("Cat V5","Computer successfully hacked!",3)
+                                    end
+                                end
+                                if mag <= 30 then
+                                    warningNotification("Cat V5","The beast is near! Going to snearest computer..",3)
+                                end
                                 if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
-                                    if computer ~= nil then
-                                        if computer.Screen.BrickColor == BrickColor.new("Dark green") then
-                                            warningNotification("Cat V5","Computer successfully hacked!",3)
-                                        end
-                                    end
-                                    if mag <= 30 then
-                                        warningNotification("Cat V5","The beast is near! Going to snearest computer..",3)
-                                    end
                                     computer = getComputer()
                                 end
                                 if not tweening then
