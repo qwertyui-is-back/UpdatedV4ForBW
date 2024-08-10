@@ -488,6 +488,7 @@ run(function()
     local SpeedValue1 = {Value = 9}
     local SpeedValue2 = {Value = 11}
     DONTTTP = tick()
+    local slot = "3"
 
     local function getComputer()
         for i,v in pairs(store.map:GetChildren()) do
@@ -495,7 +496,15 @@ run(function()
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
                     local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
                     if mag >= 30 then
-                        return v
+                        local s = 3
+                        for i2,v2 in pairs(players:GetChildren()) do
+                            local mag2 = (v2.Character.HumanoidRootPart.Position - v["ComputerTrigger"..slot].Position).magnitude
+                            if mag2 < 3 and v2 ~= lplr then
+                                s -= 1
+                            end
+                        end
+                        slot = tostring(s)
+                        return s > 0 and v or nil
                     end
                 end
             end
@@ -523,7 +532,7 @@ run(function()
         local info = TweenInfo.new(time)
         local mag = (cf.Position - lplr.Character.HumanoidRootPart.Position).magnitude
         if not store.status:lower():find("exit") then
-            if mag >= 6.5 then
+            if mag <= 6.5 then
                 time = 0.1
             end
         end
@@ -576,11 +585,11 @@ run(function()
                                     end
                                     computer = getComputer()
                                 end
-                                local slot = "3"
                                 for i,v in pairs(players:GetChildren()) do
                                     local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                    if mag2 < 3 and v ~= lplr then
-                                        slot = tostring(math.random(1,3))
+                                    if mag2 <= 2 and v ~= lplr then
+                                        local slot2 = tonumber(slot)
+                                        slot = tostring(slot2 -= 1)
                                     end
                                 end
                                 if not tweening then
