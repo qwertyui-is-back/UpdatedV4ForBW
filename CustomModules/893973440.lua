@@ -493,6 +493,8 @@ run(function()
         for i,comp in pairs(store.map:GetChildren()) do
             if comp.Name == "ComputerTable" then
                 if comp.Screen.BrickColor ~= BrickColor.new("Dark green") then
+                    local mag = (store.beast.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
+                    if mag >= 30
                         return v
                     end
                 end
@@ -546,6 +548,7 @@ run(function()
                         end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
+                        if store.beast == lplr then mag = 5000 end
                         if mag <= 25 then
                             if store.timer == 0 then return end
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
