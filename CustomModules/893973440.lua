@@ -539,7 +539,7 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToStepped("aw",1,function()
-                    pcall(function()
+                    --pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if store.timer == 0 then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
@@ -572,13 +572,13 @@ run(function()
                                 end
                                 local slot = "3"
                                 for i,v in pairs(players:GetChildren()) do
-                                    local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot]).magnitude
+                                    local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
                                     if mag2 < 3 then
                                         slot = tostring(math.random(1,3))
                                     end
                                 end
                                 if not tweening then
-                                    if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
+                                    if pos.X ~= computer["ComputerTrigger"..slot].Position.X or pos.Z ~= computer["ComputerTrigger"..slot].Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                         tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
@@ -606,7 +606,7 @@ run(function()
                                 tweenToCFrame(partTP.CFrame, speed)
                             end
                         end
-                    end)
+                    --end)
                 end)
             else
                 UnbindFromStepped("aw")
