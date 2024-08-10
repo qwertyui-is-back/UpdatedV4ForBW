@@ -487,7 +487,6 @@ run(function()
     local SaveCaptured = {Enabled = false}
     local SpeedValue1 = {Value = 9}
     local SpeedValue2 = {Value = 11}
-    DONTTTP = tick()
     local slot = "3"
 
     local function getComputer()
@@ -545,7 +544,7 @@ run(function()
             doInteract = true
         end)
     end
-    local cfTicks = 0
+    
     local computer = nil
     local exit = nil
 
