@@ -485,12 +485,14 @@ run(function()
                     if mag <= 25 then
                         lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
                     else
-                        if store.status:lower():find("computer") or store.status:lower():find("head start") then
+                        if store.status:lower():find("computer") or store.status:lower():find("15 ") then
                             if not tweening then
                                 local computer = getComputer()
                                 --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                tweenToCFrame(computer.ComputerTrigger3.CFrame, 6.95)
+                                tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(5.95, 9.95))
                             end
+                            repstorage.RemoteEvent:FireServer("Input","Crawl",true)
+                            repstorage.RemoteEvent:FireServer("Input","Crawl",false)
                         elseif store.status:lower():find("exit") then
                             local exit = getExit()
                             local partTP = exit.ExitArea
