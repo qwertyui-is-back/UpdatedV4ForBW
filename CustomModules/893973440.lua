@@ -444,8 +444,8 @@ run(function()
         for i,v in pairs(store.map:GetChildren()) do
             if v.Name == "ComputerTable" then
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
-                    local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-                    if mag >= 35 then
+                    local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
+                    if mag >= 45 then
                         return v
                     end
                 end
@@ -505,7 +505,7 @@ run(function()
                                 if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
                                     partTP = exit.ExitDoorTrigger
                                 end
-                                tweenToCFrame(partTP.CFrame, 2)
+                                tweenToCFrame(partTP.CFrame, 25)
                             end
                         end
                     end)
