@@ -506,6 +506,7 @@ run(function()
     end
 
     local tweening = false
+    local doInteract = true
     local function tweenToCFrame(cf,time)
         doInteract = false
         local tweenservice = game:GetService("TweenService")
@@ -522,7 +523,6 @@ run(function()
     local cfTicks = 0
     local computer = nil
     local exit = nil
-    local doInteract = false
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -540,6 +540,11 @@ run(function()
                             if tostring(store.map) == "Nil" then return end
                             cfTicks += 1
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
+                            if doInteract then
+                                repstorage.RemoteEvent:FireServer("Input", "Action", true)
+                            else
+                                repstorage.RemoteEvent:FireServer("Input", "Action", false)
+                            end
                             if store.status:lower():find("computers left") or store.status:lower():find("15 sec head start") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
@@ -558,11 +563,6 @@ run(function()
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                         tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(6.85,8.99))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
-                                    end
-                                    if doInteract then
-                                        repstorage.RemoteEvent:FireServer("Input", "Action", true)
-                                    else
-                                        repstorage.RemoteEvent:FireServer("Input", "Action", false)
                                     end
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
