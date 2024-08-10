@@ -547,7 +547,7 @@ run(function()
                             else
                                 repstorage.RemoteEvent:FireServer("Input", "Action", false)
                             end
-                            if store.status:lower():contains("computers") or store.status:lower():contains("15 sec") then
+                            if store.status:lower():find("computers left") or store.status:lower():find("15 sec head start") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
                                     if computer.Screen.BrickColor == BrickColor.new("Dark green") then
@@ -568,7 +568,7 @@ run(function()
                                     end
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
-                            elseif store.status:lower():contains("exit") then
+                            elseif store.status:lower():find("exit") then
                                 if tostring(store.map) == "Nil" then return end
                                 if exit == nil or mag <= 30 then
                                     if mag <= 30 then
