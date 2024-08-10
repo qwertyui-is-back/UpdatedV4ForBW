@@ -510,7 +510,7 @@ run(function()
                                 if not tweening then
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(9,10))
+                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(5.85,6.99))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
