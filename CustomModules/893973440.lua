@@ -497,8 +497,13 @@ run(function()
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
-                                    if computer.Screen.BrickColor == BrickColor.new("Dark green") then
-                                        warningNotification("Cat V5","Computer successfully hacked!",3)
+                                    if computer ~= nil
+                                        if computer.Screen.BrickColor == BrickColor.new("Dark green") then
+                                            warningNotification("Cat V5","Computer successfully hacked!",3)
+                                        end
+                                    end
+                                    if mag <= 30 then
+                                        warningNotification("Cat V5","The beast is near! Going to snearest computer..",3)
                                     end
                                     computer = getComputer()
                                 end
@@ -506,7 +511,7 @@ run(function()
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                         tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(9,10))
-                                        warningNotification("Cat V5", "Teleporting to another computer..",5)
+                                        --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
