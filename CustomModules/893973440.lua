@@ -494,7 +494,7 @@ run(function()
                         elseif store.status:lower():find("exit") then
                             local exit = getExit()
                             local partTP = exit.ExitArea
-                            if exit.Door.Hinge.Rotation == 0 or exit.Door.Hinge == 90 then
+                            if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 then
                                 partTP = exit.ExitDoorTrigger
                             end
                             lplr.Character.HumanoidRootPart.CFrame = partTP.CFrame
