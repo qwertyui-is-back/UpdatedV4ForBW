@@ -495,7 +495,7 @@ run(function()
                             local exit = getExit()
                             local partTP = exit.ExitArea
                             if exit.Door.Hinge.Rotation == 0 or exit.Door.Hinge == 90 then
-                                partTP = exit.Door.Part
+                                partTP = exit.ExitDoorTrigger
                             end
                             lplr.Character.HumanoidRootPart.CFrame = partTP.CFrame
                         end
