@@ -503,7 +503,7 @@ run(function()
                                 end
                                 if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
                                     if mag <= 30 then
-                                        warningNotification("Cat V5","The beast is near! Going to snearest computer..",3)
+                                        warningNotification("Cat V5","The beast is near!",3)
                                     end
                                     computer = getComputer()
                                 end
