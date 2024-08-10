@@ -512,13 +512,16 @@ run(function()
                             elseif store.status:lower():find("exit") then
                                 local exit = getExit()
                                 local partTP = exit.ExitArea
+                                speed = 25
                                 if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
                                     partTP = exit.ExitDoorTrigger
+                                    speed = 1
                                 end
                                 if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
                                     partTP = exit.ExitDoorTrigger
+                                    speed = 1
                                 end
-                                tweenToCFrame(partTP.CFrame, 25)
+                                tweenToCFrame(partTP.CFrame, sepeed)
                             end
                         end
                     end)
