@@ -477,6 +477,8 @@ end)
 run(function()
     local AutoWin = {Enabled = false}
     local SaveCaptured = {Enabled = false}
+    local SpeedValue1 = {Value = 9}
+    local SpeedValue2 = {Value = 11}
     DONTTTP = tick()
 
     local function getComputer()
@@ -561,7 +563,7 @@ run(function()
                                 if not tweening then
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(6.85,8.99))
+                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
@@ -594,5 +596,19 @@ run(function()
             end
         end,
         HoverText = "Automatically win the game"
+    })
+    SpeedValue1 = AutoWin.CreateSlider({
+        Name = "Speed 1",
+        Min = 4,
+        Max = 30,
+        Default = 9,
+        Function = function(val) end
+    })
+    SpeedValue2 = AutoWin.CreateSlider({
+        Name = "Speed 2",
+        Min = 4,
+        Max = 30,
+        Default = 11,
+        Function = function(val) end
     })
 end)
