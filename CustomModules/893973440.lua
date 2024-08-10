@@ -490,10 +490,10 @@ run(function()
     DONTTTP = tick()
 
     local function getComputer()
-        for i,comp in pairs(store.map:GetChildren()) do
-            if comp.Name == "ComputerTable" then
-                if comp.Screen.BrickColor ~= BrickColor.new("Dark green") then
-                    local mag = (store.beast.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
+        for i,v in pairs(store.map:GetChildren()) do
+            if v.Name == "ComputerTable" then
+                if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
+                    local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
                     if mag >= 30 then
                         return v
                     end
