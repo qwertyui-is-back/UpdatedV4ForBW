@@ -536,7 +536,7 @@ run(function()
                             if tostring(store.map) == "Nil" then return end
                             cfTicks += 1
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
-                            if not store.status:lower():find("game over") and not store.status:lower():find("inter") and not store.status:lower():find("exit") then
+                            if store.status:lower():find("computers left") or store.status:lower():find("15 sec head start") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
                                     if computer.Screen.BrickColor == BrickColor.new("Dark green") then
@@ -576,10 +576,6 @@ run(function()
                                     speed = 1
                                 end
                                 tweenToCFrame(partTP.CFrame, speed)
-                            else
-                                tweenToCFrame(CFrame.new(104,8,-417),0.00001)
-                                computer = nil
-                                exit = nil
                             end
                         end
                     end)
