@@ -486,12 +486,12 @@ run(function()
                 BindToStepped("aw",1,function()
                     pcall(function()
                         if not isAlive() then return end
-                        if tostring(store.map) == "Nil" then return end
                         if store.beast == lplr then return end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         if mag <= 25 then
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                         else
+                            if tostring(store.map) == "Nil" then return end
                             cfTicks += 1
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
@@ -508,6 +508,7 @@ run(function()
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
+                                if tostring(store.map) == "Nil" then return end
                                 local exit = getExit()
                                 local partTP = exit.ExitArea
                                 speed = 7.5
