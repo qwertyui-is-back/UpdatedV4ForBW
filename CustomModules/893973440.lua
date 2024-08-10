@@ -547,7 +547,7 @@ run(function()
                             else
                                 repstorage.RemoteEvent:FireServer("Input", "Action", false)
                             end
-                            if store.computers ~= 0 then
+                            if store.computers >= 0 then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
                                     if computer.Screen.BrickColor == BrickColor.new("Dark green") then
@@ -568,7 +568,7 @@ run(function()
                                     end
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
-                            elseif store.computers == 0 then
+                            elseif store.computers <= 0 then
                                 if tostring(store.map) == "Nil" then return end
                                 if exit == nil or mag <= 30 then
                                     if mag <= 30 then
