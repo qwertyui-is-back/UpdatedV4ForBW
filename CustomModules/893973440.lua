@@ -451,6 +451,15 @@ run(function()
         return nil
     end
 
+    local function getExit()
+        for i,v in pairs(store.map:GetChildren()) do
+            if v.Name == "ExitDoor" then
+                return v
+            end
+        end
+        return nil
+    end
+
     local tweening = false
     local function tweenToCFrame(cf,time)
         local tweenservice = game:GetService("TweenService")
@@ -483,7 +492,12 @@ run(function()
                                 tweenToCFrame(computer.ComputerTrigger3.CFrame, 5.95)
                             end
                         elseif store.status:lower():find("exit") then
-
+                            local exit = getExit()
+                            local partTP = exit.ExitArea
+                            if exit.Door.Hinge.Rotation == 0 or exit.Door.Hinge == 90 then
+                                partTP = exit.Door.Part
+                            end
+                            lplr.Character.HumanoidRootPart.CFrame = partTP.CFrame
                         end
                     end
                 end)
