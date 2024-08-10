@@ -492,8 +492,8 @@ run(function()
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
                         else
                             cfTicks += 1
-                            lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,-1.5,0)
-                            if store.status:lower():find("computer") or store.status:lower():find("15 ") then
+                            lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0.25,0)
+                            if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if not tweening then
                                     local computer = getComputer()
@@ -502,12 +502,12 @@ run(function()
                                         tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(9,10))
                                         warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
-                                    lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                 end
+                                lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
                                 local exit = getExit()
                                 local partTP = exit.ExitArea
-                                speed = 25
+                                speed = 15
                                 if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
                                     partTP = exit.ExitDoorTrigger
                                     speed = 1
@@ -517,6 +517,8 @@ run(function()
                                     speed = 1
                                 end
                                 tweenToCFrame(partTP.CFrame, speed)
+                            else
+                                tweenToCFrame(CFrame.new(104,8,-417),0.00001)
                             end
                         end
                     end)
