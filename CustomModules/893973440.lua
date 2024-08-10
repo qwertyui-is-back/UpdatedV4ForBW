@@ -499,7 +499,7 @@ run(function()
         for i,v in pairs(store.map:GetChildren()) do
             if v.Name == "ExitDoor" then
                 local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
-                if mag >= 30 then
+                if mag >= 15 then
                     return v
                 end
             end
@@ -570,12 +570,7 @@ run(function()
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
                                 if tostring(store.map) == "Nil" then return end
-                                if exit == nil or mag <= 30 then
-                                    if mag <= 30 then
-                                        warningNotification("Cat V5","The beast is near!",3)
-                                    end
-                                    exit = getExit()
-                                end
+                                local exit = getExit()
                                 local partTP = exit.ExitArea
                                 speed = 1.65
                                 if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
