@@ -542,6 +542,9 @@ run(function()
                     pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if not isAlive() then return end
+                        if store.timer == 0 then
+                            lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
+                        end
                         if store.beast == lplr then return end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
