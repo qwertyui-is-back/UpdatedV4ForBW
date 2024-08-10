@@ -315,6 +315,7 @@ run(function()
     local BeastNotifier = {Enabled = false}
     local Range = {Value = 25}
     local hasNotified = tick()
+    notifiedUser = lplr.Name
 
     BeastNotifier = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
         Name = "BeastNotifier",
@@ -324,10 +325,12 @@ run(function()
                     --pcall(function()
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         if mag <= Range.Value then
-                            if math.floor(tick() - hasNotified) > 10 then
+                            if notifiedUser ~= store.beast.Name and store.status ~= "game over" then
                                 warningNotification("Cat V5", "The beast is near you!", 10)
-                                hasNotified = tick()
+                                notifiedUser = store.beast.Name
                             end
+                        else
+                            notifiedUser = lplr.Name
                         end
                     --end)
                 end)
@@ -468,8 +471,9 @@ run(function()
                 BindToStepped("aw",1,function()
                     if not isAlive() then return end
                     if tostring(store.map) == "Nil" then return end
+                    if store.beast == lplr then return end
                     local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-                    if mag <= 20 then
+                    if mag <= 25 then
                         lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
                     else
                         if store.status:lower():find("computer") or store.status:lower():find("head start") then
