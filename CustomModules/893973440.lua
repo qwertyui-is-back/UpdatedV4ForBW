@@ -494,7 +494,7 @@ run(function()
                             if tostring(store.map) == "Nil" then return end
                             cfTicks += 1
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
-                            if store.status:lower():find("computer") or store.status:lower():find("sec") then
+                            if not store.status:lower():find("game over") and not store.status:lower():find("inter") and not store.status:lower():find("exit") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
                                     if computer.Screen.BrickColor == BrickColor.new("Dark green") then
