@@ -492,16 +492,17 @@ run(function()
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
                         else
                             cfTicks += 1
-                            lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
+                            lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,-1.5,0)
                             if store.status:lower():find("computer") or store.status:lower():find("15 ") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if not tweening then
                                     local computer = getComputer()
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(6.65, 9.95))
+                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(9,10))
                                         warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
+                                    lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                 end
                             elseif store.status:lower():find("exit") then
                                 local exit = getExit()
