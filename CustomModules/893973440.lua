@@ -185,7 +185,8 @@ local store = {
     beast = nil,
     map = "nil",
     computers = 0,
-    status = "GAME OVER"
+    status = "GAME OVER",
+    ingame = false
 }
 
 local run = runcode
@@ -475,6 +476,7 @@ run(function()
             DONTTP = tick()
         end)
     end
+    local cfTicks = 0
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -489,12 +491,23 @@ run(function()
                         if mag <= 25 then
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
                         else
+                            cfTicks += 1
                             lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                             if store.status:lower():find("computer") or store.status:lower():find("15 ") then
+                                local pos = lplr.Character.HumanoidRootPart.Position
                                 if not tweening then
                                     local computer = getComputer()
-                                    --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                    tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(5.95, 9.95))
+                                    if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
+                                        --local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(6.65, 9.95))
+                                        if cfTicks >= 60 then
+                                            lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,computer.ComputerTrigger3.Position.Y + 4,0)
+                                        elseif cfTicks >= 120 then
+                                            lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,computer.ComputerTrigger3.Position.Y,0)
+                                            cfTicks = 0
+                                        end
+                                        warningNotification("Cat V5", "Teleporting to another computer..",5)
+                                    end
                                 end
                             elseif store.status:lower():find("exit") then
                                 local exit = getExit()
