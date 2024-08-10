@@ -5212,6 +5212,42 @@ run(function()
 end)
 
 run(function()
+	local NameProtect = {Enabled = false}
+	local Nme = {Value = "qwertyui"}
+
+	NameProtect = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = "NameProtect",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToStepped("NameProtect",function()
+					for i,v in pairs(lplr.PlayerGui:GetDescendants()) do
+						pcall(function()
+							v.Text = v.Text:gsub(v.Text, lplr.Name, Nme.Value)
+							v.Text = v.Text:gsub(v.Text, lplr.Username, Nme.Value)
+						end)
+					end
+					for i,v in pairs(game:GetService("CoreGui"):GetDescendants()) do
+						pcall(function()
+							v.Text = v.Text:gsub(v.Text, lplr.Name, Nme.Value)
+							v.Text = v.Text:gsub(v.Text, lplr.Username, Nme.Value)
+						end)
+					end
+				end)
+			else
+				warningNotification("Cat V5", "Disabled next game!",5)
+				RunLoops:UnbindFromStepped("NameProtect")
+			end
+		end,
+		ExtraText = function() return Nme.Value end
+	})
+	Nme = NameProtect.CreateTextBox({
+		Name = "Name",
+		TempText = "Name to be displayed as",
+		Function = function() end
+	})
+end)
+
+run(function()
 	local AutoReport = {Enabled = false}
 	local AutoReportList = {ObjectList = {}}
 	local AutoReportNotify = {Enabled = false}
