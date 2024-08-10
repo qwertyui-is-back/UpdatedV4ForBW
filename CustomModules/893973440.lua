@@ -506,7 +506,7 @@ run(function()
                                         warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
-                                --lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
+                                -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
                                 local exit = getExit()
                                 local partTP = exit.ExitArea
