@@ -521,7 +521,7 @@ run(function()
                                     partTP = exit.ExitDoorTrigger
                                     speed = 1
                                 end
-                                tweenToCFrame(partTP.CFrame, sepeed)
+                                tweenToCFrame(partTP.CFrame, speed)
                             end
                         end
                     end)
