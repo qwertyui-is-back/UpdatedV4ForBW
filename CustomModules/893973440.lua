@@ -545,7 +545,7 @@ run(function()
                             else
                                 repstorage.RemoteEvent:FireServer("Input", "Action", false)
                             end
-                            if store.computers > ~= 0 then
+                            if store.computers ~= 0 then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
                                     if computer.Screen.BrickColor == BrickColor.new("Dark green") then
