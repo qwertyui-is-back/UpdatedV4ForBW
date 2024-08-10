@@ -494,7 +494,7 @@ run(function()
             if comp.Name == "ComputerTable" then
                 if comp.Screen.BrickColor ~= BrickColor.new("Dark green") then
                     local mag = (store.beast.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
-                    if mag >= 30
+                    if mag >= 30 then
                         return v
                     end
                 end
