@@ -477,6 +477,7 @@ run(function()
         end)
     end
     local cfTicks = 0
+    local computer = nil
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -496,7 +497,9 @@ run(function()
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if not tweening then
-                                    local computer = getComputer()
+                                    if computer == nil or computer.Screen.Color == BrickColor.new("Dark green") or mag >= 30 then
+                                        computer = getComputer()
+                                    end
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                         tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(9,10))
@@ -519,6 +522,7 @@ run(function()
                                 tweenToCFrame(partTP.CFrame, speed)
                             else
                                 tweenToCFrame(CFrame.new(104,8,-417),0.00001)
+                                computer = nil
                             end
                         end
                     end)
