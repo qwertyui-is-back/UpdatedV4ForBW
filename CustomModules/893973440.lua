@@ -492,7 +492,7 @@ run(function()
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
                         else
                             cfTicks += 1
-                            lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,1,0)
+                            lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,10,0)
                             if store.status:lower():find("computer") or store.status:lower():find("sec") then
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if not tweening then
