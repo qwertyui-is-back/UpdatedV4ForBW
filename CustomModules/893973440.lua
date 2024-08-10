@@ -183,7 +183,9 @@ end
 
 local store = {
     beast = nil,
-    map = "nil"
+    map = "nil",
+    computers = 0,
+    status = "GAME OVER"
 }
 
 local run = runcode
@@ -230,6 +232,8 @@ task.spawn(function()
             end)
         end
         store.map = repstorage.CurrentMap.Value
+        store.computers = repstorage.ComputersLeft.Value
+        store.status = repstorage.GameStatus.Value
     end)
 end)
 
@@ -431,6 +435,7 @@ end)
 run(function()
     local AutoWin = {Enabled = false}
     local SaveCaptured = {Enabled = false}
+    DONTTTP = tick()
 
     local function getComputer()
         for i,v in pairs(store.map:GetChildren()) do
@@ -463,6 +468,7 @@ run(function()
         tweening = true
         tween.Completed:Connect(function()
             tweening = false
+            DONTTP = tick()
         end)
     end
 
@@ -473,10 +479,15 @@ run(function()
                 BindToStepped("aw",1,function()
                     if not isAlive() then return end
                     if tostring(store.map) == "Nil" then return end
-                    if not tweening then
-                        local computer = getComputer()
-                        --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                        tweenToCFrame(computer.ComputerTrigger3.CFrame, 3.85)
+                    if store.status:lower():find("computer") then
+                        local time = math.floor(tick() - DONTTP)
+                        if not tweening and DONTTP > 7.5 then
+                            local computer = getComputer()
+                            --local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                            tweenToCFrame(computer.ComputerTrigger3.CFrame, 3.85)
+                        end
+                    elseif store.status:lower():find("exit") then
+
                     end
                 end)
             else
