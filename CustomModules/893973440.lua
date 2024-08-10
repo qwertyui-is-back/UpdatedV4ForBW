@@ -493,31 +493,7 @@ run(function()
         for i,comp in pairs(store.map:GetChildren()) do
             if comp.Name == "ComputerTable" then
                 if comp.Screen.BrickColor ~= BrickColor.new("Dark green") then
-                    local mag = (store.beast.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
-                    if mag >= 30 then
-                        local do1 = false
-                        local do2 = false
-                        local do3 = false
-                        local mag2
-                        local mag3
-                        local mag4
-                        for i,v in pairs(players:GetPlayers()) do
-                            mag2 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
-                            if mag2 >= 2 then
-                                do3 = true
-                            end
-                            mag3 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger2.Position).magnitude
-                            if mag3 >= 2 then
-                                do2 = true
-                            end
-                            mag4 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger1.Position).magnitude
-                            if mag4 >= 2 then
-                                do1 = true
-                            end
-                        end
-                        if do1 or do2 or do3 then
-                            return v
-                        end
+                        return v
                     end
                 end
             end
@@ -563,7 +539,7 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToStepped("aw",1,function()
-                    --pcall(function()
+                    pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if store.timer == 0 then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
@@ -593,7 +569,7 @@ run(function()
                                     end
                                     computer = getComputer()
                                 end
-                                if not tweening and computer ~= nil then
+                                if not tweening then
                                     tweenToCFrame(computer["ComputerTrigger"..math.random(1,3)].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                     --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                 end
@@ -619,7 +595,7 @@ run(function()
                                 tweenToCFrame(partTP.CFrame, speed)
                             end
                         end
-                    --end)
+                    end)
                 end)
             else
                 UnbindFromStepped("aw")
