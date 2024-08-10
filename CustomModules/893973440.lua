@@ -501,10 +501,10 @@ run(function()
                                         warningNotification("Cat V5","Computer successfully hacked!",3)
                                     end
                                 end
-                                if mag <= 30 then
-                                    warningNotification("Cat V5","The beast is near! Going to snearest computer..",3)
-                                end
                                 if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
+                                    if mag <= 30 then
+                                        warningNotification("Cat V5","The beast is near! Going to snearest computer..",3)
+                                    end
                                     computer = getComputer()
                                 end
                                 if not tweening then
@@ -519,7 +519,7 @@ run(function()
                                 if tostring(store.map) == "Nil" then return end
                                 local exit = getExit()
                                 local partTP = exit.ExitArea
-                                speed = 3.5
+                                speed = 1
                                 if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
                                     partTP = exit.ExitDoorTrigger
                                     speed = 1
