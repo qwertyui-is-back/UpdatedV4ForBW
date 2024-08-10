@@ -468,14 +468,19 @@ run(function()
                 BindToStepped("aw",1,function()
                     if not isAlive() then return end
                     if tostring(store.map) == "Nil" then return end
-                    if store.status:lower():find("computer") then
-                        if not tweening then
-                            local computer = getComputer()
-                            --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                            tweenToCFrame(computer.ComputerTrigger3.CFrame, 3.85)
-                        end
-                    elseif store.status:lower():find("exit") then
+                    local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+                    if mag <= 20 then
+                        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
+                    else
+                        if store.status:lower():find("computer") or store.status:lower():find("head start") then
+                            if not tweening then
+                                local computer = getComputer()
+                                --local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                                tweenToCFrame(computer.ComputerTrigger3.CFrame, 5.1)
+                            end
+                        elseif store.status:lower():find("exit") then
 
+                        end
                     end
                 end)
             else
