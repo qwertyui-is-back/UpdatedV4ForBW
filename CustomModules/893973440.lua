@@ -506,11 +506,11 @@ run(function()
                             if mag2 >= 2 then
                                 do3 = true
                             end
-                            mag3 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
+                            mag3 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger2.Position).magnitude
                             if mag3 >= 2 then
                                 do2 = true
                             end
-                            mag4 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger3.Position).magnitude
+                            mag4 = (v.Character.HumanoidRootPart.Position - comp.ComputerTrigger1.Position).magnitude
                             if mag4 >= 2 then
                                 do1 = true
                             end
@@ -561,7 +561,7 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToStepped("aw",1,function()
-                    pcall(function()
+                    --pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if store.timer == 0 then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
@@ -604,11 +604,11 @@ run(function()
                                             if mag2 >= 2 then
                                                 do3 = true
                                             end
-                                            mag3 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
+                                            mag3 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger2.Position).magnitude
                                             if mag3 >= 2 then
                                                 do2 = true
                                             end
-                                            mag4 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger3.Position).magnitude
+                                            mag4 = (v.Character.HumanoidRootPart.Position - computer.ComputerTrigger1.Position).magnitude
                                             if mag4 >= 2 then
                                                 do1 = true
                                             end
@@ -640,7 +640,7 @@ run(function()
                                 tweenToCFrame(partTP.CFrame, speed)
                             end
                         end
-                    end)
+                    --end)
                 end)
             else
                 UnbindFromStepped("aw")
