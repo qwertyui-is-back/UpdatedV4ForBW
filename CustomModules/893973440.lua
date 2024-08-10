@@ -432,7 +432,45 @@ run(function()
 				UnbindFromStepped("pe")
 			end
 		end,
-		HoverText = "Render computers through walls"
+		HoverText = "Render Freeze pods through walls"
+	})
+end)
+
+run(function()
+
+	local function addfunc(ent)
+		local hl = Instance.new("Highlight")
+		hl.Parent = ent
+		hl.FillColor = Color3.fromRGB(55, 222, 89)
+		hl.OutlineColor = Color3.fromRGB(255,255,255)
+		h1.FullTransparency = 0.4
+	end
+
+	local function removefunc(ent)
+		ent.Highlight:Destroy()
+	end
+
+	local Chams = {Enabled = false}
+	Chams = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "ExitESP",
+		Function = function(callback)
+			if callback then
+                BindToStepped("ee",1,function()
+                    pcall(function()
+                        for i,v in pairs(store.map:GetChildren()) do
+                            if v.Name == "ExitDoor" then
+                                if v:FindFirstChild("Highlight") == nil then
+                                    addfunc(v)
+                                end
+                            end
+                        end
+                    end)
+                end)
+			else
+				UnbindFromStepped("ee")
+			end
+		end,
+		HoverText = "Render exits through walls"
 	})
 end)
 
@@ -510,7 +548,7 @@ run(function()
                                 if not tweening then
                                     if pos.X ~= computer.ComputerTrigger3.Position.X or pos.Z ~= computer.ComputerTrigger3.Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(5.85,6.99))
+                                        tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(6.85,8.99))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
