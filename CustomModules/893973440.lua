@@ -469,8 +469,7 @@ run(function()
                     if not isAlive() then return end
                     if tostring(store.map) == "Nil" then return end
                     if store.status:lower():find("computer") then
-                        local time = math.floor(tick() - DONTTP)
-                        if not tweening and time >= 7 then
+                        if not tweening then
                             local computer = getComputer()
                             --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                             tweenToCFrame(computer.ComputerTrigger3.CFrame, 3.85)
