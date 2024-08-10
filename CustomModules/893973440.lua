@@ -488,6 +488,7 @@ run(function()
     local SpeedValue1 = {Value = 9}
     local SpeedValue2 = {Value = 11}
     DONTTTP = tick()
+    local slot = "3"
 
     local function getComputer()
         for i,v in pairs(store.map:GetChildren()) do
@@ -495,14 +496,15 @@ run(function()
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
                     local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
                     if mag >= 30 then
-                        local slot = 3
+                        local s = 3
                         for i2,v2 in pairs(players:GetChildren()) do
-                            local mag2 = (v2.Character.HumanoidRootPart.Position - v["ComputerTrigger"..slot].Position).magnitude
+                            local mag2 = (v2.Character.HumanoidRootPart.Position - v["ComputerTrigger"..s].Position).magnitude
                             if mag2 < 3 and v2 ~= lplr then
-                                slot -= 1
+                                s -= 1
                             end
                         end
-                        return slot > 0 and v or nil
+                        slot = "3"
+                        return s > 0 and v or nil
                     end
                 end
             end
@@ -546,7 +548,6 @@ run(function()
     local cfTicks = 0
     local computer = nil
     local exit = nil
-    local slot = "3"
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
