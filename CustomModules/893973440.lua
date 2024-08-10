@@ -444,7 +444,10 @@ run(function()
         for i,v in pairs(store.map:GetChildren()) do
             if v.Name == "ComputerTable" then
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
-                    return v
+                    local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+                    if mag >= 35 then
+                        return v
+                    end
                 end
             end
         end
@@ -478,31 +481,34 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToStepped("aw",1,function()
-                    if not isAlive() then return end
-                    if tostring(store.map) == "Nil" then return end
-                    if store.beast == lplr then return end
-                    local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-                    if mag <= 25 then
-                        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
-                    else
-                        if store.status:lower():find("computer") or store.status:lower():find("15 ") then
-                            if not tweening then
-                                local computer = getComputer()
-                                --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(5.95, 9.95))
+                    pcall(function()
+                        if not isAlive() then return end
+                        if tostring(store.map) == "Nil" then return end
+                        if store.beast == lplr then return end
+                        local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+                        if mag <= 25 then
+                            lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
+                        else
+                            lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
+                            if store.status:lower():find("computer") or store.status:lower():find("15 ") then
+                                if not tweening then
+                                    local computer = getComputer()
+                                    --local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                                    tweenToCFrame(computer.ComputerTrigger3.CFrame, math.random(5.95, 9.95))
+                                end
+                            elseif store.status:lower():find("exit") then
+                                local exit = getExit()
+                                local partTP = exit.ExitArea
+                                if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
+                                    partTP = exit.ExitDoorTrigger
+                                end
+                                if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
+                                    partTP = exit.ExitDoorTrigger
+                                end
+                                tweenToCFrame(partTP.CFrame, 2)
                             end
-                        elseif store.status:lower():find("exit") then
-                            local exit = getExit()
-                            local partTP = exit.ExitArea
-                            if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
-                                partTP = exit.ExitDoorTrigger
-                            end
-                            if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
-                                partTP = exit.ExitDoorTrigger
-                            end
-                            lplr.Character.HumanoidRootPart.CFrame = partTP.CFrame
                         end
-                    end
+                    end)
                 end)
             else
                 UnbindFromStepped("aw")
