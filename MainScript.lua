@@ -2010,9 +2010,18 @@ local function loadVape()
 	serverhop = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "ServerHop",
 		Function = function(c)
+			local function warningNotification(title, text, delay)
+				local suc, res = pcall(function()
+					local frame = GuiLibrary.CreateNotification(title, text, delay, "assets/WarningNotification.png")
+					frame.Frame.Frame.ImageColor3 = Color3.fromRGB(236, 129, 44)
+					return frame
+				end)
+				return (suc and res)
+			end
 			if c then
 				serverhop.ToggleButton(false)
 				task.wait(0.1)
+				httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 				if httprequest then -- Credits to Infinite Yield, otherwise I would NOT have figured out how to do this
 					local servers = {}
 					local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", PlaceId)})
