@@ -525,13 +525,13 @@ run(function()
 
     local tweening = false
     local doInteract = true
+    local sameComp = false
     local function tweenToCFrame(cf,time)
         doInteract = false
         local tweenservice = game:GetService("TweenService")
         local info = TweenInfo.new(time)
-        local mag = (cf.Position - lplr.Character.HumanoidRootPart.Position).magnitude
         if not store.status:lower():find("exit") then
-            if mag <= 6.5 then
+            if sameComp then
                 time = 0.1
             end
         end
@@ -591,6 +591,9 @@ run(function()
                                     local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
                                     if mag2 <= 3 and v ~= lplr then
                                         slot = tostring(math.random(1,3))
+                                        sameComp = true
+                                    else
+                                        sameComp = false
                                     end
                                 end
                                 if not tweening then
@@ -599,11 +602,11 @@ run(function()
                                         tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
-                                    if jumpTick <= 40 then
+                                    if jumpTick <= 75 then
                                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
-                                    elseif jumpTick <= 45 then
-                                        lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,3,0)
-                                    elseif jumpTick <= 55 then
+                                    elseif jumpTick <= 80 then
+                                        lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,0.05,0)
+                                    elseif jumpTick <= 90 then
                                         jumpTick = 0
                                     end
                                 else
