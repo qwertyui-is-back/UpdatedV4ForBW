@@ -537,14 +537,13 @@ run(function()
     local doInteract = true
     local sameComp = false
     local function tweenToCFrame(cf,time)
+        time = time or 0
         doInteract = false
         local tweenservice = game:GetService("TweenService")
-        local info = TweenInfo.new(time)
-        if not store.status:lower():find("exit") then
-            if sameComp then
-                time = 0.1
-            end
+        if sameComp then
+            time = 0.1
         end
+        local info = TweenInfo.new(time)
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
         tween:Play()
         tweening = true
@@ -552,6 +551,7 @@ run(function()
             tweening = false
             DONTTP = tick()
             doInteract = true
+            sameComp = false
         end)
     end
     
@@ -602,8 +602,6 @@ run(function()
                                     if mag2 <= 3 and v ~= lplr then
                                         slot = tostring(math.random(1,3))
                                         sameComp = true
-                                    else
-                                        sameComp = false
                                     end
                                 end
                                 if not tweening then
