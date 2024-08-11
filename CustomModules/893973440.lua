@@ -589,26 +589,26 @@ run(function()
                             if store.status:lower():find("computers left") or store.status:lower() == "15 sec head start" then
                                 jumpTick += 1
                                 local pos = lplr.Character.HumanoidRootPart.Position
-                                if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
-                                    if mag <= 30 then
-                                        warningNotification("Cat V5","The beast is near!",3)
-                                    end
-                                    if computer ~= nil then
-                                        if computer.Screen.BrickColor == BrickColor.new("Dark green") then
-                                            warningNotification("Cat V5","Computer successfully hacked!",3)
+                                if not tweening then
+                                    for i,v in pairs(players:GetChildren()) do
+                                        local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
+                                        if mag2 <= 3 and v ~= lplr then
+                                            slot = tostring(math.random(1,3))
+                                            lplr.Character.HumanoidRootPart.CFrame = computer["ComputerTrigger"..slot].CFrame
                                         end
                                     end
-                                    warningNotification("Cat V5","Finding new computer..",1)
-                                    computer = getComputer()
-                                end
-                                for i,v in pairs(players:GetChildren()) do
-                                    local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                    if mag2 <= 3 and v ~= lplr then
-                                        slot = tostring(math.random(1,3))
-                                        lplr.Character.HumanoidRootPart.CFrame = computer["ComputerTrigger"..slot].CFrame
+                                    if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
+                                        if mag <= 30 then
+                                            warningNotification("Cat V5","The beast is near!",3)
+                                        end
+                                        if computer ~= nil then
+                                            if computer.Screen.BrickColor == BrickColor.new("Dark green") then
+                                                warningNotification("Cat V5","Computer successfully hacked!",3)
+                                            end
+                                        end
+                                        warningNotification("Cat V5","Finding new computer..",1)
+                                        computer = getComputer()
                                     end
-                                end
-                                if not tweening then
                                     if pos.X ~= computer["ComputerTrigger"..slot].Position.X or pos.Z ~= computer["ComputerTrigger"..slot].Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                         tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
