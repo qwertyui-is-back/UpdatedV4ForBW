@@ -537,6 +537,7 @@ run(function()
     local doInteract = true
     local sameComp = false
     local function tweenToCFrame(cf,time)
+        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
         time = time or 0
         doInteract = false
         local tweenservice = game:GetService("TweenService")
@@ -544,7 +545,7 @@ run(function()
             time = 0.1
         end
         local info = TweenInfo.new(time)
-        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
+        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,5000,0)})
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
@@ -552,6 +553,7 @@ run(function()
             DONTTP = tick()
             doInteract = true
             sameComp = false
+            lplr.Character.HumanoidRootPart.CFrame = cf
         end)
     end
     
@@ -605,7 +607,7 @@ run(function()
                                     local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
                                     if mag2 <= 3 and v ~= lplr then
                                         slot = tostring(math.random(1,3))
-                                        lplr.Character.HumanoidRootPart.CFrame = computer["ComputerTrigger"..slot].CFrame
+                                        sameComp = true
                                     end
                                 end
                                 if not tweening then
