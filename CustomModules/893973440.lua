@@ -547,6 +547,7 @@ run(function()
     
     local computer = nil
     local exit = nil
+    JumpTick = 0
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -557,13 +558,14 @@ run(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if store.timer == 0 then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
+                            jumpTick = 0
                         end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-                        lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         if store.beast == lplr then mag = 5000 end
                         if mag <= 25 then
                             if store.timer == 0 then return end
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
+                            jumpTick = 0
                         else
                             if store.timer == 0 then return end
                             if doInteract then
@@ -572,6 +574,7 @@ run(function()
                                 repstorage.RemoteEvent:FireServer("Input", "Action", false)
                             end
                             if store.status:lower():find("computers left") or store.status:lower():find("15 sec head start") then
+                                jumpTick += 1
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
                                     if computer.Screen.BrickColor == BrickColor.new("Dark green") then
@@ -596,9 +599,19 @@ run(function()
                                         tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
+                                    if jumpTick <= 40 then
+                                        lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
+                                    elseif jumpTick <= 45 then
+                                        lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,3,0)
+                                    elseif jumpTick <= 55 then
+                                        jumpTick = 0
+                                    end
+                                else
+                                    lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
+                                jumpTick = 0
                                 if store.timer == 0 then return end
                                 if exit == nil or mag <= 30 then
                                     if mag <= 30 then
