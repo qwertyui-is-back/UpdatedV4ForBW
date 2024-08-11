@@ -570,6 +570,8 @@ run(function()
                         if store.timer == 0 or store.status:lower() == "game over" then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
                             jumpTick = 0
+                            computer = nil
+                            exit = nil
                         end
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         if store.beast == lplr then mag = 5000 end
@@ -602,7 +604,7 @@ run(function()
                                     local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
                                     if mag2 <= 3 and v ~= lplr then
                                         slot = tostring(math.random(1,3))
-                                        sameComp = true
+                                        lplr.Character.HumanoidRootPart.CFrame = computer["ComputerTrigger"..slot]
                                     end
                                 end
                                 if not tweening then
