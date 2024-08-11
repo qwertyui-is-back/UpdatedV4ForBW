@@ -638,7 +638,10 @@ run(function()
                 UnbindFromStepped("aw")
             end
         end,
-        HoverText = "Automatically win the game"
+        HoverText = "Automatically win the game",
+        ExtraText = function()
+            return "Delay "..SpeedValue1.Value.."-"..SpeedValue2.Value
+        end
     })
     SpeedValue1 = AutoWin.CreateSlider({
         Name = "Speed 1",
