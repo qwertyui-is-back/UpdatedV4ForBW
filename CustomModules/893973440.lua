@@ -287,7 +287,8 @@ run(function()
             else
                 UnbindFromStepped("ah")
             end
-        end
+        end,
+        ExtraText = function() return "Remote" end
     })
 end)
 
@@ -326,7 +327,8 @@ run(function()
             else
                 UnbindFromStepped("nh")
             end
-        end
+        end,
+        ExtraText = function() return "Spoof" end
     })
 end)
 
@@ -542,6 +544,23 @@ run(function()
         return nil
     end
 
+    local function getEmptyPod()
+        for i,v in pairs(store.map:GetChildren()) do
+            if v.Name == "FreezePod" and v.CapturedTorso.Value == nil then
+                return v
+            end
+        end
+        return nil
+    end
+
+    local function isPlayerInPod(pod)
+        local cap = pod.CapturedTorso
+        if cap.Value ~= nil then
+            return cap
+        end
+        return nil
+    end
+
     local tweening = false
     local doInteract = true
     local sameComp = false
@@ -587,68 +606,82 @@ run(function()
                         end
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-                        if store.beast == lplr then mag = 5000 end
-                        if mag <= 25 then
-                            if store.timer == 0 then return end
-                            lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
-                            jumpTick = 0
-                        else
-                            if doInteract then
-                                repstorage.RemoteEvent:FireServer("Input", "Action", true)
-                            else
-                                repstorage.RemoteEvent:FireServer("Input", "Action", false)
-                            end
-                            if store.status:lower():find("computers left") or store.status:lower() == "15 sec head start" then
-                                jumpTick += 1
-                                local pos = lplr.Character.HumanoidRootPart.Position
-                                if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
-                                    if mag <= 30 then
-                                        warningNotification("Cat V5","The beast is near!",3)
-                                    end
-                                    if computer ~= nil then
-                                        if computer.Screen.BrickColor == BrickColor.new("Dark green") then
-                                            warningNotification("Cat V5","Computer successfully hacked!",3)
-                                        end
-                                    end
-                                    warningNotification("Cat V5","Finding new computer..",1)
-                                    computer = getComputer()
-                                end
-                                for i,v in pairs(players:GetChildren()) do
-                                    local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                    if mag2 <= 3 and v ~= lplr then
-                                        slot = tostring(math.random(1,3))
-                                        sameComp = true
-                                    end
-                                end
-                                if not tweening then
-                                    if pos.X ~= computer["ComputerTrigger"..slot].Position.X or pos.Z ~= computer["ComputerTrigger"..slot].Position.Z then
-                                        --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
-                                        --warningNotification("Cat V5", "Teleporting to another computer..",5)
-                                    end
-                                end
-                                -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
-                            elseif store.status:lower():find("exit") then
-                                jumpTick = 0
+                        if store.beast ~= lplr then
+                            if store.beast == lplr then mag = 5000 end
+                            if mag <= 25 then
                                 if store.timer == 0 then return end
-                                if store.escaped then return end
-                                if exit == nil or mag <= 30 then
-                                    if mag <= 30 then
-                                        warningNotification("Cat V5","The beast is near!",3)
+                                lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
+                                jumpTick = 0
+                            else
+                                if doInteract then
+                                    repstorage.RemoteEvent:FireServer("Input", "Action", true)
+                                else
+                                    repstorage.RemoteEvent:FireServer("Input", "Action", false)
+                                end
+                                local pod = getPod()
+                                local cap = isPlayerInPod(pod)
+                                if cap ~= nil then
+                                    lplr.Character.HumanoidRootPart.CFrame = cap.Value.CFrame
+                                else
+                                    if store.status:lower():find("computers left") or store.status:lower() == "15 sec head start" then
+                                        jumpTick += 1
+                                        local pos = lplr.Character.HumanoidRootPart.Position
+                                        if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
+                                            if mag <= 30 then
+                                                warningNotification("Cat V5","The beast is near!",3)
+                                            end
+                                            if computer ~= nil then
+                                                if computer.Screen.BrickColor == BrickColor.new("Dark green") then
+                                                    warningNotification("Cat V5","Computer successfully hacked!",3)
+                                                end
+                                            end
+                                            warningNotification("Cat V5","Finding new computer..",1)
+                                            computer = getComputer()
+                                        end
+                                        for i,v in pairs(players:GetChildren()) do
+                                            local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
+                                            if mag2 <= 3 and v ~= lplr then
+                                                slot = tostring(math.random(1,3))
+                                                sameComp = true
+                                            end
+                                        end
+                                        if not tweening then
+                                            if pos.X ~= computer["ComputerTrigger"..slot].Position.X or pos.Z ~= computer["ComputerTrigger"..slot].Position.Z then
+                                                --local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                                                tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
+                                                --warningNotification("Cat V5", "Teleporting to another computer..",5)
+                                            end
+                                        end
+                                        -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
+                                    elseif store.status:lower():find("exit") then
+                                        jumpTick = 0
+                                        if store.timer == 0 then return end
+                                        if store.escaped then return end
+                                        if exit == nil or mag <= 30 then
+                                            if mag <= 30 then
+                                                warningNotification("Cat V5","The beast is near!",3)
+                                            end
+                                            exit = getExit()
+                                        end
+                                        local partTP = exit.ExitArea
+                                        speed = 3
+                                        if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
+                                            partTP = exit.ExitDoorTrigger
+                                            speed = 0.65
+                                        end
+                                        if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
+                                            partTP = exit.ExitDoorTrigger
+                                            speed = 0.65
+                                        end
+                                        tweenToCFrame(partTP.CFrame, speed, false)
                                     end
-                                    exit = getExit()
                                 end
-                                local partTP = exit.ExitArea
-                                speed = 3
-                                if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
-                                    partTP = exit.ExitDoorTrigger
-                                    speed = 0.65
-                                end
-                                if exit.Door.Hinge.Rotation.Y == -90 or exit.Door.Hinge.Rotation.Y == -180 or exit.Door.Hinge.Rotation.Y == -270 then
-                                    partTP = exit.ExitDoorTrigger
-                                    speed = 0.65
-                                end
-                                tweenToCFrame(partTP.CFrame, speed, false)
+                            end
+                        else
+                            local pod = getPod()
+                            local cap = isPlayerInPod()
+                            if cap ~= nil then
+
                             end
                         end
                     end)
