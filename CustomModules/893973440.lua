@@ -567,7 +567,7 @@ run(function()
                     pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if not isAlive() then return end
-                        if store.timer == 0 or store.status:lower() == "game over" then
+                        if store.timer == 0 or store.status:lower() == "game over" or store.escaped then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
                             jumpTick = 0
                             computer = nil
