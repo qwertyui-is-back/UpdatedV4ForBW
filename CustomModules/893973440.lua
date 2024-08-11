@@ -652,13 +652,13 @@ run(function()
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
                                             end
                                         end
-                                        if jumpTick == 60 then
-                                            oldpos = lplr.Character.HumanoidRootPart.Position
+                                        if jumpTick == 110 then
+                                            oldpos = lplr.Character.HumanoidRootPart.CFrame
                                         end
-                                        if jumpTick > 59 and jumpTick < 64 then
-                                            lplr.Character.HumanoidRootPart.Position += Vector3.new(0,1,0)
-                                        elseif jumpTick > 65 then
-                                            lplr.Character.HumanoidRootPart.Position = oldpos
+                                        if jumpTick > 109 and jumpTick < 114 then
+                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,1,0)
+                                        elseif jumpTick > 115 then
+                                            lplr.Character.HumanoidRootPart.CFrame = oldpos
                                             jumpTick = 0
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
