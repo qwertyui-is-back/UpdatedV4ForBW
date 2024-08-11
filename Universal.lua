@@ -2556,7 +2556,7 @@ run(function()
 					until (not Speed.Enabled)
 				end)
 				RunLoops:BindToHeartbeat("Speed", function(delta)
-					if entityLibrary.isAlive and (typeof(entityLibrary.character.HumanoidRootPart) ~= "Instance" or isnetworkowner(entityLibrary.character.HumanoidRootPart)) then
+					if entityLibrary.isAlive and isnetworkowner(entityLibrary.character.HumanoidRootPart) then
 						local movevec = (SpeedMoveMethod.Value == "Manual" and calculateMoveVector(Vector3.new(a + d, 0, w + s)) or entityLibrary.character.Humanoid.MoveDirection).Unit
 						movevec = movevec == movevec and Vector3.new(movevec.X, 0, movevec.Z) or Vector3.zero
 						SpeedRaycast.FilterDescendantsInstances = {lplr.Character, cam}
@@ -5208,42 +5208,6 @@ run(function()
 		end,
 		Default = 7,
 		Double = 10
-	})
-end)
-
-run(function()
-	local NameProtect = {Enabled = false}
-	local Nme = {Value = "qwertyui"}
-
-	NameProtect = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
-		Name = "NameProtect",
-		Function = function(callback)
-			if callback then
-				RunLoops:BindToStepped("NameProtect",function()
-					for i,v in pairs(lplr.PlayerGui:GetDescendants()) do
-						pcall(function()
-							v.Text = v.Text:gsub(v.Text, lplr.Name, Nme.Value)
-							v.Text = v.Text:gsub(v.Text, lplr.Username, Nme.Value)
-						end)
-					end
-					for i,v in pairs(game:GetService("CoreGui"):GetDescendants()) do
-						pcall(function()
-							v.Text = v.Text:gsub(v.Text, lplr.Name, Nme.Value)
-							v.Text = v.Text:gsub(v.Text, lplr.Username, Nme.Value)
-						end)
-					end
-				end)
-			else
-				warningNotification("Cat V5", "Disabled next game!",5)
-				RunLoops:UnbindFromStepped("NameProtect")
-			end
-		end,
-		ExtraText = function() return Nme.Value end
-	})
-	Nme = NameProtect.CreateTextBox({
-		Name = "Name",
-		TempText = "Name to be displayed as",
-		Function = function() end
 	})
 end)
 
