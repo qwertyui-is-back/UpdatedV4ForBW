@@ -653,10 +653,12 @@ run(function()
                                                 --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                             end
                                         end
-                                        if jumpTick > 79 then
+                                        if jumpTick == 80 then
                                             oldpos = lplr.Character.HumanoidRootPart.CFrame
-                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,5,0)
-                                        elseif jumpTick > 80 then
+                                        end
+                                        if jumpTick > 79 then
+                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,1,0)
+                                        elseif jumpTick > 84 then
                                             lplr.Character.HumanoidRootPart.CFrame = oldpos
                                             jumpTick = 0
                                         end
