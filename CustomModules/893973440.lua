@@ -573,6 +573,7 @@ run(function()
                             computer = nil
                             exit = nil
                         end
+                        lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         if store.beast == lplr then mag = 5000 end
                         if mag <= 25 then
@@ -613,15 +614,6 @@ run(function()
                                         tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
-                                    if jumpTick <= 75 then
-                                        lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
-                                    elseif jumpTick <= 80 then
-                                        lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,0.35,0)
-                                    elseif jumpTick <= 90 then
-                                        jumpTick = 0
-                                    end
-                                else
-                                    lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                                 end
                                 -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                             elseif store.status:lower():find("exit") then
@@ -635,7 +627,7 @@ run(function()
                                     exit = getExit()
                                 end
                                 local partTP = exit.ExitArea
-                                speed = 2.65
+                                speed = 3
                                 if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
                                     partTP = exit.ExitDoorTrigger
                                     speed = 0.65
