@@ -614,6 +614,7 @@ run(function()
                                 lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                                 jumpTick = 0
                             else
+                                jumpTick += 1
                                 if doInteract then
                                     repstorage.RemoteEvent:FireServer("Input", "Action", true)
                                 else
@@ -625,7 +626,6 @@ run(function()
                                     lplr.Character.HumanoidRootPart.CFrame = cap.Value.CFrame
                                 else
                                     if store.status:lower():find("computers left") or store.status:lower() == "15 sec head start" then
-                                        jumpTick += 1
                                         local pos = lplr.Character.HumanoidRootPart.Position
                                         if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
                                             if mag <= 30 then
@@ -657,7 +657,7 @@ run(function()
                                             oldpos = lplr.Character.HumanoidRootPart.CFrame
                                         end
                                         if jumpTick > 79 then
-                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,1,0)
+                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,2.5,0)
                                         elseif jumpTick > 84 then
                                             lplr.Character.HumanoidRootPart.CFrame = oldpos
                                             jumpTick = 0
