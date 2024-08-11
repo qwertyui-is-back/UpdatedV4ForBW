@@ -566,7 +566,7 @@ run(function()
     local sameComp = false
     local function tweenToCFrame(cf,time,safe)
         safe = safe or false
-        if tweening then return end
+        if tweening and not store.status:lower():find("exit") then return end
         local pos = safe and 150 or 0
         lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
         time = time or 0
