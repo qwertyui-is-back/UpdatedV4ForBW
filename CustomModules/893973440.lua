@@ -656,12 +656,12 @@ run(function()
                                             end
                                         end
                                         if jumpTick == 80 then
-                                            oldpos = lplr.Character.HumanoidRootPart.CFrame
+                                            oldpos = lplr.Character.HumanoidRootPart.Position
                                         end
                                         if jumpTick > 79 then
-                                            lplr.Character.HumanoidRootPart.Position += Vector3.new(0,15,0)
+                                            lplr.Character.HumanoidRootPart.Position += Vector3.new(0,1,0)
                                         elseif jumpTick > 84 then
-                                            lplr.Character.HumanoidRootPart.CFrame = oldpos
+                                            lplr.Character.HumanoidRootPart.Position = oldpos
                                             jumpTick = 0
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
