@@ -545,8 +545,9 @@ run(function()
     local tweening = false
     local doInteract = true
     local sameComp = false
-    local function tweenToCFrame(cf,time)
-        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,150,0)
+    local function tweenToCFrame(cf,time,safe)
+        local pos = safe and 150 or 0
+        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
         time = time or 0
         doInteract = false
         local tweenservice = game:GetService("TweenService")
@@ -554,7 +555,7 @@ run(function()
             time = 0.1
         end
         local info = TweenInfo.new(time)
-        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,150,0)})
+        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,pos,0)})
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
@@ -622,7 +623,7 @@ run(function()
                                 if not tweening then
                                     if pos.X ~= computer["ComputerTrigger"..slot].Position.X or pos.Z ~= computer["ComputerTrigger"..slot].Position.Z then
                                         --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                        tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value))
+                                        tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
                                         --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                     end
                                 end
@@ -647,7 +648,7 @@ run(function()
                                     partTP = exit.ExitDoorTrigger
                                     speed = 0.65
                                 end
-                                tweenToCFrame(partTP.CFrame, speed)
+                                tweenToCFrame(partTP.CFrame, speed, false)
                             end
                         end
                     end)
