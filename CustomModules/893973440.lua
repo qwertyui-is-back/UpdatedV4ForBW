@@ -556,7 +556,7 @@ run(function()
                 BindToStepped("aw",1,function()
                     --pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
-                        if store.timer == 0 then
+                        if store.timer == 0 or store.status:lower() == "game over" then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
                             jumpTick = 0
                         end
@@ -567,13 +567,12 @@ run(function()
                             lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                             jumpTick = 0
                         else
-                            if store.timer == 0 then return end
                             if doInteract then
                                 repstorage.RemoteEvent:FireServer("Input", "Action", true)
                             else
                                 repstorage.RemoteEvent:FireServer("Input", "Action", false)
                             end
-                            if store.status:lower():find("computers left") or store.status:lower():find("15 sec head start") then
+                            if store.status:lower():find("computers left") or store.status:lower() == "15 sec head start" then
                                 jumpTick += 1
                                 local pos = lplr.Character.HumanoidRootPart.Position
                                 if computer ~= nil then
