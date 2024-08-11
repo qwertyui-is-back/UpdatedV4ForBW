@@ -586,15 +586,16 @@ run(function()
                             if store.status:lower():find("computers left") or store.status:lower() == "15 sec head start" then
                                 jumpTick += 1
                                 local pos = lplr.Character.HumanoidRootPart.Position
-                                if computer ~= nil then
-                                    if computer.Screen.BrickColor == BrickColor.new("Dark green") then
-                                        warningNotification("Cat V5","Computer successfully hacked!",3)
-                                    end
-                                end
                                 if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
                                     if mag <= 30 then
                                         warningNotification("Cat V5","The beast is near!",3)
                                     end
+                                    if computer ~= nil then
+                                        if computer.Screen.BrickColor == BrickColor.new("Dark green") then
+                                            warningNotification("Cat V5","Computer successfully hacked!",3)
+                                        end
+                                    end
+                                    warningNotification("Cat V5","Finding new computer..",1)
                                     computer = getComputer()
                                 end
                                 for i,v in pairs(players:GetChildren()) do
@@ -669,4 +670,88 @@ run(function()
         Default = 11,
         Function = function(val) end
     })
+end)
+
+run(function()
+	--[[GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Api.CreateCustomToggle({
+		Name = "Overlay",
+		Icon = "vape/assets/TargetIcon1.png",
+		Function = function(callback)
+			overlayenabled = callback
+			Overlay.SetVisible(callback)
+			if callback then
+				task.spawn(function()
+					repeat
+						local ping = math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue()))
+						if #pinglist >= 10 then
+							table.remove(pinglist, 1)
+						end
+						table.insert(pinglist, ping)
+						task.wait(1)
+						if store.matchState ~= matchstatechanged then
+							if store.matchState == 1 then
+								matchstatetick = tick() + 3
+							end
+							matchstatechanged = store.matchState
+						end
+						if not store.TPString then
+							store.TPString = tick().."/"..store.statistics.kills.."/"..store.statistics.beds.."/"..(victorysaid and 1 or 0).."/"..(1).."/"..(0).."/"..(0).."/"..(0)
+							origtpstring = store.TPString
+						end
+						if entityLibrary.isAlive and (not oldcloneroot) then
+							local newnetworkowner = isnetworkowner(entityLibrary.character.HumanoidRootPart)
+							if oldnetworkowner ~= nil and oldnetworkowner ~= newnetworkowner and newnetworkowner == false and notlasso() then
+								local respawnflag = math.abs(lplr:GetAttribute("SpawnTime") - lplr:GetAttribute("LastTeleported")) > 3
+								if (not teleported[lplr]) and respawnflag then
+									task.delay(1, function()
+										local falseflag = didpingspike()
+										if not falseflag then
+											store.statistics.lagbacks = store.statistics.lagbacks + 1
+										end
+									end)
+								end
+							end
+							oldnetworkowner = newnetworkowner
+						else
+							oldnetworkowner = nil
+						end
+						teleported[lplr] = nil
+						for i, v in pairs(entityLibrary.entityList) do
+							if teleportconnections[v.Player.Name.."1"] then continue end
+							teleportconnections[v.Player.Name.."1"] = v.Player:GetAttributeChangedSignal("LastTeleported"):Connect(function()
+								if not vapeInjected then return end
+								for i = 1, 15 do
+									task.wait(0.1)
+									if teleported[v.Player] or teleported2[v.Player] or matchstatetick > tick() or math.abs(v.Player:GetAttribute("SpawnTime") - v.Player:GetAttribute("LastTeleported")) < 3 or (teleportedability[v.Player] or tick() - 1) > tick() then break end
+								end
+								if v.Player ~= nil and (not v.Player.Neutral) and teleported[v.Player] == nil and teleported2[v.Player] == nil and (teleportedability[v.Player] or tick() - 1) < tick() and math.abs(v.Player:GetAttribute("SpawnTime") - v.Player:GetAttribute("LastTeleported")) > 3 and matchstatetick <= tick() then
+									store.statistics.universalLagbacks = store.statistics.universalLagbacks + 1
+									vapeEvents.LagbackEvent:Fire(v.Player)
+								end
+								teleported[v.Player] = nil
+							end)
+							teleportconnections[v.Player.Name.."2"] = v.Player:GetAttributeChangedSignal("PlayerConnected"):Connect(function()
+								teleported2[v.Player] = true
+								task.delay(5, function()
+									teleported2[v.Player] = nil
+								end)
+							end)
+						end
+						local splitted = origtpstring:split("/")
+						label.Text = "Session Info\nTime Played : "..os.date("!%X",math.floor(tick() - splitted[1])).."\nKills : "..(splitted[2] + store.statistics.kills).."\nBeds : "..(splitted[3] + store.statistics.beds).."\nWins : "..(splitted[4] + (victorysaid and 1 or 0)).."\nGames : "..splitted[5].."\nLagbacks : "..(splitted[6] + store.statistics.lagbacks).."\nUniversal Lagbacks : "..(splitted[7] + store.statistics.universalLagbacks).."\nReported : "..(splitted[8] + store.statistics.reported).."\nMap : "..mapname
+						local textsize = textService:GetTextSize(label.Text, label.TextSize, label.Font, Vector2.new(9e9, 9e9))
+						overlayframe.Size = UDim2.new(0, math.max(textsize.X + 19, 200), 0, (textsize.Y * 1.2) + 6)
+						store.TPString = splitted[1].."/"..(splitted[2] + store.statistics.kills).."/"..(splitted[3] + store.statistics.beds).."/"..(splitted[4] + (victorysaid and 1 or 0)).."/"..(splitted[5] + 1).."/"..(splitted[6] + store.statistics.lagbacks).."/"..(splitted[7] + store.statistics.universalLagbacks).."/"..(splitted[8] + store.statistics.reported)
+					until not overlayenabled
+				end)
+			else
+				for i, v in pairs(overlayconnections) do
+					if v.Disconnect then pcall(function() v:Disconnect() end) continue end
+					if v.disconnect then pcall(function() v:disconnect() end) continue end
+				end
+				table.clear(overlayconnections)
+			end
+		end,
+		Priority = 2
+	})]]
 end)
