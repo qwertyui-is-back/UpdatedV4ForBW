@@ -589,6 +589,7 @@ run(function()
     local computer = nil
     local exit = nil
     JumpTick = 0
+    local oldpos
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -651,6 +652,13 @@ run(function()
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
                                                 --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                             end
+                                        end
+                                        if jumpTick > 79 then
+                                            oldpos = lplr.Character.HumanoidRootPart.CFrame
+                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,5,0)
+                                        elseif jumpTick > 80 then
+                                            lplr.Character.HumanoidRootPart.CFrame = oldpos
+                                            jumpTick = 0
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                     elseif store.status:lower():find("exit") then
