@@ -650,7 +650,7 @@ run(function()
                                                 if jumpTick == 140 then
                                                     oldpos = lplr.Character.HumanoidRootPart.Position
                                                 end
-                                                if jumpTick > 139 then
+                                                if jumpTick > 139 and jumpTick < 144 then
                                                     lplr.Character.HumanoidRootPart.Position += Vector3.new(0,0.5,0)
                                                 elseif jumpTick > 144 then
                                                     lplr.Character.HumanoidRootPart.Position = oldpos
