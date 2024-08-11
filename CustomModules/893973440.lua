@@ -652,14 +652,16 @@ run(function()
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
                                             end
                                         end
-                                        if jumpTick == 110 then
-                                            oldpos = lplr.Character.HumanoidRootPart.CFrame
-                                        end
-                                        if jumpTick > 109 and jumpTick < 114 then
-                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,1,0)
-                                        elseif jumpTick > 115 then
-                                            lplr.Character.HumanoidRootPart.CFrame = oldpos
-                                            jumpTick = 0
+                                        if not tweening then -- yes im doing it twice shut up
+                                            if jumpTick == 110 then
+                                                oldpos = lplr.Character.HumanoidRootPart.CFrame
+                                            end
+                                            if jumpTick > 109 and jumpTick < 114 then
+                                                lplr.Character.HumanoidRootPart.CFrame = oldpos * CFrame.new(0,5,0)
+                                            elseif jumpTick > 115 then
+                                                lplr.Character.HumanoidRootPart.CFrame = oldpos
+                                                jumpTick = 0
+                                            end
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                     elseif store.status:lower():find("exit") then
