@@ -188,7 +188,11 @@ local store = {
     status = "GAME OVER",
     ingame = false,
     timer = 0,
-    escaped = false
+    escaped = false,
+    captured = false,
+    progress = 0,
+    cancrawl = true,
+    caninteract = true
 }
 
 local run = runcode
@@ -222,6 +226,10 @@ task.spawn(function()
         store.ingame = repstorage.IsGameActive.Value
         store.timer = repstorage.GameTimer.Value
         store.escaped = lplr.TempPlayerStatsModule.Escaped.Value
+        store.captured = lplr.TempPlayerStatsModule.Captured.Value
+        store.progress = lplr.TempPlayerStatsModule.ActionProgress.Value * 100
+        store.cancrawl = lplr.TempPlayerStatsModule.DisableCrawl.Value
+        store.caninteract = lplr.TempPlayerStatsModule.DisableInteraction
         for i,v in players:GetPlayers() do
             if v.Character == nil then return end
             pcall(function()
@@ -556,7 +564,7 @@ run(function()
         Function = function(callback)
             if callback then
                 BindToStepped("aw",1,function()
-                    --pcall(function()
+                    pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if store.timer == 0 or store.status:lower() == "game over" then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
@@ -637,7 +645,7 @@ run(function()
                                 tweenToCFrame(partTP.CFrame, speed)
                             end
                         end
-                    --end)
+                    end)
                 end)
             else
                 UnbindFromStepped("aw")
