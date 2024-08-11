@@ -533,11 +533,20 @@ run(function()
         return nil
     end
 
+    local function getPod()
+        for i,v in pairs(store.map:GetChildren()) do
+            if v.Name == "FreezePod" then
+                return v
+            end
+        end
+        return nil
+    end
+
     local tweening = false
     local doInteract = true
     local sameComp = false
     local function tweenToCFrame(cf,time)
-        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,5000,0)
+        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,150,0)
         time = time or 0
         doInteract = false
         local tweenservice = game:GetService("TweenService")
@@ -545,7 +554,7 @@ run(function()
             time = 0.1
         end
         local info = TweenInfo.new(time)
-        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,5000,0)})
+        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,150,0)})
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
