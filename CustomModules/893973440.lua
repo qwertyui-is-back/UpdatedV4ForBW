@@ -618,8 +618,8 @@ run(function()
                                 else
                                     repstorage.RemoteEvent:FireServer("Input", "Action", false)
                                 end
-                                local pod = getPod()
-                                local cap = isPlayerInPod(pod)
+                                local pod = nil --getPod()
+                                local cap = nil --isPlayerInPod(pod)
                                 if cap ~= nil then
                                     lplr.Character.HumanoidRootPart.CFrame = cap.Value.CFrame
                                 else
