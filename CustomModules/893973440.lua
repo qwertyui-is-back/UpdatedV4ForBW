@@ -187,7 +187,8 @@ local store = {
     computers = 0,
     status = "GAME OVER",
     ingame = false,
-    timer = 0
+    timer = 0,
+    escaped = false
 }
 
 local run = runcode
@@ -220,6 +221,7 @@ task.spawn(function()
         store.status = repstorage.GameStatus.Value
         store.ingame = repstorage.IsGameActive.Value
         store.timer = repstorage.GameTimer.Value
+        store.escaped = lplr.TempPlayerStatsModule.Escaped.Value
         for i,v in players:GetPlayers() do
             if v.Character == nil then return end
             pcall(function()
@@ -615,7 +617,7 @@ run(function()
                             elseif store.status:lower():find("exit") then
                                 jumpTick = 0
                                 if store.timer == 0 then return end
-                                if lplr.TempPlayerStatsModule.Escaped.Value then return end
+                                if store.escaped then return end
                                 if exit == nil or mag <= 30 then
                                     if mag <= 30 then
                                         warningNotification("Cat V5","The beast is near!",3)
