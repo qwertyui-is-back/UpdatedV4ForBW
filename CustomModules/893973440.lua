@@ -565,6 +565,7 @@ run(function()
     local doInteract = true
     local sameComp = false
     local function tweenToCFrame(cf,time,safe)
+        if tweening then return end
         local pos = safe and 150 or 0
         lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
         time = time or 0
@@ -614,7 +615,7 @@ run(function()
                                 lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                                 jumpTick = 0
                             else
-                                jumpTick += 1
+                                jumpTick = jumpTick + 1
                                 if doInteract then
                                     repstorage.RemoteEvent:FireServer("Input", "Action", true)
                                 else
@@ -639,13 +640,6 @@ run(function()
                                             warningNotification("Cat V5","Finding new computer..",1)
                                             computer = getComputer()
                                         end
-                                        for i,v in pairs(players:GetChildren()) do
-                                            local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                            if mag2 <= 3 and v ~= lplr then
-                                                slot = tostring(math.random(1,3))
-                                                sameComp = true
-                                            end
-                                        end
                                         if not tweening then
                                             if pos.X ~= computer["ComputerTrigger"..slot].Position.X or pos.Z ~= computer["ComputerTrigger"..slot].Position.Z then
                                                 --local slot = "ComputerTrigger"..getAvailableSlot(computer)
@@ -653,11 +647,18 @@ run(function()
                                                 --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                             end
                                         end
+                                        for i,v in pairs(players:GetChildren()) do
+                                            local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
+                                            if mag2 <= 3 and v ~= lplr then
+                                                slot = tostring(math.random(1,3))
+                                                tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1)
+                                            end
+                                        end
                                         if jumpTick == 80 then
                                             oldpos = lplr.Character.HumanoidRootPart.CFrame
                                         end
                                         if jumpTick > 79 then
-                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,2.5,0)
+                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,15,0)
                                         elseif jumpTick > 84 then
                                             lplr.Character.HumanoidRootPart.CFrame = oldpos
                                             jumpTick = 0
