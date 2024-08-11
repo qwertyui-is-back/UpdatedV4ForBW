@@ -605,7 +605,7 @@ run(function()
                                     if jumpTick <= 75 then
                                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                                     elseif jumpTick <= 80 then
-                                        lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,0.05,0)
+                                        lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,0.35,0)
                                     elseif jumpTick <= 90 then
                                         jumpTick = 0
                                     end
