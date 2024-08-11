@@ -572,9 +572,6 @@ run(function()
         time = time or 0
         doInteract = false
         local tweenservice = game:GetService("TweenService")
-        if sameComp then
-            time = 0.1
-        end
         local info = TweenInfo.new(time)
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,pos,0)})
         tween:Play()
