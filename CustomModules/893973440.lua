@@ -646,16 +646,15 @@ run(function()
                                                 --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
                                                 --warningNotification("Cat V5", "Teleporting to another computer..",5)
-                                            else
-                                                if jumpTick == 140 then
-                                                    oldpos = lplr.Character.HumanoidRootPart.Position
-                                                end
-                                                if jumpTick > 139 and jumpTick < 144 then
-                                                    lplr.Character.HumanoidRootPart.Position += Vector3.new(0,0.5,0)
-                                                elseif jumpTick > 144 then
-                                                    lplr.Character.HumanoidRootPart.Position = oldpos
-                                                    jumpTick = 0
-                                                end
+                                            end
+                                            if jumpTick == 90 then
+                                                oldpos = lplr.Character.HumanoidRootPart.Position
+                                            end
+                                            if jumpTick > 89 and jumpTick < 94 then
+                                                lplr.Character.HumanoidRootPart.Position += Vector3.new(0,1,0)
+                                            elseif jumpTick > 94 then
+                                                lplr.Character.HumanoidRootPart.Position = oldpos
+                                                jumpTick = 0
                                             end
                                         end
                                         for i,v in pairs(players:GetChildren()) do
