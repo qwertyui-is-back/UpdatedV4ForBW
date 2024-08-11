@@ -424,6 +424,7 @@ local function getSpeed()
 	if lplr.Character then
 		local SpeedDamageBoost = lplr.Character:GetAttribute("SpeedBoost")
 		if SpeedDamageBoost and SpeedDamageBoost > 1 then
+			speed = speed * 1.6
 			speed = speed * 1.15
 		end
 		if store.grapple > tick() then
@@ -9175,6 +9176,151 @@ run(function()
 	})
 end)
 
+run(function()
+	local JellyfishExploit = {Enabled = false}
+
+	JellyfishExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "JellyfishExploit",
+		Function = function(callback)
+			if callback then -- thank you whoever gave me this
+                task.spawn(function()
+                    repeat task.wait(0.2)
+                        local args = {
+                            [1] = "electrify_jellyfish"
+                        }
+
+                        game:GetService("ReplicatedStorage"):WaitForChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"):WaitForChild("useAbility"):FireServer(unpack(args))
+                    until (not JellyfishExploit.Enabled)
+                end)
+            end
+        end, 
+		HovorText = "Requires Marina kit to use"
+	})
+end)
+
+run(function() -- thank you SystemXVoid for letting me use this
+	local invis = {};
+	local invisbaseparts = {};
+	local invisroot = {};
+	local invisrootcolor = {};
+	local invisanim = Instance.new('Animation');
+	local invisrenderstep;
+	local invistask;
+	local invshumanim;
+	local invisFunction = function()
+		pcall(task.wait(1))
+		pcall(task.cancel, invistask);
+		table.clear(invisbaseparts);
+		pcall(function() invisrenderstep:Disconnect() end);
+		repeat task.wait() until entityLibrary.isAlive;
+		for i,v in lplr.Character:GetDescendants() do 
+			if v.ClassName:lower():find('part') and v.CanCollide and v ~= lplr.Character.PrimaryPart then 
+				v.CanCollide = false;
+				table.insert(invisbaseparts, v);
+			end 
+		end
+		invisrenderstep = runService.Stepped:Connect(function()
+			for i,v in invisbaseparts do 
+				v.CanCollide = false;
+			end
+		end);
+		table.insert(invis.Connections, invisrenderstep);
+		invisanim.AnimationId = 'rbxassetid://11335949902';
+		local anim = lplr.Character.Humanoid.Animator:LoadAnimation(invisanim);
+		invishumanim = anim;
+		repeat 
+			task.wait()
+			if GuiLibrary.ObjectsThatCanBeSaved.AnimationPlayerOptionsButton.Api.Enabled then 
+				GuiLibrary.ObjectsThatCanBeSaved.AnimationPlayerOptionsButton.Api.ToggleButton();
+			end
+			if entityLibrary.isAlive == false or not isnetworkowner(lplr.Character.PrimaryPart) or not invis.Enabled then 
+				pcall(function() 
+					anim:AdjustSpeed(0);
+					anim:Stop() 
+				end);
+				continue
+			end
+			lplr.Character.PrimaryPart.Transparency = 0.6;
+			anim:Play(0.1, 9e9, 0.1);
+		until (not invis.Enabled)
+	end;
+	invis = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = 'Invisibility',
+		HoverText = 'Plays an animation which makes it harder\nfor targets to see you.',
+		Function = function(calling)
+			if calling then 
+				invistask = task.spawn(invisFunction);
+				table.insert(invis.Connections, lplr.CharacterAdded:Connect(invisFunction))
+			else 
+				pcall(function()
+					invishumanim:AdjustSpeed(0);
+					invishumanim:Stop();
+				end);
+				pcall(task.cancel, invistask)
+			end
+		end
+	})
+end) -- thank you SystemXVoid for letting me use this
+
+run(function() -- thank you SystemXVoid for letting me use this
+    local RichExploit = {};
+	local ftick = 0
+    RichExploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = "FortuneExploit",
+        HoverText = "Makes you rich with fortune enchant :money:, CREDITS TO SYSTEMXVOID!",
+        Function = function(calling)
+            if calling then 
+				RunLoops:BindToStepped("fortune", function(testing)
+					ftick = ftick + 1
+					game:GetService('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
+					:FireServer({
+						statusEffectType = "fortune_1",
+						fortuneStacks = 9e9
+					})
+					ftick = 0
+				end)
+			else
+				RunLoops:UnbindFromRenderStep('fortune')
+            end
+        end
+    })
+end) -- thank you SystemXVoid for letting me use this
+
+run(function() -- thank you SystemXVoid for letting me use this
+    local enchantexploit = {};
+    local enchantexploit = {}
+	local enchantnum = 0
+	local et = 0
+    local effects = {
+        "fire_3", "forest_3", "void_3", "static_3", "updraft_2", 
+        "shield_gen_3", "anti_knockback_2", "rapid_regen_3", "execute_3", 
+        "wind_3", "plunder_2", "critical_strike_3", "volley_3", 
+        "grounded_3", "clingy_3", "life_steal_3", "fortune_1", "fortune_2", "fortune_3"
+	   }
+	local function addEnchants()
+	end
+    enchantexploit = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+        Name = 'EnchantExploit',
+        HoverText = 'Gives you most enchants.',
+        Function = function(calling)
+            if calling then 
+				et = 0
+				RunLoops:BindToStepped("enchant",function()
+					et = et + 1
+					if et == 45 then
+						for i,v in effects do 
+							bedwars.Client:Get("RequestFortuneDoubleDown").instance:FireServer({statusEffectType = v})
+						end
+						et = 0
+					end
+				end)
+			else
+				RunLoops:UnbindFromStepped("enchant")
+            end
+        end
+    })
+end) -- thank you SystemXVoid for letting me use this
+
 run(function() -- i dont know why bedwars hasnt patched it but they havent (ive had this for a month i believe by now)
 	local MelodyExploit = {Enabled = false}
 
@@ -9298,7 +9444,7 @@ run(function()
 							}
 						}
 	
-						pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args)) end)
+						game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"):InvokeServer(unpack(args))
 					end
 				end)
 			else
