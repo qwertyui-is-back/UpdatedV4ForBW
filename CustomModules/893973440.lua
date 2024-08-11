@@ -605,7 +605,7 @@ run(function()
                                     local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
                                     if mag2 <= 3 and v ~= lplr then
                                         slot = tostring(math.random(1,3))
-                                        lplr.Character.HumanoidRootPart.CFrame = computer["ComputerTrigger"..slot]
+                                        lplr.Character.HumanoidRootPart.CFrame = computer["ComputerTrigger"..slot].CFrame
                                     end
                                 end
                                 if not tweening then
