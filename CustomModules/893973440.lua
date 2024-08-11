@@ -646,6 +646,16 @@ run(function()
                                                 --local slot = "ComputerTrigger"..getAvailableSlot(computer)
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
                                                 --warningNotification("Cat V5", "Teleporting to another computer..",5)
+                                            else
+                                                if jumpTick == 140 then
+                                                    oldpos = lplr.Character.HumanoidRootPart.Position
+                                                end
+                                                if jumpTick > 139 then
+                                                    lplr.Character.HumanoidRootPart.Position += Vector3.new(0,0.5,0)
+                                                elseif jumpTick > 144 then
+                                                    lplr.Character.HumanoidRootPart.Position = oldpos
+                                                    jumpTick = 0
+                                                end
                                             end
                                         end
                                         for i,v in pairs(players:GetChildren()) do
@@ -654,15 +664,6 @@ run(function()
                                                 slot = tostring(math.random(1,3))
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
                                             end
-                                        end
-                                        if jumpTick == 80 then
-                                            oldpos = lplr.Character.HumanoidRootPart.Position
-                                        end
-                                        if jumpTick > 79 then
-                                            lplr.Character.HumanoidRootPart.Position += Vector3.new(0,1,0)
-                                        elseif jumpTick > 84 then
-                                            lplr.Character.HumanoidRootPart.Position = oldpos
-                                            jumpTick = 0
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                     elseif store.status:lower():find("exit") then
