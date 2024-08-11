@@ -565,6 +565,7 @@ run(function()
     local doInteract = true
     local sameComp = false
     local function tweenToCFrame(cf,time,safe)
+        safe = safe or false
         if tweening then return end
         local pos = safe and 150 or 0
         lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
@@ -651,7 +652,7 @@ run(function()
                                             local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
                                             if mag2 <= 3 and v ~= lplr then
                                                 slot = tostring(math.random(1,3))
-                                                tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1)
+                                                tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
                                             end
                                         end
                                         if jumpTick == 80 then
