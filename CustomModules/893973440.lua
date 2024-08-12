@@ -530,8 +530,15 @@ run(function()
                                 s -= 1
                             end
                         end
-                        slot = "3"
-                        return s > 0 and v or nil
+                        if s > 0 then
+                            local data = {
+                                Object = v,
+                                Index = i,
+                                CFrame = v["ComputerTrigger"..s].CFrame,
+                                Position = v["ComputerTrigger"..s].Position
+                            }
+                            return data
+                        end
                     end
                 end
             end
@@ -577,36 +584,33 @@ run(function()
         return nil
     end
 
+    local computer = nil
+    local exit = nil
     local tweening = false
-    local doInteract = true
-    local sameComp = false
-    local function tweenToCFrame(cf,time,safe)
-        safe = safe or false
+    local doInteract = false
+    local function tweenCF(cf,time)
         if tweening and not store.status == "exits" then return end
-        -- local pos = safe and 0 or 0
-        --lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
-        local pos = safe and 150 or 0
-        time = time or 0
+        local comp = computer or {CFrame = 0, Position = 0}
         doInteract = false
+        time = time or 0
+        if cf == comp.CFrame then
+            local mag = (comp.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+            if mag <= 7 then
+                time = 0.5
+            end
+        end
         local tweenservice = game:GetService("TweenService")
-        local info = TweenInfo.new(time)
+        local info = TweenInfo.new(time,Enum.EasingStyle.Linear)
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
-            DONTTP = tick()
             doInteract = true
-            sameComp = false
-            task.wait(0.000000001)
-            --lplr.Character.HumanoidRootPart.CFrame = cf
             tweening = false
         end)
     end
     
-    local computer = nil
-    local exit = nil
-    JumpTick = 0
-    local oldpos
+    local jumpTick = 0
 
     AutoWin = GuiLibrary.ObjectsThatCanBeSaved.AFKWindow.Api.CreateOptionsButton({
         Name = "AutoWin",
@@ -655,12 +659,12 @@ run(function()
                                 else
                                     if store.status == "computers" then
                                         local pos = lplr.Character.HumanoidRootPart.Position
-                                        if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
+                                        if computer == nil or computer.Object == nil or computer.Object.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
                                             if mag <= 30 then
                                                 warningNotification("Cat V5","The beast is near!",3)
                                             end
                                             if computer ~= nil then
-                                                if computer.Screen.BrickColor == BrickColor.new("Dark green") then
+                                                if computer.Object.Screen.BrickColor == BrickColor.new("Dark green") then
                                                     warningNotification("Cat V5","Computer successfully hacked!",3)
                                                 end
                                             end
@@ -668,18 +672,9 @@ run(function()
                                             computer = getComputer()
                                         end
                                         if not tweening then
-                                            if pos.X ~= computer["ComputerTrigger"..slot].Position.X or pos.Z ~= computer["ComputerTrigger"..slot].Position.Z then
-                                                --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                                tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
-                                                --warningNotification("Cat V5", "Teleporting to another computer..",5)
-                                            end
-                                        end
-                                        for i,v in pairs(players:GetChildren()) do
-                                            local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                            if mag2 <= 1.15 and v ~= lplr then
-                                                slot = tostring(math.random(1,3))
-                                                tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
-                                            end
+                                            --local slot = "ComputerTrigger"..getAvailableSlot(computer)
+                                            tweenCF(computer.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
+                                            --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                         end
                                         if jumpTick > 249 and jumpTick < 256 then
                                             lplr.Character.Humanoid.JumpPower = 40
@@ -711,7 +706,7 @@ run(function()
                                         end
                                         if mag >= 15 then
                                             if not tweening then
-                                                tweenToCFrame(partTP.CFrame, speed, false)
+                                                tweenCF(partTP.CFrame, speed, false)
                                             end
                                         else
                                             exit = getExit()
