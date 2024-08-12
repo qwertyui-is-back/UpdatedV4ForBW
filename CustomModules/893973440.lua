@@ -691,8 +691,8 @@ run(function()
                                         jumpTick = 0
                                         if store.timer == 0 then return end
                                         if store.escaped then return end
-                                        if exit == nil or mag <= 30 then
-                                            if mag <= 30 then
+                                        if exit == nil or mag <= 15 then
+                                            if mag <= 15 then
                                                 warningNotification("Cat V5","The beast is near!",3)
                                             end
                                             exit = getExit()
