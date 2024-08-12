@@ -654,8 +654,10 @@ run(function()
                                         end
                                         if jumpTick > 139 and jumpTick < 145 then
                                             lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                                            lplr.Character.Humanoid.JumpPower = 10
                                         elseif jumpTick > 146 then
                                             jumpTick = 0
+                                            lplr.Character.Humanoid.JumpPower = 7.2
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                     elseif store.status:lower():find("exit") then
