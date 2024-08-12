@@ -652,10 +652,10 @@ run(function()
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
                                             end
                                         end
-                                        if jumpTick > 209 and jumpTick < 216 then
+                                        if jumpTick > 249 and jumpTick < 256 then
                                             lplr.Character.Humanoid.JumpPower = 40
                                             lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-                                        elseif jumpTick > 217 then
+                                        elseif jumpTick > 257 then
                                             jumpTick = 0
                                             lplr.Character.Humanoid.JumpPower = 36
                                         end
