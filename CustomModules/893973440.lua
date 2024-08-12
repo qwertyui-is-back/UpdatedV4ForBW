@@ -597,10 +597,10 @@ run(function()
         Name = "AutoWin",
         Function = function(callback)
             if callback then
-                game:GetService("GuiService").ErrorMessageChanged:Connect(function() -- credits to Infinite Yield
+                table.insert(AutoWin.Connections, game:GetService("GuiService").ErrorMessageChanged:Connect(function() -- credits to Infinite Yield
                     if not AutoRejoin.Enabled then return end
                     game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,lplr)
-                end)
+                end))
                 BindToStepped("aw",1,function()
                     pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
@@ -614,7 +614,7 @@ run(function()
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         local plrs = players:GetPlayers()
-                        if #plrs <= 1 and AutoServerHop.Enabled then
+                        if #plrs == 1 and AutoServerHop.Enabled then
                             -- Credits to Infinite Yield, otherwise I would NOT have figured out how to do this
                             local servers = {}
                             local req = requestfunc({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
@@ -729,7 +729,10 @@ run(function()
     AutoRejoin = AutoWin.CreateToggle({
         Name = "Auto Rejoin",
         Default = true,
-        Function = function() end,
+        Function = function()
+            AutoWin.ToggleButton(false)
+            AutoWin.ToggleButton(false)
+        end,
         HoverText = "Automatically rejoin if kicked"
     })
     AutoServerHop = AutoWin.CreateToggle({
