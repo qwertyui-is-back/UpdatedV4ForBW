@@ -589,7 +589,7 @@ run(function()
         doInteract = false
         local tweenservice = game:GetService("TweenService")
         local info = TweenInfo.new(time)
-        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf + CFrame.new(0,pos,0)})
+        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,pos,0)})
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
