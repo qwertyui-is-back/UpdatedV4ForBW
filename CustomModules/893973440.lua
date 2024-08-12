@@ -522,7 +522,7 @@ run(function()
             if v.Name == "ComputerTable" then
                 if v.Screen.BrickColor ~= BrickColor.new("Dark green") then
                     local mag = (store.beast.Character.HumanoidRootPart.Position - v.ComputerTrigger3.Position).magnitude
-                    if mag >= 30 then
+                    if mag >= 70 then
                         local s = 3
                         for i2,v2 in pairs(players:GetChildren()) do
                             local mag2 = (v2.Character.HumanoidRootPart.Position - v["ComputerTrigger"..s].Position).magnitude
@@ -680,12 +680,21 @@ run(function()
                                             tweenCF(computer.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
                                             --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                         end
+                                        local s = 3
+                                        for i2,v2 in pairs(players:GetChildren()) do
+                                            local mag2 = (v2.Character.HumanoidRootPart.Position - computer.Position).magnitude
+                                            if mag2 < 1.15 and v2 ~= lplr then
+                                                computer = getComputer()
+                                            end
+                                        end
                                         if jumpTick > 249 and jumpTick < 256 then
-                                            lplr.Character.Humanoid.JumpPower = 400
+                                            lplr.Character.Humanoid.JumpPower = 100
                                             lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                                            doInteract = false
                                         elseif jumpTick > 257 then
                                             jumpTick = 0
                                             lplr.Character.Humanoid.JumpPower = 36
+                                            doInteract = true
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                     elseif store.status == "exits" then
