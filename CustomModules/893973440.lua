@@ -653,8 +653,8 @@ run(function()
                                             end
                                         end
                                         if jumpTick > 169 and jumpTick < 176 then
-                                            lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                                             lplr.Character.Humanoid.JumpPower = 40
+                                            lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                                         elseif jumpTick > 177 then
                                             jumpTick = 0
                                             lplr.Character.Humanoid.JumpPower = 36
