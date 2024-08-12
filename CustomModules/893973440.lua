@@ -681,7 +681,8 @@ run(function()
                                             --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                         end
                                         if jumpTick > 249 and jumpTick < 256 then
-                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,25,0)
+                                            lplr.Character.Humanoid.JumpPower = 400
+                                            lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                                         elseif jumpTick > 257 then
                                             jumpTick = 0
                                             lplr.Character.Humanoid.JumpPower = 36
