@@ -583,8 +583,8 @@ run(function()
     local function tweenToCFrame(cf,time,safe)
         safe = safe or false
         if tweening and not store.status == "exits" then return end
-        local pos = safe and 150 or 0
-        lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,pos,0)
+        local pos = safe and 0 or 0
+        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
         time = time or 0
         doInteract = false
         local tweenservice = game:GetService("TweenService")
