@@ -620,6 +620,14 @@ run(function()
                     if not AutoRejoin.Enabled then return end
                     shared.Rejoin()
                 end))
+                task.spawn(function()
+                    repeat task.wait(3)
+                        local plrs = players:GetPlayers()
+                        if #plrs <= 2 and AutoServerHop.Enabled then
+                            shared.ServerHop()
+                        end
+                    until (not AutoWin.Enabled)
+                end)
                 BindToStepped("aw",1,function()
                     pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
@@ -632,10 +640,6 @@ run(function()
                         end
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-                        local plrs = players:GetPlayers()
-                        if #plrs <= 2 and AutoServerHop.Enabled then
-                            shared.ServerHop()
-                        end
                         if store.gamebeast then
                             shared.Rejoin()
                         end
@@ -677,8 +681,7 @@ run(function()
                                             --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                         end
                                         if jumpTick > 249 and jumpTick < 256 then
-                                            lplr.Character.Humanoid.JumpPower = 150
-                                            lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                                            lplr.Character.HumanoidRootPart.CFrame += CFrame.new(0,4,0)
                                         elseif jumpTick > 257 then
                                             jumpTick = 0
                                             lplr.Character.Humanoid.JumpPower = 36
