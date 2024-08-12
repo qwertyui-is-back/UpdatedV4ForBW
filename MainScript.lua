@@ -1996,52 +1996,58 @@ local function loadVape()
 		end
 	})
 	local rejoin
+	shared.Rejoin = function()
+		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,lplr)
+	end
 	rejoin = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "Rejoin",
 		Function = function(c)
 			if c then
 				rejoin.ToggleButton(false)
 				task.wait(0.1)
-				game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,lplr)
+				shared.Rejoin()
 			end
 		end
 	})
 	local serverhop
+	local function warningNotification(title, text, delay)
+		local suc, res = pcall(function()
+			local frame = GuiLibrary.CreateNotification(title, text, delay, "assets/WarningNotification.png")
+			frame.Frame.Frame.ImageColor3 = Color3.fromRGB(236, 129, 44)
+			return frame
+		end)
+		return (suc and res)
+	end
+	shared.ServerHop = function()
+		httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+		if httprequest then -- Credits to Infinite Yield, otherwise I would NOT have figured out how to do this
+			local servers = {}
+			local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
+			local body = game:GetService("HttpService"):JSONDecode(req.Body)
+	
+			if body and body.data then
+				for i, v in next, body.data do
+					if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
+						table.insert(servers, 1, v.id)
+					end
+				end
+			end
+			if #servers > 0 then
+				game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], lplr)
+			else
+				return warningNotification("Cat V5", "Couldn't find a server",5)
+			end
+		else
+			warningNotification("Cat V5", "Your exploit does not support this module (missing request)",5)
+		end
+	end
 	serverhop = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "ServerHop",
 		Function = function(c)
-			local function warningNotification(title, text, delay)
-				local suc, res = pcall(function()
-					local frame = GuiLibrary.CreateNotification(title, text, delay, "assets/WarningNotification.png")
-					frame.Frame.Frame.ImageColor3 = Color3.fromRGB(236, 129, 44)
-					return frame
-				end)
-				return (suc and res)
-			end
 			if c then
 				serverhop.ToggleButton(false)
 				task.wait(0.1)
-				httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
-				if httprequest then -- Credits to Infinite Yield, otherwise I would NOT have figured out how to do this
-					local servers = {}
-					local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
-					local body = game:GetService("HttpService"):JSONDecode(req.Body)
-			
-					if body and body.data then
-						for i, v in next, body.data do
-							if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
-								table.insert(servers, 1, v.id)
-							end
-						end
-					end
-					if #servers > 0 then
-						game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], lplr)
-					else
-						return warningNotification("Cat V5", "Couldn't find a server",5)
-					end
-				else
-					warningNotification("Cat V5", "Your exploit does not support this module (missing request)",5)
-				end
+				shared.ServerHop()
 			end
 		end
 	})

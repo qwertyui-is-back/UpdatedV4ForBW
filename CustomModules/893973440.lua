@@ -599,7 +599,7 @@ run(function()
             if callback then
                 table.insert(AutoWin.Connections, game:GetService("GuiService").ErrorMessageChanged:Connect(function() -- credits to Infinite Yield
                     if not AutoRejoin.Enabled then return end
-                    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,lplr)
+                    shared.Rejoin()
                 end))
                 BindToStepped("aw",1,function()
                     pcall(function()
@@ -615,23 +615,7 @@ run(function()
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         local plrs = players:GetPlayers()
                         if #plrs == 1 and AutoServerHop.Enabled then
-                            -- Credits to Infinite Yield, otherwise I would NOT have figured out how to do this
-                            local servers = {}
-                            local req = requestfunc({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
-                            local body = game:GetService("HttpService"):JSONDecode(req.Body)
-                    
-                            if body and body.data then
-                                for i, v in next, body.data do
-                                    if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
-                                        table.insert(servers, 1, v.id)
-                                    end
-                                end
-                            end
-                            if #servers > 0 then
-                                game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], lplr)
-                            else
-                                return warningNotification("Cat V5", "Couldn't find a server",5)
-                            end
+                            shared.ServerHop()
                         end
                         if store.beast ~= lplr then
                             if store.beast == lplr then mag = 5000 end
