@@ -628,7 +628,7 @@ run(function()
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
                         local plrs = players:GetPlayers()
-                        if #plrs == 1 and AutoServerHop.Enabled then
+                        if #plrs <= 2 and AutoServerHop.Enabled then
                             shared.ServerHop()
                         end
                         if store.gamebeast then
