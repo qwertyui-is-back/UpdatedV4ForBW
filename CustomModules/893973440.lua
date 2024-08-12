@@ -497,6 +497,8 @@ end)
 run(function()
     local AutoWin = {Enabled = false}
     local SaveCaptured = {Enabled = false}
+    local AutoRejoin = {Enabled = false}
+    local AutoServerHop = {Enabled = false}
     local SpeedValue1 = {Value = 9}
     local SpeedValue2 = {Value = 11}
     local slot = "3"
@@ -577,11 +579,12 @@ run(function()
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
-            tweening = false
             DONTTP = tick()
             doInteract = true
             sameComp = false
+            task.wait(0.000000001)
             lplr.Character.HumanoidRootPart.CFrame = cf
+            tweening = false
         end)
     end
     
@@ -594,6 +597,10 @@ run(function()
         Name = "AutoWin",
         Function = function(callback)
             if callback then
+                game:GetService("GuiService").ErrorMessageChanged:Connect(function() -- credits to Infinite Yield
+                    if not AutoRejoin.Enabled then return end
+                    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,lplr)
+                end)
                 BindToStepped("aw",1,function()
                     pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
@@ -606,6 +613,26 @@ run(function()
                         end
                         lplr.Character.HumanoidRootPart.Velocity = Vector3.zero
                         local mag = (store.beast.Character.HumanoidRootPart.Position - lplr.Character.HumanoidRootPart.Position).magnitude
+                        local plrs = players:GetPlayers()
+                        if #plrs <= 1 and AutoServerHop.Enabled then
+                            -- Credits to Infinite Yield, otherwise I would NOT have figured out how to do this
+                            local servers = {}
+                            local req = requestfunc({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
+                            local body = game:GetService("HttpService"):JSONDecode(req.Body)
+                    
+                            if body and body.data then
+                                for i, v in next, body.data do
+                                    if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
+                                        table.insert(servers, 1, v.id)
+                                    end
+                                end
+                            end
+                            if #servers > 0 then
+                                game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], lplr)
+                            else
+                                return warningNotification("Cat V5", "Couldn't find a server",5)
+                            end
+                        end
                         if store.beast ~= lplr then
                             if store.beast == lplr then mag = 5000 end
                             if mag <= 25 then
@@ -685,11 +712,8 @@ run(function()
                                 end
                             end
                         else
-                            local pod = getPod()
-                            local cap = isPlayerInPod()
-                            if cap ~= nil then
-
-                            end
+                            if not AutoRejoin.Enabled then return end
+                            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,lplr)
                         end
                     end)
                 end)
@@ -701,6 +725,18 @@ run(function()
         ExtraText = function()
             return "Delay "..SpeedValue1.Value.."-"..SpeedValue2.Value
         end
+    })
+    AutoRejoin = AutoWin.CreateToggle({
+        Name = "Auto Rejoin",
+        Default = true,
+        Function = function() end,
+        HoverText = "Automatically rejoin if kicked"
+    })
+    AutoServerHop = AutoWin.CreateToggle({
+        Name = "Auto ServerHop",
+        Default = true,
+        Function = function() end,
+        HoverText = "Automatically server hop if you are the only player"
     })
     SpeedValue1 = AutoWin.CreateSlider({
         Name = "Speed 1",
