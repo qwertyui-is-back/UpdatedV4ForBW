@@ -619,7 +619,7 @@ run(function()
                         end
                         if store.beast ~= lplr then
                             if store.beast == lplr then mag = 5000 end
-                            if mag <= 25 then
+                            if mag <= 25 and not store.escaped then
                                 if store.timer == 0 then return end
                                 lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                                 jumpTick = 0
