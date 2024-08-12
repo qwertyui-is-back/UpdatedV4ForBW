@@ -651,7 +651,7 @@ run(function()
                                                 slot = tostring(math.random(1,3))
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
                                             end
-                                        End
+                                        end
                                         if jumpTick > 109 and jumpTick < 112 then
                                             lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                                         elseif jumpTick > 113 then
