@@ -185,7 +185,8 @@ local store = {
     beast = nil,
     map = "nil",
     computers = 0,
-    status = "GAME OVER",
+    status = "spawn",
+    gamestatus = "GAME OVER",
     ingame = false,
     timer = 0,
     escaped = false,
@@ -220,9 +221,20 @@ task.spawn(function()
         if not shared.VapeExecuted then
             UnbindFromStepped("Update")
         end
+        local status = "spawn"
+        if repstorage.GameTimer.Value == 0 or repstorage.GameStatus.Value:lower():find("game over") then
+            status = "spawn"
+        end
+        if repstorage.GameStatus.Value:lower():find("computers") or repstorage.GameStatus.Value:lower() == "15 sec head start" then
+            status = "computers"
+        end
+        if repstorage.GameStatus.Value:lower():find("exit") then
+            status = "exits"
+        end
         store.map = repstorage.CurrentMap.Value
         store.computers = repstorage.ComputersLeft.Value
-        store.status = repstorage.GameStatus.Value
+        store.status = status
+        store.gamestatus = repstorage.GameStatus.Value
         store.ingame = repstorage.IsGameActive.Value
         store.timer = repstorage.GameTimer.Value
         store.escaped = lplr.TempPlayerStatsModule.Escaped.Value
@@ -635,7 +647,7 @@ run(function()
                                 if cap ~= nil then
                                     lplr.Character.HumanoidRootPart.CFrame = cap.Value.CFrame
                                 else
-                                    if store.status:lower():find("computers left") or store.status:lower() == "15 sec head start" then
+                                    if store.status == "computers" then
                                         local pos = lplr.Character.HumanoidRootPart.Position
                                         if computer == nil or computer.Screen.BrickColor == BrickColor.new("Dark green") or mag <= 30 then
                                             if mag <= 30 then
@@ -671,7 +683,7 @@ run(function()
                                             lplr.Character.Humanoid.JumpPower = 36
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
-                                    elseif store.status:lower():find("exit") then
+                                    elseif store.status == "exits" then
                                         jumpTick = 0
                                         if store.timer == 0 then return end
                                         if store.escaped then return end
