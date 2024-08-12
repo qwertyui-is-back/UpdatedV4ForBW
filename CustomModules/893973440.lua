@@ -512,7 +512,7 @@ run(function()
                         local s = 3
                         for i2,v2 in pairs(players:GetChildren()) do
                             local mag2 = (v2.Character.HumanoidRootPart.Position - v["ComputerTrigger"..s].Position).magnitude
-                            if mag2 < 3 and v2 ~= lplr then
+                            if mag2 < 1.15 and v2 ~= lplr then
                                 s -= 1
                             end
                         end
@@ -674,7 +674,7 @@ run(function()
                                         end
                                         for i,v in pairs(players:GetChildren()) do
                                             local mag2 = (v.Character.HumanoidRootPart.Position - computer["ComputerTrigger"..slot].Position).magnitude
-                                            if mag2 <= 3 and v ~= lplr then
+                                            if mag2 <= 1.15 and v ~= lplr then
                                                 slot = tostring(math.random(1,3))
                                                 tweenToCFrame(computer["ComputerTrigger"..slot].CFrame, 1, false)
                                             end
@@ -707,7 +707,11 @@ run(function()
                                             partTP = exit.ExitDoorTrigger
                                             speed = 0.65
                                         end
-                                        tweenToCFrame(partTP.CFrame, speed, false)
+                                        if mag >= 15 then
+                                            tweenToCFrame(partTP.CFrame, speed, false)
+                                        else
+                                            exit = getExit()
+                                        end
                                     end
                                 end
                             end
