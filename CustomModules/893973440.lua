@@ -183,6 +183,7 @@ end
 
 local store = {
     beast = nil,
+    gamebeast = nil,
     map = "nil",
     computers = 0,
     status = "spawn",
@@ -231,6 +232,7 @@ task.spawn(function()
         if repstorage.GameStatus.Value:lower():find("exit") then
             status = "exits"
         end
+        store.gamebeast = lplr.TempPlayerStatsModule.IsBeast.Value
         store.map = repstorage.CurrentMap.Value
         store.computers = repstorage.ComputersLeft.Value
         store.status = status
@@ -617,7 +619,7 @@ run(function()
                     pcall(function()
                         if AutoInteract.Enabled then AutoInteract.ToggleButton(false) end
                         if not isAlive() then return end
-                        if store.timer == 0 or store.status:lower() == "game over" or store.status:lower() == "game over - beast left" or store.escaped then
+                        if store.status == "spawn" then
                             lplr.Character.HumanoidRootPart.CFrame = CFrame.new(104,8,-417)
                             jumpTick = 0
                             computer = nil
@@ -628,6 +630,9 @@ run(function()
                         local plrs = players:GetPlayers()
                         if #plrs == 1 and AutoServerHop.Enabled then
                             shared.ServerHop()
+                        end
+                        if store.gamebeast then
+                            shared.Rejoin()
                         end
                         if store.beast ~= lplr then
                             if store.beast == lplr then mag = 5000 end
@@ -694,7 +699,7 @@ run(function()
                                             exit = getExit()
                                         end
                                         local partTP = exit.ExitArea
-                                        speed = 3
+                                        speed = 5
                                         if exit.Door.Hinge.Rotation.Y == 0 or exit.Door.Hinge.Rotation.Y == 90 or exit.Door.Hinge.Rotation.Y == 180 or exit.Door.Hinge.Rotation.Y == 270 then
                                             partTP = exit.ExitDoorTrigger
                                             speed = 0.65
@@ -704,7 +709,9 @@ run(function()
                                             speed = 0.65
                                         end
                                         if mag >= 15 then
-                                            tweenToCFrame(partTP.CFrame, speed, false)
+                                            if not tweening then
+                                                tweenToCFrame(partTP.CFrame, speed, false)
+                                            end
                                         else
                                             exit = getExit()
                                         end
