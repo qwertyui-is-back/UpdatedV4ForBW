@@ -592,6 +592,7 @@ run(function()
         if tweening and not store.status == "exits" then return end
         local comp = computer or {CFrame = 0, Position = 0}
         time = time or 0
+        doInteract = false
         if cf == comp.CFrame then
             local mag = (comp.Position - lplr.Character.HumanoidRootPart.Position).magnitude
             if mag <= 7 then
@@ -604,6 +605,7 @@ run(function()
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
+            doInteract = true
             tweening = false
         end)
     end
@@ -643,7 +645,7 @@ run(function()
                         end
                         if store.beast ~= lplr then
                             if store.beast == lplr then mag = 5000 end
-                            if mag <= 25 and not store.escaped then
+                            if mag <= 25 and not store.escaped and not store.status == "spawn" then
                                 if store.timer == 0 then return end
                                 lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,100,0)
                                 jumpTick = 0
@@ -675,7 +677,7 @@ run(function()
                                         end
                                         if not tweening then
                                             --local slot = "ComputerTrigger"..getAvailableSlot(computer)
-                                            tweenCF(computer.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true)
+                                            if pos.X ~= computer.Position.X or pos.Z ~= computer.Position.Z then tweenCF(computer.CFrame, math.random(SpeedValue1.Value,SpeedValue2.Value), true) end
                                             --warningNotification("Cat V5", "Teleporting to another computer..",5)
                                         end
                                         local s = 3
@@ -686,15 +688,11 @@ run(function()
                                             end
                                         end
                                         if jumpTick > 249 and jumpTick < 256 then
-                                            lplr.Character.Humanoid.JumpPower = 250
+                                            lplr.Character.Humanoid.JumpPower = 40
                                             lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-                                            doInteract = false
                                         elseif jumpTick > 257 then
                                             jumpTick = 0
                                             lplr.Character.Humanoid.JumpPower = 36
-                                            doInteract = true
-                                        else
-                                            doInteract = true
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
                                     elseif store.status == "exits" then
