@@ -686,7 +686,7 @@ run(function()
                                             end
                                         end
                                         if jumpTick > 249 and jumpTick < 256 then
-                                            lplr.Character.Humanoid.JumpPower = 100
+                                            lplr.Character.Humanoid.JumpPower = 250
                                             lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                                             doInteract = false
                                         elseif jumpTick > 257 then
