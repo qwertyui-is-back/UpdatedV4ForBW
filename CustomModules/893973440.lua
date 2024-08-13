@@ -591,7 +591,6 @@ run(function()
     local function tweenCF(cf,time)
         if tweening and not store.status == "exits" then return end
         local comp = computer or {CFrame = 0, Position = 0}
-        doInteract = false
         time = time or 0
         if cf == comp.CFrame then
             local mag = (comp.Position - lplr.Character.HumanoidRootPart.Position).magnitude
@@ -605,7 +604,6 @@ run(function()
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
-            doInteract = true
             tweening = false
         end)
     end
@@ -694,6 +692,8 @@ run(function()
                                         elseif jumpTick > 257 then
                                             jumpTick = 0
                                             lplr.Character.Humanoid.JumpPower = 36
+                                            doInteract = true
+                                        else
                                             doInteract = true
                                         end
                                         -- lplr.Character.HumanoidRootPart.CFrame = lplr.Character.HumanoidRootPart.CFrame * CFrame.new(0,computer.ComputerTrigger3.CFrame.Y,0)
