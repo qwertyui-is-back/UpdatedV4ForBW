@@ -4838,6 +4838,8 @@ run(function()
 										b.Transparency = 1
 									elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
 										b.Handle.Transparency = 1
+									elseif b:IsA("Part") then
+										b.Transparency = 1
 									end
 								end
 								if v.Character:FindFirstChild("amogus") == nil then
@@ -4854,6 +4856,8 @@ run(function()
 						if b.Name == "SkibidiPing" then
 							return
 						elseif b:IsA("MeshPart") then
+							b.Transparency = 0
+						elseif b:IsA("Part") then
 							b.Transparency = 0
 						elseif b:IsA("Accessory") then
 							b.Handle.Transparency = 0
