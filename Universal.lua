@@ -4788,6 +4788,88 @@ run(function()
 end)
 
 run(function()
+	local AmongUs = {Enabled = false}
+	local Mode = {Value = "Among Us"}
+
+	local function getTorso(ent)
+		local torso = nil
+		if Enum.HumanoidRigType.R6 then torso = "Torso" end
+		if Enum.HumanoidRigType.R15 then torso = "UpperTorso" end
+		return ent.Character[torso]
+	end
+
+	local function camu(ent)
+		local asset = "http://www.roblox.com/asset/?id=6235963214"
+		local text = "http://www.roblox.com/asset/?id=6235963270"
+		local part = Instance.new("Part",ent.Character)
+		local mesh = Instance.new("SpecialMesh",part)
+		local weld = Instance.new("Weld",part)
+		part.Name = "amogus"
+		mesh.MeshId = asset
+		mesh.TextureId = text
+		part.CanCollide = false
+		mesh.Offset = Vector3.new(0,-0.3,0)
+		mesh.Scale = Vector3.new(0.11,0.11,0.11)
+		weld.Part0 = part
+		weld.Part1 = getTorso(ent)
+	end
+
+	local function isAlive(plr)
+		if plr then
+			return plr and plr.Character and plr.Character.Parent ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Head") and plr.Character:FindFirstChild("Humanoid")
+		end
+		return lplr and lplr.Character and lplr.Character.Parent ~= nil and lplr.Character:FindFirstChild("HumanoidRootPart") and lplr.Character:FindFirstChild("Head") and lplr.Character:FindFirstChild("Humanoid")
+	end
+
+	AmongUs = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
+		Name = "PlayerModel",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("amogus",function()
+					for i,v in pairs(game.Players:GetChildren()) do
+						if v.Character:FindFirstChild("Humanoid") ~= nil and isAlive(v) then
+							if v.Character.Humanoid.Health == 0 and v.Character:FindFirstChild("amogus") then
+								v.Character:FindFirstChild("amogus"):Destroy()
+							end
+							if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
+								for o,b in pairs(v.Character:GetChildren()) do
+									if b.Name == "SkibidiPing" then
+										return
+									elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
+										b.Transparency = 1
+									elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
+										b.Handle.Transparency = 1
+									end
+								end
+								if v.Character:FindFirstChild("amogus") == nil then
+									camu(v)
+								end
+							end
+						end
+					end
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("amogus")
+				for i,v in pairs(game.Players:GetChildren()) do
+					for o,b in pairs(v.Character:GetChildren()) do
+						if b.Name == "SkibidiPing" then
+							return
+						elseif b:IsA("MeshPart") then
+							b.Transparency = 0
+						elseif b:IsA("Accessory") then
+							b.Handle.Transparency = 0
+						end
+					end
+				end
+				lplr.Character:FindFirstChild("amogus"):Destroy()
+			end
+		end,
+		HoverText = "Turns you into Among Us",
+		ExtraText = function() return Mode.Value end
+	})
+end)
+
+run(function()
 	local controlmodule
 	local oldmove
 	local SafeWalk = {Enabled = false}

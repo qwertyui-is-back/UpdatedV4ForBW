@@ -515,6 +515,7 @@ run(function()
     local AutoServerHop = {Enabled = false}
     local SpeedValue1 = {Value = 9}
     local SpeedValue2 = {Value = 11}
+    local FastHack = {Enabled = false}
     local slot = "3"
 
     local function getComputer()
@@ -600,7 +601,7 @@ run(function()
             end
         end
         local tweenservice = game:GetService("TweenService")
-        local info = TweenInfo.new(time,Enum.EasingStyle.Linear)
+        local info = TweenInfo.new(time,Enum.EasingStyle.Linear)-- this is cringe i thought linear was the default :sob:
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
         tween:Play()
         tweening = true
@@ -618,13 +619,13 @@ run(function()
             if callback then
                 table.insert(AutoWin.Connections, game:GetService("GuiService").ErrorMessageChanged:Connect(function() -- credits to Infinite Yield
                     if not AutoRejoin.Enabled then return end
-                    shared.Rejoin()
+                    shared.Rejoin() -- will there be false rejoins? yes, do i care? no
                 end))
                 task.spawn(function()
                     repeat task.wait(3)
                         local plrs = players:GetPlayers()
                         if #plrs <= 2 and AutoServerHop.Enabled then
-                            shared.ServerHop()
+                            shared.ServerHop() -- it works!! (and doesnt crash ur game)
                         end
                     until (not AutoWin.Enabled)
                 end)
@@ -687,7 +688,7 @@ run(function()
                                                 computer = getComputer()
                                             end
                                         end
-                                        if jumpTick > 249 and jumpTick < 256 then
+                                        if jumpTick > 249 and jumpTick < 256 and FastHack.Enabled then
                                             lplr.Character.Humanoid.JumpPower = 40
                                             lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
                                         elseif jumpTick > 257 then
@@ -768,6 +769,13 @@ run(function()
         Max = 30,
         Default = 11,
         Function = function(val) end
+    })
+    FastHack = AutoWin.CreateToggle({
+        Name = "Fast Hack",
+        Default = true,
+        Function = function()
+        end,
+        HoverText = "Automatically rejoin if kicked"
     })
 end)
 
