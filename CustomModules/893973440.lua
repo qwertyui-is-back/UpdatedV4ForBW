@@ -589,7 +589,10 @@ run(function()
     local exit = nil
     local tweening = false
     local doInteract = false
-    local function tweenCF(cf,time)
+    local function tweenCF(cf,time,safe)
+        safe = safe or false
+        local pos = safe and 150 or 0
+        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
         if tweening and not store.status == "exits" then return end
         local comp = computer or {CFrame = 0, Position = 0}
         time = time or 0
@@ -602,7 +605,7 @@ run(function()
         end
         local tweenservice = game:GetService("TweenService")
         local info = TweenInfo.new(time,Enum.EasingStyle.Linear)-- this is cringe i thought linear was the default :sob:
-        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf})
+        local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,pos,0)})
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
