@@ -609,6 +609,7 @@ run(function()
         tween:Play()
         tweening = true
         tween.Completed:Connect(function()
+            lplr.Character.HumanoidRootPart.CFrame = cf
             doInteract = true
             tweening = false
         end)

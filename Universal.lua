@@ -4838,7 +4838,7 @@ run(function()
 										b.Transparency = 1
 									elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
 										b.Handle.Transparency = 1
-									elseif b:IsA("Part") then
+									elseif b:IsA("Part") and b.Name ~= "amogus" then
 										b.Transparency = 1
 									end
 								end
@@ -4857,7 +4857,7 @@ run(function()
 							return
 						elseif b:IsA("MeshPart") then
 							b.Transparency = 0
-						elseif b:IsA("Part") then
+						elseif b:IsA("Part") and b.Name ~= "HumanoidRootPart" then
 							b.Transparency = 0
 						elseif b:IsA("Accessory") then
 							b.Handle.Transparency = 0
