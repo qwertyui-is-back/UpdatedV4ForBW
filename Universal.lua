@@ -4792,9 +4792,8 @@ run(function()
 	local Mode = {Value = "Among Us"}
 
 	local function getTorso(ent)
-		local torso = nil
-		if Enum.HumanoidRigType.R6 then torso = "Torso" end
-		if Enum.HumanoidRigType.R15 then torso = "UpperTorso" end
+		local torso = "UpperTorso"
+		if Enum.HumanoidRigType.R6 or ent.Character:FindFirstChild("Torso") then torso = "Torso" end
 		return ent.Character[torso]
 	end
 
