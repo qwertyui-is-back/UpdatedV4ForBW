@@ -789,25 +789,25 @@ run(function()
 		Name = "Progress",
 		Function = function(callback)
 			if callback then
-				HealthText = Drawing.new("Text")
-				HealthText.Size = 20
-				HealthText.Text = "0%"
-				HealthText.Position = Vector2.new(0, 0)
-				HealthText.Color = Color3.fromRGB(0, 255, 0)
-				HealthText.Center = true
-				HealthText.Visible = true
-				task.spawn(function()
+                task.spawn(function()
+                    ProgressText = Drawing.new("Text")
+                    ProgressText.Size = 20
+                    ProgressText.Text = "0%"
+                    ProgressText.Position = Vector2.new(0, 0)
+                    ProgressText.Color = Color3.fromRGB(0, 255, 0)
+                    ProgressText.Center = true
+                    ProgressText.Visible = true
 					repeat
 						if isAlive() then
-							HealthText.Text = math.floor(store.progress).."%"
-							HealthText.Color = Color3.fromHSV(math.clamp(math.floor(store.progress) / 100, 0, 1) / 2.5, 0.89, 1)
+							ProgressText.Text = math.floor(store.progress).."%"
+							ProgressText.Color = Color3.fromHSV(math.clamp(math.floor(store.progress) / 100, 0, 1) / 2.5, 0.89, 1)
 						end
-						HealthText.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2 + 75)
-						task.wait(0.1)
+						ProgressText.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2 + 75)
+						task.wait()
 					until not Health.Enabled
-				end)
+                end)
 			else
-				if HealthText then HealthText:Remove() end
+				if ProgressText then ProgressText:Remove() end
 			end
 		end,
 		HoverText = "Displays your progress in the center of your screen."
