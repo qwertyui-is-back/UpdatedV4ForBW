@@ -628,8 +628,9 @@ run(function()
                 task.spawn(function()
                     repeat task.wait(3)
                         local plrs = players:GetPlayers()
-                        if #plrs <= 2 and AutoServerHop.Enabled then
+                        if #plrs <= 2 and AutoServerHop.Enabled and not store.ingame then
                             shared.ServerHop() -- it works!! (and doesnt crash ur game)
+                            warningNotification("Cat V5", "Server Hopping..",2.85)
                         end
                     until (not AutoWin.Enabled)
                 end)
@@ -802,7 +803,7 @@ run(function()
 							ProgressText.Text = math.floor(store.progress).."%"
 							ProgressText.Color = Color3.fromHSV(math.clamp(math.floor(store.progress) / 100, 0, 1) / 2.5, 0.89, 1)
 						end
-						ProgressText.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2 + 75)
+						ProgressText.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2 + 95)
 						task.wait()
 					until not Health.Enabled
                 end)
