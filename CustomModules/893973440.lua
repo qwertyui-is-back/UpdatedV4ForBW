@@ -592,8 +592,8 @@ run(function()
     local function tweenCF(cf,time,safe)
         safe = safe or false
         local pos = safe and 150 or 0
-        lplr.Character.HumanoidRootPart.CFrame *= CFrame.new(0,pos,0)
-        if tweening and not store.status == "exits" then return end
+        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, cf.Y + pos, lplr.Character.HumanoidRootPart.CFrame.Z)
+        if tweening and (not store.gamestatus:lower():find("exit") or not store.status == "exits") then return end
         local comp = computer or {CFrame = 0, Position = 0}
         time = time or 0
         doInteract = false
@@ -784,7 +784,118 @@ run(function()
 end)
 
 run(function()
-	--[[GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Api.CreateCustomToggle({
+	local Health = {Enabled = false}
+	Health =  GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "Progress",
+		Function = function(callback)
+			if callback then
+				HealthText = Drawing.new("Text")
+				HealthText.Size = 20
+				HealthText.Text = "0%"
+				HealthText.Position = Vector2.new(0, 0)
+				HealthText.Color = Color3.fromRGB(0, 255, 0)
+				HealthText.Center = true
+				HealthText.Visible = true
+				task.spawn(function()
+					repeat
+						if isAlive() then
+							HealthText.Text = math.floor(store.progress).."%"
+							HealthText.Color = Color3.fromHSV(math.clamp(math.floor(store.progress) / 100, 0, 1) / 2.5, 0.89, 1)
+						end
+						HealthText.Position = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2 + 75)
+						task.wait(0.1)
+					until not Health.Enabled
+				end)
+			else
+				if HealthText then HealthText:Remove() end
+			end
+		end,
+		HoverText = "Displays your progress in the center of your screen."
+	})
+end)
+
+--[[run(function()
+	store.TPString = shared.vapeoverlay or nil
+	local origtpstring = store.TPString
+	local Overlay = GuiLibrary.CreateCustomWindow({
+		Name = "Overlay",
+		Icon = "vape/assets/TargetIcon1.png",
+		IconSize = 16
+	})
+	local overlayframe = Instance.new("Frame")
+	overlayframe.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	overlayframe.Size = UDim2.new(0, 200, 0, 120)
+	overlayframe.Position = UDim2.new(0, 0, 0, 5)
+	overlayframe.Parent = Overlay.GetCustomChildren()
+	local overlayframe2 = Instance.new("Frame")
+	overlayframe2.Size = UDim2.new(1, 0, 0, 10)
+	overlayframe2.Position = UDim2.new(0, 0, 0, -5)
+	overlayframe2.Parent = overlayframe
+	local overlayframe3 = Instance.new("Frame")
+	overlayframe3.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	overlayframe3.Size = UDim2.new(1, 0, 0, 6)
+	overlayframe3.Position = UDim2.new(0, 0, 0, 6)
+	overlayframe3.BorderSizePixel = 0
+	overlayframe3.Parent = overlayframe2
+	local oldguiupdate = GuiLibrary.UpdateUI
+	GuiLibrary.UpdateUI = function(h, s, v, ...)
+		overlayframe2.BackgroundColor3 = Color3.fromHSV(h, s, v)
+		return oldguiupdate(h, s, v, ...)
+	end
+	local framecorner1 = Instance.new("UICorner")
+	framecorner1.CornerRadius = UDim.new(0, 5)
+	framecorner1.Parent = overlayframe
+	local framecorner2 = Instance.new("UICorner")
+	framecorner2.CornerRadius = UDim.new(0, 5)
+	framecorner2.Parent = overlayframe2
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.new(1, -7, 1, -5)
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.TextYAlignment = Enum.TextYAlignment.Top
+	label.Font = Enum.Font.Arial
+	label.LineHeight = 1.2
+	label.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	label.TextSize = 16
+	label.Text = ""
+	label.BackgroundTransparency = 1
+	label.TextColor3 = Color3.fromRGB(200, 200, 200)
+	label.Position = UDim2.new(0, 7, 0, 5)
+	label.Parent = overlayframe
+	local OverlayFonts = {"Arial"}
+	for i,v in pairs(Enum.Font:GetEnumItems()) do
+		if v.Name ~= "Arial" then
+			table.insert(OverlayFonts, v.Name)
+		end
+	end
+	local OverlayFont = Overlay.CreateDropdown({
+		Name = "Font",
+		List = OverlayFonts,
+		Function = function(val)
+			label.Font = Enum.Font[val]
+		end
+	})
+	OverlayFont.Bypass = true
+	Overlay.Bypass = true
+	local overlayconnections = {}
+	local oldnetworkowner
+	local teleported = {}
+	local teleported2 = {}
+	local teleportedability = {}
+	local teleportconnections = {}
+	local pinglist = {}
+	local fpslist = {}
+	local matchstatechanged = 0
+	local mapname = "Unknown"
+	local overlayenabled = false
+
+	task.spawn(function()
+		pcall(function()
+			mapname = tostring(store.map)
+		end)
+	end)
+
+	local matchstatetick = tick()
+	GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Api.CreateCustomToggle({
 		Name = "Overlay",
 		Icon = "vape/assets/TargetIcon1.png",
 		Function = function(callback)
@@ -799,54 +910,9 @@ run(function()
 						end
 						table.insert(pinglist, ping)
 						task.wait(1)
-						if store.matchState ~= matchstatechanged then
-							if store.matchState == 1 then
-								matchstatetick = tick() + 3
-							end
-							matchstatechanged = store.matchState
-						end
 						if not store.TPString then
 							store.TPString = tick().."/"..store.statistics.kills.."/"..store.statistics.beds.."/"..(victorysaid and 1 or 0).."/"..(1).."/"..(0).."/"..(0).."/"..(0)
 							origtpstring = store.TPString
-						end
-						if entityLibrary.isAlive and (not oldcloneroot) then
-							local newnetworkowner = isnetworkowner(entityLibrary.character.HumanoidRootPart)
-							if oldnetworkowner ~= nil and oldnetworkowner ~= newnetworkowner and newnetworkowner == false and notlasso() then
-								local respawnflag = math.abs(lplr:GetAttribute("SpawnTime") - lplr:GetAttribute("LastTeleported")) > 3
-								if (not teleported[lplr]) and respawnflag then
-									task.delay(1, function()
-										local falseflag = didpingspike()
-										if not falseflag then
-											store.statistics.lagbacks = store.statistics.lagbacks + 1
-										end
-									end)
-								end
-							end
-							oldnetworkowner = newnetworkowner
-						else
-							oldnetworkowner = nil
-						end
-						teleported[lplr] = nil
-						for i, v in pairs(entityLibrary.entityList) do
-							if teleportconnections[v.Player.Name.."1"] then continue end
-							teleportconnections[v.Player.Name.."1"] = v.Player:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-								if not vapeInjected then return end
-								for i = 1, 15 do
-									task.wait(0.1)
-									if teleported[v.Player] or teleported2[v.Player] or matchstatetick > tick() or math.abs(v.Player:GetAttribute("SpawnTime") - v.Player:GetAttribute("LastTeleported")) < 3 or (teleportedability[v.Player] or tick() - 1) > tick() then break end
-								end
-								if v.Player ~= nil and (not v.Player.Neutral) and teleported[v.Player] == nil and teleported2[v.Player] == nil and (teleportedability[v.Player] or tick() - 1) < tick() and math.abs(v.Player:GetAttribute("SpawnTime") - v.Player:GetAttribute("LastTeleported")) > 3 and matchstatetick <= tick() then
-									store.statistics.universalLagbacks = store.statistics.universalLagbacks + 1
-									vapeEvents.LagbackEvent:Fire(v.Player)
-								end
-								teleported[v.Player] = nil
-							end)
-							teleportconnections[v.Player.Name.."2"] = v.Player:GetAttributeChangedSignal("PlayerConnected"):Connect(function()
-								teleported2[v.Player] = true
-								task.delay(5, function()
-									teleported2[v.Player] = nil
-								end)
-							end)
 						end
 						local splitted = origtpstring:split("/")
 						label.Text = "Session Info\nTime Played : "..os.date("!%X",math.floor(tick() - splitted[1])).."\nKills : "..(splitted[2] + store.statistics.kills).."\nBeds : "..(splitted[3] + store.statistics.beds).."\nWins : "..(splitted[4] + (victorysaid and 1 or 0)).."\nGames : "..splitted[5].."\nLagbacks : "..(splitted[6] + store.statistics.lagbacks).."\nUniversal Lagbacks : "..(splitted[7] + store.statistics.universalLagbacks).."\nReported : "..(splitted[8] + store.statistics.reported).."\nMap : "..mapname
@@ -864,5 +930,5 @@ run(function()
 			end
 		end,
 		Priority = 2
-	})]]
-end)
+	})
+end)]]
