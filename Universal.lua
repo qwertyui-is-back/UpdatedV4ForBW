@@ -4887,20 +4887,22 @@ run(function()
 		Name = "FontChanger",
 		Function = function(callback)
 			if callback then
-				RunLoops:BindToHeartbeat("fonts",function()
-					for _, v in next, game.CoreGui:GetDescendants() do
-						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							v.Font = Enum.Font[fonts.Value]
+				task.spawn(function()
+					repeat
+						task.wait()
+						for _, v in next, game.CoreGui:GetDescendants() do
+							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+								v.Font = Enum.Font[fonts.Value]
+							end
 						end
-					end
-					for _, v in next, lplr.PlayerGui:GetDescendants() do
-						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							v.Font = Enum.Font[fonts.Value]
+						for _, v in next, lplr.PlayerGui:GetDescendants() do
+							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+								v.Font = Enum.Font[fonts.Value]
+							end
 						end
-					end
+					until (not FontsChanger.Enabled)
 				end)
 			else
-				RunLoops:UnbindFromHeartbeat("fonts")
 				warningNotification("Cat V5", "Disabled next game!",10)
 			end
 		end,
@@ -4926,30 +4928,32 @@ run(function()
 		Name = "NameProtect",
 		Function = function(callback)
 			if callback then
-				RunLoops:BindToHeartbeat("NameProtect",function()
-					for _, v in next, game.CoreGui:GetDescendants() do
-						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							if v.Text:find(lplr.Name) then
-								v.Text = v.Text:gsub(lplr.Name, name.Value)
+				task.spawn(function()
+					repeat
+						task.wait()
+						for _, v in next, game.CoreGui:GetDescendants() do
+							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+								if v.Text:find(lplr.Name) then
+									v.Text = v.Text:gsub(lplr.Name, name.Value)
+								end
+							end
+							if v:IsA("TextBox") then
+								if v.PlaceholderText:find(lplr.Name) then
+									v.PlaceholderText = v.PlaceholderText:gsub(lplr.Name, name.Value)
+								end
 							end
 						end
-						if v:IsA("TextBox") then
-							if v.PlaceholderText:find(lplr.Name) then
+						for _, v in next, lplr.PlayerGui:GetDescendants() do
+							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+								v.Text = v.Text:gsub(lplr.Name, name.Value)
+							end
+							if v:IsA("TextBox") then
 								v.PlaceholderText = v.PlaceholderText:gsub(lplr.Name, name.Value)
 							end
 						end
-					end
-					for _, v in next, lplr.PlayerGui:GetDescendants() do
-						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							v.Text = v.Text:gsub(lplr.Name, name.Value)
-						end
-						if v:IsA("TextBox") then
-							v.PlaceholderText = v.PlaceholderText:gsub(lplr.Name, name.Value)
-						end
-					end
+					until (not NameProtect.Enabled)
 				end)
 			else
-				RunLoops:UnbindFromHeartbeat("NameProtect")
 				warningNotification("Cat V5", "Disabled next game!",10)
 			end
 		end,
