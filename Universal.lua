@@ -4931,22 +4931,18 @@ run(function()
 				RunLoops:BindToHeartbeat("NameProtect",function()
 					for _, v in pairs(game.CoreGui:GetDescendants()) do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							if v.Text:find(lplr.Name) then
-								v.Text:gsub(lplr.Name, name.Value)
-							end
-							pcall(function()
-								v.PlaceholderText:gsub(lplr.Name, name.Value)
-							end)
+							v.Text = v.Text:gsub(lplr.Name, name.Value)
+						end
+						if v:IsA("TextBox") then
+							v.PlaceholderText = v.PlaceholderText:gsub(lplr.Name, name.Value)
 						end
 					end
 					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							if v.Text:find(lplr.Name) then
-								v.Text:gsub(lplr.Name, name.Value)
-							end
-							pcall(function()
-								v.PlaceholderText:gsub(lplr.Name, name.Value)
-							end)
+							v.Text = v.Text:gsub(lplr.Name, name.Value)
+						end
+						if v:IsA("TextBox") then
+							v.PlaceholderText = v.PlaceholderText:gsub(lplr.Name, name.Value)
 						end
 					end
 				end)
