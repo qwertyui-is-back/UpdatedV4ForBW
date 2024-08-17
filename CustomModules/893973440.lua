@@ -593,6 +593,7 @@ run(function()
         safe = safe or false
         local pos = safe and 150 or 0
         lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, cf.Y + pos, lplr.Character.HumanoidRootPart.CFrame.Z)
+        lplr.Character.Humanoid.CameraOffset = Vector3.new(0,-pos,0)
         if tweening and (not store.gamestatus:lower():find("exit") or not store.status == "exits") then return end
         local comp = computer or {CFrame = 0, Position = 0}
         time = time or 0
@@ -610,6 +611,7 @@ run(function()
         tweening = true
         tween.Completed:Connect(function()
             lplr.Character.HumanoidRootPart.CFrame = cf
+            lplr.Character.Humanoid.CameraOffset = Vector3.new(0,0,0)
             doInteract = true
             tweening = false
         end)

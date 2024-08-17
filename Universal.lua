@@ -4863,6 +4863,9 @@ run(function()
 						elseif b:IsA("Accessory") then
 							b.Handle.Transparency = 0
 						end
+						if b:IsA("Part") and b.Name == "amogus" then
+							b:Destroy()
+						end
 					end
 				end
 				lplr.Character:FindFirstChild("amogus"):Destroy()
