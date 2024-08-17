@@ -600,7 +600,7 @@ run(function()
         doInteract = false
         if cf == comp.CFrame then
             local mag = (comp.Position - lplr.Character.HumanoidRootPart.Position).magnitude
-            if mag <= 7 then
+            if mag <= 12 then
                 time = 0.5
             end
         end
