@@ -4878,8 +4878,8 @@ end)
 
 run(function()
 	local FontsChanger = {Enabled = false}
-	local font = {Value = "Code"}
-	local fontlist
+	local fonts = {Value = "Code"}
+	local fontlist = {"SourceSans"}
 
 	FontsChanger = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.CreateOptionsButton({
 		Name = "FontChanger",
@@ -4888,16 +4888,12 @@ run(function()
 				RunLoops:BindToHeartbeat("fonts",function()
 					for _, v in pairs(game.CoreGui:GetDescendants()) do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							if v.Font ~= Enum.Font[font.Value] then
-								v.Font = Enum.Font[font.Value]
-							end
+							v.Font = Enum.Font[fonts.Name]
 						end
 					end
 					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							if v.Font ~= Enum.Font[font.Value] then
-								v.Font = Enum.Font[font.Value]
-							end
+							v.Font = Enum.Font[fonts.Name]
 						end
 					end
 				end)
@@ -4913,7 +4909,7 @@ run(function()
 			table.insert(fontlist, v.Name)
 		end
 	end
-	font = FontsChanger.CreateDropdown({
+	fonts = FontsChanger.CreateDropdown({
 		Name = "Font",
 		List = fontlist,
 		Function = function() end,
