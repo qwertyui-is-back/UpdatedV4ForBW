@@ -4877,6 +4877,94 @@ run(function()
 end)
 
 run(function()
+	local FontsChanger = {Enabled = false}
+	local font = {Value = "Code"}
+	local fontlist
+
+	FontsChanger = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.CreateOptionsButton({
+		Name = "FontChanger",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("fonts",function()
+					for _, v in pairs(game.CoreGui:GetDescendants()) do
+						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+							if v.Font ~= Enum.Font[font.Value] then
+								v.Font = Enum.Font[font.Value]
+							end
+						end
+					end
+					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
+						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+							if v.Font ~= Enum.Font[font.Value] then
+								v.Font = Enum.Font[font.Value]
+							end
+						end
+					end
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("fonts")
+				WarningNotification("Cat V5", "Disabled next game!",10)
+			end
+		end,
+		ExtraText = function() return font.Value end
+	})
+	for i,v in pairs(Enum.Font:GetEnumItems()) do
+		if v.Name ~= "SourceSans" then
+			table.insert(fontlist, v.Name)
+		end
+	end
+	font = FontsChanger.CreateDropdown({
+		Name = "Font",
+		List = fontlist,
+		Function = function() end,
+	})
+end)
+
+run(function()
+	local NameProtect = {Enabled = false}
+	local name = {Value = "qwertyui"}
+
+	NameProtect = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.CreateOptionsButton({
+		Name = "NameProtect",
+		Function = function(callback)
+			if callback then
+				RunLoops:BindToHeartbeat("NameProtect",function()
+					for _, v in pairs(game.CoreGui:GetDescendants()) do
+						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+							if v.Text:find(lplr.Name) then
+								v.Text:gsub(lplr.Name, name.Value)
+							end
+							pcall(function()
+								v.PlaceholderText:gsub(lplr.Name, name.Value)
+							end)
+						end
+					end
+					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
+						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+							if v.Text:find(lplr.Name) then
+								v.Text:gsub(lplr.Name, name.Value)
+							end
+							pcall(function()
+								v.PlaceholderText:gsub(lplr.Name, name.Value)
+							end)
+						end
+					end
+				end)
+			else
+				RunLoops:UnbindFromHeartbeat("NameProtect")
+				WarningNotification("Cat V5", "Disabled next game!",10)
+			end
+		end,
+		ExtraText = function() return name.Value end
+	})
+	name = NameProtect.CreateTextBox({
+		Name = "Name",
+		TempText = "name to display",
+		Function = function() end
+	})
+end)
+
+run(function()
 	local controlmodule
 	local oldmove
 	local SafeWalk = {Enabled = false}
