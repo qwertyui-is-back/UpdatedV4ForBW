@@ -4826,29 +4826,31 @@ run(function()
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("amogus",function()
-					for i,v in pairs(game.Players:GetChildren()) do
-						if v.Character:FindFirstChild("Humanoid") ~= nil and isAlive(v) then
-							if v.Character.Humanoid.Health == 0 and v.Character:FindFirstChild("amogus") then
-								v.Character:FindFirstChild("amogus"):Destroy()
-							end
-							if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
-								for o,b in pairs(v.Character:GetChildren()) do
-									if b.Name == "SkibidiPing" then
-										return
-									elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
-										b.Transparency = 1
-									elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
-										b.Handle.Transparency = 1
-									elseif b:IsA("Part") and b.Name ~= "amogus" then
-										b.Transparency = 1
-									end
+					pcall(function()
+						for i,v in pairs(game.Players:GetChildren()) do
+							if v.Character:FindFirstChild("Humanoid") ~= nil and isAlive(v) then
+								if v.Character.Humanoid.Health == 0 and v.Character:FindFirstChild("amogus") then
+									v.Character:FindFirstChild("amogus"):Destroy()
 								end
-								if v.Character:FindFirstChild("amogus") == nil then
-									camu(v)
+								if v.Character.Humanoid ~= nil and (v.Character ~= nil and v.Character.HumanoidRootPart ~= nil and v.Character.Humanoid ~= nil and v.Character.Humanoid.Health ~= 0) then
+									for o,b in pairs(v.Character:GetChildren()) do
+										if b.Name == "SkibidiPing" then
+											return
+										elseif b:IsA("MeshPart") and b.Name ~= "amogus" then
+											b.Transparency = 1
+										elseif b:IsA("Accessory") and not b.Name:find("sword") and not b.Name:find("block") and not b.Name:find("pickaxe") and not b.Name:find("bow") and not b.Name:find("axe") and not b.Name:find("fireball") and not b.Name:find("cannon") and not b.Name:find("shears") then
+											b.Handle.Transparency = 1
+										elseif b:IsA("Part") and b.Name ~= "amogus" then
+											b.Transparency = 1
+										end
+									end
+									if v.Character:FindFirstChild("amogus") == nil then
+										camu(v)
+									end
 								end
 							end
 						end
-					end
+					end)
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("amogus")
@@ -4888,12 +4890,12 @@ run(function()
 				RunLoops:BindToHeartbeat("fonts",function()
 					for _, v in pairs(game.CoreGui:GetDescendants()) do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							v.Font = Enum.Font[fonts.Name]
+							v.Font = Enum.Font[fonts.Value]
 						end
 					end
 					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							v.Font = Enum.Font[fonts.Name]
+							v.Font = Enum.Font[fonts.Value]
 						end
 					end
 				end)
@@ -4927,10 +4929,14 @@ run(function()
 				RunLoops:BindToHeartbeat("NameProtect",function()
 					for _, v in pairs(game.CoreGui:GetDescendants()) do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-							v.Text = v.Text:gsub(lplr.Name, name.Value)
+							if v.Text:find(lplr.Name) then
+								v.Text = v.Text:gsub(lplr.Name, name.Value)
+							end
 						end
 						if v:IsA("TextBox") then
-							v.PlaceholderText = v.PlaceholderText:gsub(lplr.Name, name.Value)
+							if v.PlaceholderText:find(lplr.Name) then
+								v.PlaceholderText = v.PlaceholderText:gsub(lplr.Name, name.Value)
+							end
 						end
 					end
 					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
