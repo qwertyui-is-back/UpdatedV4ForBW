@@ -592,8 +592,6 @@ run(function()
     local function tweenCF(cf,time,safe)
         safe = safe or false
         local pos = safe and 150 or 0
-        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, cf.Y + pos, lplr.Character.HumanoidRootPart.CFrame.Z)
-        lplr.Character.Humanoid.CameraOffset = Vector3.new(0,-pos,0)
         if tweening and (not store.gamestatus:lower():find("exit") or not store.status == "exits") then return end
         local comp = computer or {CFrame = 0, Position = 0}
         time = time or 0
@@ -604,6 +602,8 @@ run(function()
                 time = 0.5
             end
         end
+        lplr.Character.HumanoidRootPart.CFrame = CFrame.new(lplr.Character.HumanoidRootPart.CFrame.X, cf.Y + pos, lplr.Character.HumanoidRootPart.CFrame.Z)
+        lplr.Character.Humanoid.CameraOffset = Vector3.new(0,-pos,0)
         local tweenservice = game:GetService("TweenService")
         local info = TweenInfo.new(time,Enum.EasingStyle.Linear)-- this is cringe i thought linear was the default :sob:
         local tween = tweenservice:Create(lplr.Character.HumanoidRootPart,info,{CFrame = cf * CFrame.new(0,pos,0)})
