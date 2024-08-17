@@ -4889,7 +4889,7 @@ run(function()
 			if callback then
 				task.spawn(function()
 					repeat
-						task.wait()
+						task.wait(0.1)
 						for _, v in next, game.CoreGui:GetDescendants() do
 							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 								v.Font = Enum.Font[fonts.Value]
@@ -4930,7 +4930,7 @@ run(function()
 			if callback then
 				task.spawn(function()
 					repeat
-						task.wait()
+						task.wait(0.1)
 						for _, v in next, game.CoreGui:GetDescendants() do
 							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 								if v.Text:find(lplr.Name) then
