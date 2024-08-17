@@ -4881,7 +4881,7 @@ run(function()
 	local fonts = {Value = "Code"}
 	local fontlist = {"SourceSans"}
 
-	FontsChanger = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.CreateOptionsButton({
+	FontsChanger = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "FontChanger",
 		Function = function(callback)
 			if callback then
@@ -4920,7 +4920,7 @@ run(function()
 	local NameProtect = {Enabled = false}
 	local name = {Value = "qwertyui"}
 
-	NameProtect = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.CreateOptionsButton({
+	NameProtect = GuiLibrary.ObjectsThatCanBeSaved.CatV5Window.Api.CreateOptionsButton({
 		Name = "NameProtect",
 		Function = function(callback)
 			if callback then
