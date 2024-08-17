@@ -4888,12 +4888,12 @@ run(function()
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("fonts",function()
-					for _, v in pairs(game.CoreGui:GetDescendants()) do
+					for _, v in next, game.CoreGui:GetDescendants() do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 							v.Font = Enum.Font[fonts.Value]
 						end
 					end
-					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
+					for _, v in next, lplr.PlayerGui:GetDescendants() do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 							v.Font = Enum.Font[fonts.Value]
 						end
@@ -4901,10 +4901,10 @@ run(function()
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("fonts")
-				WarningNotification("Cat V5", "Disabled next game!",10)
+				warningNotification("Cat V5", "Disabled next game!",10)
 			end
 		end,
-		ExtraText = function() return font.Value end
+		ExtraText = function() return fonts.Value end
 	})
 	for i,v in pairs(Enum.Font:GetEnumItems()) do
 		if v.Name ~= "SourceSans" then
@@ -4927,7 +4927,7 @@ run(function()
 		Function = function(callback)
 			if callback then
 				RunLoops:BindToHeartbeat("NameProtect",function()
-					for _, v in pairs(game.CoreGui:GetDescendants()) do
+					for _, v in next, game.CoreGui:GetDescendants() do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 							if v.Text:find(lplr.Name) then
 								v.Text = v.Text:gsub(lplr.Name, name.Value)
@@ -4939,7 +4939,7 @@ run(function()
 							end
 						end
 					end
-					for _, v in pairs(lplr.PlayerGui:GetDescendants()) do
+					for _, v in next, lplr.PlayerGui:GetDescendants() do
 						if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 							v.Text = v.Text:gsub(lplr.Name, name.Value)
 						end
@@ -4950,7 +4950,7 @@ run(function()
 				end)
 			else
 				RunLoops:UnbindFromHeartbeat("NameProtect")
-				WarningNotification("Cat V5", "Disabled next game!",10)
+				warningNotification("Cat V5", "Disabled next game!",10)
 			end
 		end,
 		ExtraText = function() return name.Value end
