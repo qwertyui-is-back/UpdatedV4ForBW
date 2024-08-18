@@ -4892,11 +4892,13 @@ run(function()
 						task.wait(0.1)
 						for _, v in next, game.CoreGui:GetDescendants() do
 							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+								if v.Font == Enum.Font[fonts.Value] then return end
 								v.Font = Enum.Font[fonts.Value]
 							end
 						end
 						for _, v in next, lplr.PlayerGui:GetDescendants() do
 							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+								if v.Font == Enum.Font[fonts.Value] then return end
 								v.Font = Enum.Font[fonts.Value]
 							end
 						end
@@ -4930,7 +4932,7 @@ run(function()
 			if callback then
 				task.spawn(function()
 					repeat
-						task.wait(0.1)
+						task.wait(1)
 						for _, v in next, game.CoreGui:GetDescendants() do
 							if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
 								if v.Text:find(lplr.Name) then
